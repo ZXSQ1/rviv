@@ -19,14 +19,8 @@ configurable.
    constant, and so the user will provide, in the configuration, a set of IPs
    that will be selected from).
 6. The system must provide many options for operation.
-    - `-j` option for setting the number of jobs.
-    - `-c` option to set the path to the configuration directory.
-    - `-a <archive>` for archiving archives.
-        - Archives all archives if no archive was provided.
-        - Archives the given `archive` if it was provided.
-    - `-ba` resyncs the archives.
-    - `-bf` resyncs the files after some operations.
-    - `-p` for progress indicators.
-    - `-v` for whether to show output or not.
-    - `-d` for specifying the server or device to backup to.
-        - Name is specified in the configuration.
+   - `-c`: coloring and colored output.
+   - `<config>`: the configuration file to base your options on.
+      - the configuration file set through environment variables.
+      - there must be a default configuration directory
+7. The system must provide customizable options & operations through config.
