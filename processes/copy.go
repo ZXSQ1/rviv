@@ -8,7 +8,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func Copy(src, dest Path, progress chan int) error {
+func Copy(src, dest *Path, progress chan int) error {
 	srcfs, destfs := src.Filesys, dest.Filesys
 	srctype, err := srcfs.Type(src.Filename)
 
