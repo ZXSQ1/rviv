@@ -8,13 +8,7 @@ import (
 )
 
 func (client *Client) CreateFile(filename string) error {
-	exist, err := client.IsExist(filename)
-
-	if err != nil {
-		return err
-	}
-
-	if exist {
+	if client.IsExist(filename) {
 		return os.ErrExist
 	}
 

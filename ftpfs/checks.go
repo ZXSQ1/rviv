@@ -5,9 +5,9 @@ import (
 	"github.com/jlaffaye/ftp"
 )
 
-func (client *Client) IsExist(filename string) (bool, error) {
+func (client *Client) IsExist(filename string) bool {
 	_, err := client.conn.FileSize(filename)
-	return status(err) != ftp.StatusFileUnavailable, nil
+	return status(err) != ftp.StatusFileUnavailable
 }
 
 func (client *Client) Type(filename string) (int8, error) {

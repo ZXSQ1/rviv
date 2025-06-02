@@ -1,13 +1,7 @@
 package ftpfs
 
-func (client *Client) GetFile(filename string) (*File, error) {
-	exists, err := client.IsExist(filename)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if !exists {
+func (client *Client) OpenFile(filename string) (*File, error) {
+	if !client.IsExist(filename) {
 		client.CreateFile(filename)
 	}
 
