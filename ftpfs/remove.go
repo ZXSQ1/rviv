@@ -1,6 +1,6 @@
 package ftpfs
 
-func (client *Client) RemoveFile(filename string) error {
+func (client *Client) Remove(filename string) error {
 	return client.conn.Delete(filename)
 }
 

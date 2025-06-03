@@ -1,8 +1,8 @@
 package ftpfs
 
-func (client *Client) OpenFile(filename string) (*File, error) {
+func (client *Client) Open(filename string) (*File, error) {
 	if !client.IsExist(filename) {
-		client.CreateFile(filename)
+		client.Create(filename)
 	}
 
 	return &File{

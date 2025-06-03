@@ -7,9 +7,7 @@ type Path struct {
 	Filesys  filesystem.Filesystem
 }
 
-func NewPath(filename string, filesys filesystem.Filesystem) *Path {
-	return &Path{
-		Filename: filename,
-		Filesys:  filesys,
-	}
+type Paths struct {
+	Filenames []string
+	Filesys   filesystem.Filesystem
 }

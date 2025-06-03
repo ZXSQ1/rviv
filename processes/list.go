@@ -1,29 +1,14 @@
 package processes
 
-import (
-	"os"
-
-	"github.com/ZXSQ1/rviv/filesystem"
-)
-
 // continues when paths have permission errors or the like
-func ListDir(src *Path, recursive bool) ([]string, error) {
-	if !src.Filesys.IsExist(src.Filename) {
-		return nil, os.ErrNotExist
-	}
-
-	srctype, err := src.Filesys.Type(src.Filename)
-
-	if err != nil {
-		return nil, err
-	}
-
-	if srctype != filesystem.TypeDir {
-		return nil, os.ErrInvalid
-	}
-
+func ListDir(src *Path, recursive bool) (*Paths, error) {
 	if !recursive {
-		return src.Filesys.ListDir(src.Filename)
+		entries, err := src.Filesys.ListDir(src.Filename)
+
+		return &Paths{
+			Filenames: entries,
+			Filesys:   src.Filesys,
+		}, err
 	}
 
 	entries, err := ListDir(src, false)
@@ -32,25 +17,30 @@ func ListDir(src *Path, recursive bool) ([]string, error) {
 		return nil, err
 	}
 
-	for _, entry := range entries {
-		entrytype, err := src.Filesys.Type(entry)
+	for _, entry := range entries.Filenames {
+		entrystat, err := src.Filesys.Stat(entry)
 
 		if err != nil {
 			continue
 		}
 
-		if entrytype != filesystem.TypeDir {
-			entries = append(entries, entry)
+		if !entrystat.IsDir() {
+			entries.Filenames = append(entries.Filenames, entry)
 		} else {
 			newEntries, err := ListDir(
-				NewPath(entry, src.Filesys), true,
+				&Path{
+					Filename: entry,
+					Filesys:  src.Filesys,
+				}, true,
 			)
 
 			if err != nil {
 				continue
 			}
 
-			entries = append(entries, newEntries...)
+			entries.Filenames = append(
+				entries.Filenames, newEntries.Filenames...,
+			)
 		}
 	}
 

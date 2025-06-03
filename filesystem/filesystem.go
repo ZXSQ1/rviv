@@ -1,21 +1,23 @@
 package filesystem
 
-import "io"
+import (
+	"io"
+	"io/fs"
+)
 
 const (
-	TypeFile = 0
-	TypeDir  = 1
-	TypeLink = 2
+	DirPerm     = 0755
+	RegularPerm = 0644
+	LinkPerm    = 0777
 )
 
 type Filesystem interface {
 	IsExist(filename string) bool
-	Type(filename string) (int8, error)
-	Size(filename string) (uint64, error)
-	CreateFile(filename string) error
+	Stat(filename string) (fs.FileInfo, error)
+	Create(filename string) error
 	CreateDir(filename string) error
-	RemoveFile(filename string) error
+	Remove(filename string) error
 	RemoveDir(filename string) error
 	ListDir(filename string) ([]string, error)
-	OpenFile(filename string) (io.ReadWriteCloser, error)
+	Open(filename string) (io.ReadWriteCloser, error)
 }

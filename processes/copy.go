@@ -3,43 +3,18 @@ package processes
 import (
 	"errors"
 	"io"
-	"os"
-
-	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 func Copy(src, dest *Path, progress chan int) error {
 	srcfs, destfs := src.Filesys, dest.Filesys
-	srctype, err := srcfs.Type(src.Filename)
-
-	if err != nil {
-		return err
-	}
-
-	desttype, err := destfs.Type(dest.Filename)
-
-	if err != nil {
-		return err
-	}
-
-	if !srcfs.IsExist(src.Filename) {
-		return os.ErrNotExist
-	} else if srctype == filesystem.TypeDir {
-		return os.ErrInvalid
-	}
-
-	if destfs.IsExist(dest.Filename) && desttype == filesystem.TypeDir {
-		return os.ErrInvalid
-	}
-
-	srcobj, err := srcfs.OpenFile(src.Filename)
+	srcobj, err := srcfs.Open(src.Filename)
 
 	if err != nil {
 		return err
 	}
 
 	defer srcobj.Close()
-	destobj, err := destfs.OpenFile(dest.Filename)
+	destobj, err := destfs.Open(dest.Filename)
 
 	if err != nil {
 		return err
