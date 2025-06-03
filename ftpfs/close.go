@@ -1,5 +1,5 @@
 package ftpfs
 
-func (client *Client) Close() error {
+func (client *FTPFS) Close() error {
 	return client.conn.Quit()
 }

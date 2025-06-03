@@ -1,9 +1,9 @@
 package ftpfs
 
-func (client *Client) Remove(filename string) error {
+func (client *FTPFS) Remove(filename string) error {
 	return client.conn.Delete(filename)
 }
 
-func (client *Client) RemoveDir(filename string) error {
+func (client *FTPFS) RemoveDir(filename string) error {
 	return client.conn.RemoveDirRecur(filename)
 }

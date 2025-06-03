@@ -1,6 +1,6 @@
 package ftpfs
 
-func (client *Client) ListDir(filename string) ([]string, error) {
+func (client *FTPFS) ListDir(filename string) ([]string, error) {
 	entries, err := client.conn.NameList(filename)
 
 	if err != nil {

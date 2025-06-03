@@ -7,7 +7,7 @@ import (
 	"github.com/jlaffaye/ftp"
 )
 
-func (client *Client) Create(filename string) error {
+func (client *FTPFS) Create(filename string) error {
 	if client.IsExist(filename) {
 		return os.ErrExist
 	}

@@ -6,11 +6,11 @@ import (
 	"github.com/jlaffaye/ftp"
 )
 
-type Client struct {
+type FTPFS struct {
 	conn *ftp.ServerConn
 }
 
-func Connect(ip string, port int, user, pass string) (*Client, error) {
+func Connect(ip string, port int, user, pass string) (*FTPFS, error) {
 	portString := strconv.Itoa(port)
 	addr := ip + ":" + portString
 	conn, err := ftp.Dial(addr)
@@ -23,5 +23,5 @@ func Connect(ip string, port int, user, pass string) (*Client, error) {
 		return nil, err
 	}
 
-	return &Client{conn}, nil
+	return &FTPFS{conn}, nil
 }

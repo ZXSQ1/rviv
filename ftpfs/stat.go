@@ -5,7 +5,7 @@ import (
 	"os"
 )
 
-func (client *Client) Stat(filename string) (fs.FileInfo, error) {
+func (client *FTPFS) Stat(filename string) (fs.FileInfo, error) {
 	if !client.IsExist(filename) {
 		return nil, os.ErrNotExist
 	}
