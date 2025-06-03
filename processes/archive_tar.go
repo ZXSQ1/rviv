@@ -5,8 +5,7 @@ import (
 	"io"
 )
 
-// continues when paths have permission errors or the like
-func ArchiveTar(archive *Path, entries *Paths) error {
+func ArchiveTar(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 	archiveObj, err := archive.Filesys.Open(archive.Filename)
 
 	if err != nil {
@@ -21,29 +20,49 @@ func ArchiveTar(archive *Path, entries *Paths) error {
 		entryWriter, err := entries.Filesys.Open(entry)
 
 		if err != nil {
-			continue
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
 		}
 
 		info, err := entries.Filesys.Stat(entry)
 
 		if err != nil {
-			continue
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
 		}
 
 		header, err := tar.FileInfoHeader(info, info.Name())
 
 		if err != nil {
-			continue
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
 		}
 
 		if err := tarWriter.WriteHeader(header); err != nil {
-			continue
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
 		}
 
 		_, err = io.Copy(tarWriter, entryWriter)
 
 		if err != nil {
-			continue
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
 		}
 
 		entryWriter.Close()

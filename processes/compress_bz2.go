@@ -21,7 +21,9 @@ func CompressBz2(archive *Path, outfile *Path) error {
 	}
 
 	defer outObj.Close()
-	bz2Writer, err := bzip2.NewWriter(outObj, nil)
+	bz2Writer, err := bzip2.NewWriter(
+		outObj, &bzip2.WriterConfig{Level: bzip2.BestCompression},
+	)
 
 	if err != nil {
 		return err

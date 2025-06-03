@@ -1,7 +1,6 @@
 package processes
 
-// continues when paths have permission errors or the like
-func ListDir(src *Path, recursive bool) (*Paths, error) {
+func ListDir(src *Path, recursive, ignoreBadFiles bool) (*Paths, error) {
 	if !recursive {
 		entries, err := src.Filesys.ListDir(src.Filename)
 
@@ -11,7 +10,7 @@ func ListDir(src *Path, recursive bool) (*Paths, error) {
 		}, err
 	}
 
-	entries, err := ListDir(src, false)
+	entries, err := ListDir(src, false, ignoreBadFiles)
 
 	if err != nil {
 		return nil, err
@@ -21,7 +20,11 @@ func ListDir(src *Path, recursive bool) (*Paths, error) {
 		entrystat, err := src.Filesys.Stat(entry)
 
 		if err != nil {
-			continue
+			if ignoreBadFiles {
+				continue
+			}
+
+			return nil, err
 		}
 
 		if !entrystat.IsDir() {
@@ -31,11 +34,15 @@ func ListDir(src *Path, recursive bool) (*Paths, error) {
 				&Path{
 					Filename: entry,
 					Filesys:  src.Filesys,
-				}, true,
+				}, true, ignoreBadFiles,
 			)
 
 			if err != nil {
-				continue
+				if ignoreBadFiles {
+					continue
+				}
+
+				return nil, err
 			}
 
 			entries.Filenames = append(

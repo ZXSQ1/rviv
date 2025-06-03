@@ -5,8 +5,7 @@ import (
 	"io"
 )
 
-// continues when entries have permission errors or the like
-func ArchiveZip(archive *Path, entries *Paths) error {
+func ArchiveZip(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 	archiveObj, err := archive.Filesys.Open(archive.Filename)
 
 	if err != nil {
@@ -21,35 +20,56 @@ func ArchiveZip(archive *Path, entries *Paths) error {
 		entryWriter, err := entries.Filesys.Open(entry)
 
 		if err != nil {
-			continue
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
 		}
 
 		info, err := entries.Filesys.Stat(entry)
 
 		if err != nil {
-			continue
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
 		}
 
 		header, err := zip.FileInfoHeader(info)
 
 		if err != nil {
-			continue
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
 		}
 
 		header.Name = entry
 		header.Method = zip.Deflate
+		header.Flags = 0x8
 
 		writer, err := zipWriter.CreateHeader(header)
 
 		if err != nil {
-			continue
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
 		}
 
 		_, err = io.Copy(writer, entryWriter)
 		entryWriter.Close()
 
 		if err != nil {
-			continue
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
 		}
 	}
 
