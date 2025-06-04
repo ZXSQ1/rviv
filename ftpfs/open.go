@@ -1,8 +1,13 @@
 package ftpfs
 
-func (client *FTPFS) Open(filename string) (*File, error) {
+import (
+	"io"
+	"os"
+)
+
+func (client *FtpFs) Open(filename string) (io.ReadWriteCloser, error) {
 	if !client.IsExist(filename) {
-		client.Create(filename)
+		return nil, os.ErrNotExist
 	}
 
 	return &File{

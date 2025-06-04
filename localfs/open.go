@@ -1,7 +1,12 @@
 package localfs
 
-import "os"
+import (
+	"io"
+	"os"
 
-func (local *LocalFS) Open(filename string) (*os.File, error) {
-	return os.Open(filename)
+	"github.com/ZXSQ1/rviv/filesystem"
+)
+
+func (local *LocalFS) Open(filename string) (io.ReadWriteCloser, error) {
+	return os.OpenFile(filename, os.O_RDWR, filesystem.RegularPerm)
 }

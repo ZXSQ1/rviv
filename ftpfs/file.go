@@ -6,7 +6,6 @@ import (
 	"github.com/jlaffaye/ftp"
 )
 
-// implements the io.Reader, io.Writer and io.Closer interfaces
 type File struct {
 	conn     *ftp.ServerConn
 	filename string

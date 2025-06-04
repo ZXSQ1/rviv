@@ -3,14 +3,15 @@ package ftpfs
 import (
 	"strconv"
 
+	"github.com/ZXSQ1/rviv/filesystem"
 	"github.com/jlaffaye/ftp"
 )
 
-type FTPFS struct {
+type FtpFs struct {
 	conn *ftp.ServerConn
 }
 
-func Connect(ip string, port int, user, pass string) (*FTPFS, error) {
+func Connect(ip string, port int, user, pass string) (filesystem.Filesystem, error) {
 	portString := strconv.Itoa(port)
 	addr := ip + ":" + portString
 	conn, err := ftp.Dial(addr)
@@ -23,5 +24,5 @@ func Connect(ip string, port int, user, pass string) (*FTPFS, error) {
 		return nil, err
 	}
 
-	return &FTPFS{conn}, nil
+	return &FtpFs{conn}, nil
 }

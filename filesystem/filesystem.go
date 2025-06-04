@@ -6,9 +6,16 @@ import (
 )
 
 const (
-	DirPerm     = 0755
-	RegularPerm = 0644
-	LinkPerm    = 0777
+	TypeDir     = 0
+	TypeRegular = 1
+	TypeLink    = 2
+	TypeNone    = 3
+)
+
+var (
+	DirPerm     = fs.FileMode(0755)
+	RegularPerm = fs.FileMode(0644)
+	LinkPerm    = fs.FileMode(0777)
 )
 
 type Filesystem interface {
@@ -20,4 +27,5 @@ type Filesystem interface {
 	RemoveDir(filename string) error
 	ListDir(filename string) ([]string, error)
 	Open(filename string) (io.ReadWriteCloser, error)
+	Close() error
 }

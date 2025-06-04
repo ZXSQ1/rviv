@@ -5,12 +5,12 @@ import (
 	"os"
 )
 
-func (client *FTPFS) Stat(filename string) (fs.FileInfo, error) {
+func (client *FtpFs) Stat(filename string) (fs.FileInfo, error) {
 	if !client.IsExist(filename) {
 		return nil, os.ErrNotExist
 	}
 
-	return FileInfo{
+	return &FileInfo{
 		filename: filename,
 		conn:     client.conn,
 	}, nil

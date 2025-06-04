@@ -40,7 +40,9 @@ func Copy(src, dest *Path, progress chan int) error {
 			return err
 		}
 
-		progress <- n
+		if progress != nil {
+			progress <- n
+		}
 	}
 
 	return nil
