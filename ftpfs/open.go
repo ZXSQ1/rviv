@@ -10,6 +10,16 @@ func (client *FtpFs) Open(filename string) (io.ReadWriteCloser, error) {
 		return nil, os.ErrNotExist
 	}
 
+	stat, err := client.Stat(filename)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !stat.Mode().IsRegular() {
+		return nil, os.ErrInvalid
+	}
+
 	return &File{
 		conn:     client.conn,
 		filename: filename,

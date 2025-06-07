@@ -7,5 +7,5 @@ func (client *FtpFs) ListDir(filename string) ([]string, error) {
 		return nil, err
 	}
 
-	return entries, err
+	return entries, nil
 }

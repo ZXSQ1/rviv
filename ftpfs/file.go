@@ -2,6 +2,7 @@ package ftpfs
 
 import (
 	"bytes"
+	"io"
 
 	"github.com/jlaffaye/ftp"
 )
@@ -36,9 +37,14 @@ func (file *File) Read(p []byte) (n int, err error) {
 		return -1, err
 	}
 
+	defer resp.Close()
 	n, err = resp.Read(p)
 
 	if err != nil {
+		if err == io.EOF {
+			return 0, err
+		}
+
 		return -1, err
 	}
 
