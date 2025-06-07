@@ -45,7 +45,7 @@ func (info *FileInfo) Mode() fs.FileMode {
 }
 
 func (info *FileInfo) ModTime() time.Time {
-	entry, err := (&FtpFs{info.conn}).GetEntry(info.filename)
+	entry, err := info.conn.GetEntry(info.filename)
 
 	if err != nil {
 		return time.UnixMilli(0)
@@ -55,7 +55,7 @@ func (info *FileInfo) ModTime() time.Time {
 }
 
 func (info *FileInfo) IsRegular() bool {
-	entry, err := (&FtpFs{info.conn}).GetEntry(info.filename)
+	entry, err := info.conn.GetEntry(info.filename)
 
 	if err != nil {
 		return false
@@ -65,7 +65,7 @@ func (info *FileInfo) IsRegular() bool {
 }
 
 func (info *FileInfo) IsDir() bool {
-	entry, err := (&FtpFs{info.conn}).GetEntry(info.filename)
+	entry, err := info.conn.GetEntry(info.filename)
 
 	if err != nil {
 		return false
@@ -75,7 +75,7 @@ func (info *FileInfo) IsDir() bool {
 }
 
 func (info *FileInfo) IsSymlink() bool {
-	entry, err := (&FtpFs{info.conn}).GetEntry(info.filename)
+	entry, err := info.conn.GetEntry(info.filename)
 
 	if err != nil {
 		return false
