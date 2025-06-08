@@ -1,7 +1,14 @@
 package sftpfs
 
-import "io"
+import (
+	"io"
+
+	"github.com/ZXSQ1/rviv/logging"
+)
 
 func (client *SFtpFs) Open(filename string) (io.ReadWriteCloser, error) {
-	return client.conn.Open(filename)
+	fileObj, err := client.conn.Open(filename)
+	logging.ReportErr(err)
+
+	return fileObj, err
 }

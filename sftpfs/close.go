@@ -1,5 +1,10 @@
 package sftpfs
 
+import "github.com/ZXSQ1/rviv/logging"
+
 func (client *SFtpFs) Close() error {
-	return client.conn.Close()
+	err := client.conn.Close()
+	logging.ReportErr(err)
+
+	return err
 }

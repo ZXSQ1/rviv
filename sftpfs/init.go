@@ -3,6 +3,7 @@ package sftpfs
 import (
 	"strconv"
 
+	"github.com/ZXSQ1/rviv/logging"
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
 )
@@ -11,7 +12,7 @@ type SFtpFs struct {
 	conn *sftp.Client
 }
 
-func Connect(ip string, port int, user, pass string) (*SFtpFs, error) {
+func Connect(addr, user, pass string) (*SFtpFs, error) {
 	config := &ssh.ClientConfig{
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 		User:            user,
@@ -20,13 +21,15 @@ func Connect(ip string, port int, user, pass string) (*SFtpFs, error) {
 		},
 	}
 
-	sshConn, err := ssh.Dial("tcp", ip+":"+strconv.Itoa(port), config)
+	sshConn, err := ssh.Dial("tcp", addr, config)
+	logging.ReportErr(err)
 
 	if err != nil {
 		return nil, err
 	}
 
 	sftpConn, err := sftp.NewClient(sshConn)
+	logging.ReportErr(err)
 
 	if err != nil {
 		return nil, err
@@ -35,4 +38,9 @@ func Connect(ip string, port int, user, pass string) (*SFtpFs, error) {
 	return &SFtpFs{
 		conn: sftpConn,
 	}, nil
+}
+
+func GetAddr(ip string, port int) string {
+	portString := strconv.Itoa(port)
+	return ip + ":" + portString
 }

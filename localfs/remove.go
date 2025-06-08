@@ -1,11 +1,21 @@
 package localfs
 
-import "os"
+import (
+	"os"
+
+	"github.com/ZXSQ1/rviv/logging"
+)
 
 func (local *LocalFS) Remove(filename string) error {
-	return os.Remove(filename)
+	err := os.Remove(filename)
+	logging.ReportErr(err)
+
+	return err
 }
 
 func (local *LocalFS) RemoveDir(filename string) error {
-	return os.RemoveAll(filename)
+	err := os.RemoveAll(filename)
+	logging.ReportErr(err)
+
+	return err
 }

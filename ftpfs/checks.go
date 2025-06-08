@@ -1,10 +1,18 @@
 package ftpfs
 
 import (
-	"github.com/jlaffaye/ftp"
+	"strings"
+
+	"github.com/ZXSQ1/rviv/logging"
 )
 
 func (client *FtpFs) IsExist(filename string) bool {
 	_, err := client.conn.FileSize(filename)
-	return status(err) != ftp.StatusFileActionIgnored
+	logging.ReportErr(err)
+
+	if err != nil {
+		return !strings.HasSuffix(err.Error(), "no such file or directory")
+	}
+
+	return true
 }

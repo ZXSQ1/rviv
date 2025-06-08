@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"io"
 
+	"github.com/ZXSQ1/rviv/logging"
 	"github.com/jlaffaye/ftp"
 )
 
@@ -19,6 +20,8 @@ func (file *File) Write(p []byte) (n int, err error) {
 		file.filename, bytes.NewReader(p), file.wpos,
 	)
 
+	logging.ReportErr(err)
+
 	if err != nil {
 		return -1, err
 	}
@@ -33,12 +36,17 @@ func (file *File) Read(p []byte) (n int, err error) {
 		file.filename, file.rpos,
 	)
 
+	logging.ReportErr(err)
+
 	if err != nil {
+		logging.Logf("%v\n", err)
 		return -1, err
 	}
 
 	defer resp.Close()
 	n, err = resp.Read(p)
+
+	logging.ReportErr(err)
 
 	if err != nil {
 		if err == io.EOF {

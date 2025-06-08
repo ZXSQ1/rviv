@@ -1,9 +1,17 @@
 package ftpfs
 
+import "github.com/ZXSQ1/rviv/logging"
+
 func (client *FtpFs) Remove(filename string) error {
-	return client.conn.Delete(filename)
+	err := client.conn.Delete(filename)
+	logging.ReportErr(err)
+
+	return err
 }
 
 func (client *FtpFs) RemoveDir(filename string) error {
-	return client.conn.RemoveDirRecur(filename)
+	err := client.conn.RemoveDirRecur(filename)
+	logging.ReportErr(err)
+
+	return err
 }

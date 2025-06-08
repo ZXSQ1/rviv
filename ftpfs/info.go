@@ -6,6 +6,7 @@ import (
 	"time"
 
 	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/logging"
 	"github.com/jlaffaye/ftp"
 )
 
@@ -20,6 +21,7 @@ func (info *FileInfo) Name() string {
 
 func (info *FileInfo) Size() int64 {
 	size, err := info.conn.FileSize(info.filename)
+	logging.ReportErr(err)
 
 	if err != nil {
 		return -1
@@ -29,10 +31,6 @@ func (info *FileInfo) Size() int64 {
 }
 
 func (info *FileInfo) Mode() fs.FileMode {
-	if info == nil {
-		return 0
-	}
-
 	mode := filesystem.RegularPerm
 
 	if info.IsDir() {
@@ -46,6 +44,7 @@ func (info *FileInfo) Mode() fs.FileMode {
 
 func (info *FileInfo) ModTime() time.Time {
 	entry, err := info.conn.GetEntry(info.filename)
+	logging.ReportErr(err)
 
 	if err != nil {
 		return time.UnixMilli(0)
@@ -56,6 +55,7 @@ func (info *FileInfo) ModTime() time.Time {
 
 func (info *FileInfo) IsRegular() bool {
 	entry, err := info.conn.GetEntry(info.filename)
+	logging.ReportErr(err)
 
 	if err != nil {
 		return false
@@ -66,6 +66,7 @@ func (info *FileInfo) IsRegular() bool {
 
 func (info *FileInfo) IsDir() bool {
 	entry, err := info.conn.GetEntry(info.filename)
+	logging.ReportErr(err)
 
 	if err != nil {
 		return false
@@ -76,6 +77,7 @@ func (info *FileInfo) IsDir() bool {
 
 func (info *FileInfo) IsSymlink() bool {
 	entry, err := info.conn.GetEntry(info.filename)
+	logging.ReportErr(err)
 
 	if err != nil {
 		return false

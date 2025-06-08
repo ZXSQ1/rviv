@@ -1,10 +1,15 @@
 package localfs
 
-import "os"
+import (
+	"os"
+
+	"github.com/ZXSQ1/rviv/logging"
+)
 
 func (local *LocalFS) ListDir(filename string) ([]string, error) {
 	entries := []string{}
 	rawEntries, err := os.ReadDir(filename)
+	logging.ReportErr(err)
 
 	if err != nil {
 		return nil, err
