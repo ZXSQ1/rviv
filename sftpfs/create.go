@@ -17,7 +17,7 @@ func (client *SFtpFs) Create(filename string) error {
 }
 
 func (client *SFtpFs) CreateDir(filename string) error {
-	err := client.conn.MkdirAll(filename)
+	err := client.conn.Mkdir(filename)
 	logging.ReportErr(err)
 
 	return err

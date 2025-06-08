@@ -11,12 +11,5 @@ build:
 run:
 	go run $(SRCFILE)
 
-test:
-	go test $(TESTOPTS) ./ftpfs
-	go test $(TESTOPTS) ./localfs
-	go test $(TESTOPTS) ./webdavfs
-	go test $(TESTOPTS) ./sftpfs
-	#go test $(TESTOPTS) ./processes
-
 clean:
 	rm $(BINFILE)

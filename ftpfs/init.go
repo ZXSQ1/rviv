@@ -20,11 +20,14 @@ func Connect(addr, user, pass string) (filesystem.Filesystem, error) {
 		return nil, err
 	}
 
-	if conn.Login(user, pass) != nil {
+	err = conn.Login(user, pass)
+	logging.ReportErr(err)
+
+	if err != nil {
 		return nil, err
 	}
 
-	return &FtpFs{conn}, nil
+	return &FtpFs{conn: conn}, nil
 }
 
 func GetAddr(ip string, port int) string {
