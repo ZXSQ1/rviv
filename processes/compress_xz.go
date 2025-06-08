@@ -7,6 +7,8 @@ import (
 	"github.com/ulikunitz/xz"
 )
 
+// compresses an archive into a xz archive give 2 paths; has not been tested;
+// needs implementation of compression levels
 func CompressXz(archive *Path, outfile *Path) error {
 	inObj, err := archive.Filesys.Open(archive.Filename)
 	logging.ReportErr(err)

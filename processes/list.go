@@ -2,6 +2,9 @@ package processes
 
 import "github.com/ZXSQ1/rviv/logging"
 
+// lists a directory given a path; has an option for recursion if the directory
+// has multiple layers of content; has an option to ignore erroneous file; has
+// not been tested
 func ListDir(src *Path, recursive, ignoreBadFiles bool) (*Paths, error) {
 	if !recursive {
 		entries, err := src.Filesys.ListDir(src.Filename)

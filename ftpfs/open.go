@@ -7,6 +7,8 @@ import (
 	"github.com/ZXSQ1/rviv/logging"
 )
 
+// opens a file given a path returning an implementation of the ReadWriteCloser
+// (i.e. the ftpfs.File structure)
 func (client *FtpFs) Open(filename string) (io.ReadWriteCloser, error) {
 	if !client.IsExist(filename) {
 		logging.ReportErr(os.ErrNotExist)

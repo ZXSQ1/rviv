@@ -8,13 +8,24 @@ import (
 	"github.com/jlaffaye/ftp"
 )
 
+// the structure implementing the io.ReadWriteCloser acting as a file object to
+// be returned in the Open method
 type File struct {
-	conn     *ftp.ServerConn
+	// the server connection
+	conn *ftp.ServerConn
+
+	// the path to the file
 	filename string
-	wpos     uint64
-	rpos     uint64
+
+	// the position from which to write
+	wpos uint64
+
+	// the position from which to read
+	rpos uint64
 }
 
+// writes the given bytes to the file returning the number of written bytes and
+// an error
 func (file *File) Write(p []byte) (n int, err error) {
 	err = file.conn.StorFrom(
 		file.filename, bytes.NewReader(p), file.wpos,
@@ -23,7 +34,7 @@ func (file *File) Write(p []byte) (n int, err error) {
 	logging.ReportErr(err)
 
 	if err != nil {
-		return -1, err
+		return 0, err
 	}
 
 	file.wpos += uint64(len(p))
@@ -31,6 +42,7 @@ func (file *File) Write(p []byte) (n int, err error) {
 	return len(p), nil
 }
 
+// reads to the given buffer returning the number of read bytes and an error
 func (file *File) Read(p []byte) (n int, err error) {
 	resp, err := file.conn.RetrFrom(
 		file.filename, file.rpos,
@@ -39,8 +51,7 @@ func (file *File) Read(p []byte) (n int, err error) {
 	logging.ReportErr(err)
 
 	if err != nil {
-		logging.Logf("%v\n", err)
-		return -1, err
+		return 0, err
 	}
 
 	defer resp.Close()
@@ -53,7 +64,7 @@ func (file *File) Read(p []byte) (n int, err error) {
 			return 0, err
 		}
 
-		return -1, err
+		return 0, err
 	}
 
 	file.rpos += uint64(n)
@@ -61,6 +72,7 @@ func (file *File) Read(p []byte) (n int, err error) {
 	return n, nil
 }
 
+// closes the file object
 func (file *File) Close() error {
 	file.conn = nil
 	file.filename = ""

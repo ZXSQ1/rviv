@@ -7,6 +7,8 @@ import (
 	"github.com/ZXSQ1/rviv/logging"
 )
 
+// archives a zip archive given a path for the archive and a set of entries; has
+// an option to ignore erroneous file; not complete; has not been tested
 func ArchiveZip(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 	archiveObj, err := archive.Filesys.Open(archive.Filename)
 	logging.ReportErr(err)

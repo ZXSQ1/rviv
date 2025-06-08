@@ -7,6 +7,8 @@ import (
 	"github.com/ZXSQ1/rviv/logging"
 )
 
+// compresses an archive into a gz archive give 2 paths; has not been tested;
+// needs implementation of compression levels
 func CompressGz(archive *Path, outfile *Path) error {
 	inObj, err := archive.Filesys.Open(archive.Filename)
 	logging.ReportErr(err)

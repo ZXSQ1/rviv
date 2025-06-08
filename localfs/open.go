@@ -8,7 +8,8 @@ import (
 	"github.com/ZXSQ1/rviv/logging"
 )
 
-func (local *LocalFS) Open(filename string) (io.ReadWriteCloser, error) {
+// opens a file given a path
+func (local *LocalFs) Open(filename string) (io.ReadWriteCloser, error) {
 	fileObj, err := os.OpenFile(filename, os.O_RDWR, filesystem.RegularPerm)
 	logging.ReportErr(err)
 

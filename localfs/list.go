@@ -6,7 +6,8 @@ import (
 	"github.com/ZXSQ1/rviv/logging"
 )
 
-func (local *LocalFS) ListDir(filename string) ([]string, error) {
+// gives a listing of the entries in a directory given a path
+func (local *LocalFs) ListDir(filename string) ([]string, error) {
 	entries := []string{}
 	rawEntries, err := os.ReadDir(filename)
 	logging.ReportErr(err)

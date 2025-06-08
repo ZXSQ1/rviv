@@ -7,15 +7,11 @@ import (
 	"github.com/spf13/viper"
 )
 
+// verifies the existence of certain configuration keys and their types; calls
+// other functions that verify the main keys (keys in the first layer of the
+// configuration); not complete yet
 func Verify(filename string) error {
-	err := LoadConfig(filename)
-	logging.ReportErr(err)
-
-	if err != nil {
-		return err
-	}
-
-	err = VerifyDevices()
+	err := VerifyDevices()
 	logging.ReportErr(err)
 
 	if err != nil {
@@ -32,6 +28,8 @@ func Verify(filename string) error {
 	return nil
 }
 
+// verifies the "processes" main key and its subkeys' types; not complete yet (
+// other keys must be checked for existence, and key types must be verified)
 func VerifyProcesses() error {
 	err := IsKeyExist("processes")
 	logging.ReportErr(err)
@@ -43,7 +41,10 @@ func VerifyProcesses() error {
 	for procIdx := range len(viper.Get("processes").([]any)) {
 		procPrefix := "processes." + strconv.Itoa(procIdx) + "."
 
-		err = IsKeyExist(procPrefix+"type", procPrefix+"name", procPrefix+"aliases")
+		err = IsKeyExist(
+			procPrefix+"type", procPrefix+"name", procPrefix+"aliases",
+		)
+
 		logging.ReportErr(err)
 
 		if err != nil {
@@ -54,6 +55,8 @@ func VerifyProcesses() error {
 	return nil
 }
 
+// verifies the "devices" main key and its subkeys' types; not complete yet (
+// other keys must be checked for existence, and key types must be verified
 func VerifyDevices() error {
 	err := IsKeyExist("devices")
 	logging.ReportErr(err)

@@ -6,7 +6,8 @@ import (
 	"github.com/ZXSQ1/rviv/logging"
 )
 
-func (local *LocalFS) IsExist(filename string) bool {
+// checks if the file exists given a path
+func (local *LocalFs) IsExist(filename string) bool {
 	_, err := os.Stat(filename)
 	logging.ReportErr(err)
 

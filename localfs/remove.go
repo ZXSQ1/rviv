@@ -6,14 +6,16 @@ import (
 	"github.com/ZXSQ1/rviv/logging"
 )
 
-func (local *LocalFS) Remove(filename string) error {
+// removes a file given a path
+func (local *LocalFs) Remove(filename string) error {
 	err := os.Remove(filename)
 	logging.ReportErr(err)
 
 	return err
 }
 
-func (local *LocalFS) RemoveDir(filename string) error {
+// removes a directory given a path
+func (local *LocalFs) RemoveDir(filename string) error {
 	err := os.RemoveAll(filename)
 	logging.ReportErr(err)
 

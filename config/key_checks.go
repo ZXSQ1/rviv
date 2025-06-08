@@ -7,6 +7,9 @@ import (
 	"github.com/spf13/viper"
 )
 
+// checks if given keys are found in the configuration; assumes that the viper
+// configuration is loaded (using a function like LoadConfig); the keys are in
+// the format specified by viper in the Get function
 func IsKeyExist(keys ...string) error {
 	for _, key := range keys {
 		if viper.Get(key) == nil {

@@ -5,6 +5,7 @@ import (
 	"runtime"
 )
 
+// logs an error from the direct caller function given an error type
 func ReportErr(err error) {
 	if err == nil {
 		return

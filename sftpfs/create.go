@@ -2,6 +2,7 @@ package sftpfs
 
 import "github.com/ZXSQ1/rviv/logging"
 
+// creates a file given a path
 func (client *SFtpFs) Create(filename string) error {
 	fileObj, err := client.conn.Create(filename)
 	logging.ReportErr(err)
@@ -16,6 +17,7 @@ func (client *SFtpFs) Create(filename string) error {
 	return nil
 }
 
+// creates a directory given a path
 func (client *SFtpFs) CreateDir(filename string) error {
 	err := client.conn.Mkdir(filename)
 	logging.ReportErr(err)

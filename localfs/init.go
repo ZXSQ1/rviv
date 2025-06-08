@@ -2,8 +2,10 @@ package localfs
 
 import "github.com/ZXSQ1/rviv/filesystem"
 
-type LocalFS struct{}
+// an implementation of the Filesystem interface for the local filesystem
+type LocalFs struct{}
 
+// returns the LocalFs structure
 func Init() filesystem.Filesystem {
-	return &LocalFS{}
+	return &LocalFs{}
 }

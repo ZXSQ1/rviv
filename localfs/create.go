@@ -7,7 +7,8 @@ import (
 	"github.com/ZXSQ1/rviv/logging"
 )
 
-func (local *LocalFS) Create(filename string) error {
+// creates a file given a path
+func (local *LocalFs) Create(filename string) error {
 	fileObj, err := os.Create(filename)
 	logging.ReportErr(err)
 
@@ -18,7 +19,8 @@ func (local *LocalFS) Create(filename string) error {
 	return fileObj.Close()
 }
 
-func (local *LocalFS) CreateDir(filename string) error {
+// creates a directory given a path
+func (local *LocalFs) CreateDir(filename string) error {
 	err := os.Mkdir(filename, filesystem.DirPerm)
 	logging.ReportErr(err)
 
