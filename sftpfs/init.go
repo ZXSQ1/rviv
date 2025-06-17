@@ -1,46 +1,39 @@
 package sftpfs
 
 import (
-	"strconv"
-
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/filesystem"
 	"github.com/pkg/sftp"
 	"golang.org/x/crypto/ssh"
 )
 
 type SFtpFs struct {
-	conn *sftp.Client
+	conn     *sftp.Client
+	connInfo *filesystem.ConnInfo
 }
 
-func Connect(addr, user, pass string) (*SFtpFs, error) {
+func Connect(connInfo *filesystem.ConnInfo) (*SFtpFs, error) {
 	config := &ssh.ClientConfig{
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
-		User:            user,
+		User:            connInfo.User,
 		Auth: []ssh.AuthMethod{
-			ssh.Password(pass),
+			ssh.Password(connInfo.Pass),
 		},
 	}
 
-	sshConn, err := ssh.Dial("tcp", addr, config)
-	logging.ReportErr(err)
+	sshConn, err := ssh.Dial("tcp", connInfo.Addr, config)
 
 	if err != nil {
 		return nil, err
 	}
 
 	sftpConn, err := sftp.NewClient(sshConn)
-	logging.ReportErr(err)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return &SFtpFs{
-		conn: sftpConn,
+		conn:     sftpConn,
+		connInfo: connInfo,
 	}, nil
-}
-
-func GetAddr(ip string, port int) string {
-	portString := strconv.Itoa(port)
-	return ip + ":" + portString
 }

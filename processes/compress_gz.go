@@ -4,20 +4,22 @@ import (
 	"compress/gzip"
 	"io"
 
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 func CompressGz(archive *Path, outfile *Path) error {
-	inObj, err := archive.Filesys.Open(archive.Filename)
-	logging.ReportErr(err)
+	inObj, err := archive.Filesys.Open(
+		archive.Filename, filesystem.ModeRead,
+	)
 
 	if err != nil {
 		return err
 	}
 
 	defer inObj.Close()
-	outObj, err := archive.Filesys.Open(outfile.Filename)
-	logging.ReportErr(err)
+	outObj, err := archive.Filesys.Open(
+		outfile.Filename, filesystem.ModeWrite,
+	)
 
 	if err != nil {
 		return err
@@ -28,7 +30,5 @@ func CompressGz(archive *Path, outfile *Path) error {
 	defer gzWriter.Close()
 
 	_, err = io.Copy(gzWriter, inObj)
-	logging.ReportErr(err)
-
 	return err
 }

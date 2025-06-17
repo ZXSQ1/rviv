@@ -21,6 +21,7 @@ func (info *FileInfo) Name() string {
 
 func (info *FileInfo) Size() int64 {
 	size, err := info.conn.FileSize(info.filename)
+	err = stderr(err)
 	logging.ReportErr(err)
 
 	if err != nil {
@@ -31,12 +32,12 @@ func (info *FileInfo) Size() int64 {
 }
 
 func (info *FileInfo) Mode() fs.FileMode {
-	mode := filesystem.RegularPerm
+	mode := filesystem.PermRegular
 
 	if info.IsDir() {
-		mode = fs.ModeDir | filesystem.DirPerm
+		mode = fs.ModeDir | filesystem.PermDir
 	} else if info.IsSymlink() {
-		mode = fs.ModeSymlink | filesystem.LinkPerm
+		mode = fs.ModeSymlink | filesystem.PermLink
 	}
 
 	return mode
@@ -44,6 +45,7 @@ func (info *FileInfo) Mode() fs.FileMode {
 
 func (info *FileInfo) ModTime() time.Time {
 	entry, err := info.conn.GetEntry(info.filename)
+	err = stderr(err)
 	logging.ReportErr(err)
 
 	if err != nil {
@@ -55,6 +57,7 @@ func (info *FileInfo) ModTime() time.Time {
 
 func (info *FileInfo) IsRegular() bool {
 	entry, err := info.conn.GetEntry(info.filename)
+	err = stderr(err)
 	logging.ReportErr(err)
 
 	if err != nil {
@@ -66,6 +69,7 @@ func (info *FileInfo) IsRegular() bool {
 
 func (info *FileInfo) IsDir() bool {
 	entry, err := info.conn.GetEntry(info.filename)
+	err = stderr(err)
 	logging.ReportErr(err)
 
 	if err != nil {
@@ -77,6 +81,7 @@ func (info *FileInfo) IsDir() bool {
 
 func (info *FileInfo) IsSymlink() bool {
 	entry, err := info.conn.GetEntry(info.filename)
+	err = stderr(err)
 	logging.ReportErr(err)
 
 	if err != nil {

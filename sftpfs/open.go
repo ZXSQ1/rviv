@@ -2,13 +2,20 @@ package sftpfs
 
 import (
 	"io"
+	"os"
 
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func (client *SFtpFs) Open(filename string) (io.ReadWriteCloser, error) {
-	fileObj, err := client.conn.Open(filename)
-	logging.ReportErr(err)
+func (client *SFtpFs) Open(filename string, mode filesystem.OpenMode) (
+	io.ReadWriteCloser, error) {
 
-	return fileObj, err
+	switch mode {
+	case filesystem.ModeRead:
+		return client.conn.OpenFile(filename, os.O_RDONLY)
+	case filesystem.ModeWrite:
+		return client.conn.OpenFile(filename, os.O_WRONLY)
+	default:
+		return nil, os.ErrInvalid
+	}
 }

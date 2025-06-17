@@ -4,12 +4,10 @@ import (
 	"os"
 
 	"github.com/ZXSQ1/rviv/filesystem"
-	"github.com/ZXSQ1/rviv/logging"
 )
 
 func (local *LocalFs) Create(filename string) error {
 	fileObj, err := os.Create(filename)
-	logging.ReportErr(err)
 
 	if err != nil {
 		return err
@@ -19,8 +17,5 @@ func (local *LocalFs) Create(filename string) error {
 }
 
 func (local *LocalFs) CreateDir(filename string) error {
-	err := os.Mkdir(filename, filesystem.DirPerm)
-	logging.ReportErr(err)
-
-	return err
+	return os.Mkdir(filename, filesystem.PermDir)
 }

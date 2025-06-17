@@ -5,15 +5,23 @@ import (
 	"io/fs"
 )
 
+type OpenMode uint8
+
 var (
 	// the standard permission for a directory
-	DirPerm = fs.FileMode(0755)
+	PermDir = fs.FileMode(0755)
 
 	// the standard permission for a regular file
-	RegularPerm = fs.FileMode(0644)
+	PermRegular = fs.FileMode(0644)
 
 	// the standard permission for a symbolic link
-	LinkPerm = fs.FileMode(0777)
+	PermLink = fs.FileMode(0777)
+
+	// the standard mode for write
+	ModeWrite OpenMode = 0
+
+	// the standard mode for read
+	ModeRead OpenMode = 1
 )
 
 // the filesystem interface that standardizes the operations in all different
@@ -40,8 +48,9 @@ type Filesystem interface {
 	// lists the directory given a path
 	ListDir(filename string) ([]string, error)
 
-	// returns an io.ReadWriteCloser for writing and reading a file given a path
-	Open(filename string) (io.ReadWriteCloser, error)
+	// returns an io.ReadWriteCloser for writing and reading a file given a path;
+	// the mode is one of WriteMode or ReadMode
+	Open(filename string, mode OpenMode) (io.ReadWriteCloser, error)
 
 	// closes a filesystem (assuming that it is a connection; if it is not a
 	// connection, the method returns nil)

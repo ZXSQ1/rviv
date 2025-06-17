@@ -4,12 +4,13 @@ import (
 	"archive/zip"
 	"io"
 
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 func ArchiveZip(archive *Path, entries *Paths, ignoreBadFiles bool) error {
-	archiveObj, err := archive.Filesys.Open(archive.Filename)
-	logging.ReportErr(err)
+	archiveObj, err := archive.Filesys.Open(
+		archive.Filename, filesystem.ModeWrite,
+	)
 
 	if err != nil {
 		return err
@@ -20,8 +21,7 @@ func ArchiveZip(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 	defer zipWriter.Close()
 
 	for _, entry := range entries.Filenames {
-		entryWriter, err := entries.Filesys.Open(entry)
-		logging.ReportErr(err)
+		entryWriter, err := entries.Filesys.Open(entry, filesystem.ModeRead)
 
 		if err != nil {
 			if ignoreBadFiles {
@@ -32,7 +32,6 @@ func ArchiveZip(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 		}
 
 		info, err := entries.Filesys.Stat(entry)
-		logging.ReportErr(err)
 
 		if err != nil {
 			if ignoreBadFiles {
@@ -43,7 +42,6 @@ func ArchiveZip(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 		}
 
 		header, err := zip.FileInfoHeader(info)
-		logging.ReportErr(err)
 
 		if err != nil {
 			if ignoreBadFiles {
@@ -58,7 +56,6 @@ func ArchiveZip(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 		header.Flags = 0x8
 
 		writer, err := zipWriter.CreateHeader(header)
-		logging.ReportErr(err)
 
 		if err != nil {
 			if ignoreBadFiles {
@@ -69,10 +66,16 @@ func ArchiveZip(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 		}
 
 		_, err = io.Copy(writer, entryWriter)
-		logging.ReportErr(err)
+
+		if err != nil {
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
+		}
 
 		err = entryWriter.Close()
-		logging.ReportErr(err)
 
 		if err != nil {
 			if ignoreBadFiles {

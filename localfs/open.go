@@ -5,12 +5,17 @@ import (
 	"os"
 
 	"github.com/ZXSQ1/rviv/filesystem"
-	"github.com/ZXSQ1/rviv/logging"
 )
 
-func (local *LocalFs) Open(filename string) (io.ReadWriteCloser, error) {
-	fileObj, err := os.OpenFile(filename, os.O_RDWR, filesystem.RegularPerm)
-	logging.ReportErr(err)
+func (local *LocalFs) Open(filename string, mode filesystem.OpenMode) (
+	io.ReadWriteCloser, error) {
 
-	return fileObj, err
+	switch mode {
+	case filesystem.ModeRead:
+		return os.OpenFile(filename, os.O_RDONLY, filesystem.PermRegular)
+	case filesystem.ModeWrite:
+		return os.OpenFile(filename, os.O_WRONLY, filesystem.PermRegular)
+	default:
+		return nil, os.ErrInvalid
+	}
 }

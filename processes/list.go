@@ -1,11 +1,8 @@
 package processes
 
-import "github.com/ZXSQ1/rviv/logging"
-
 func ListDir(src *Path, recursive, ignoreBadFiles bool) (*Paths, error) {
 	if !recursive {
 		entries, err := src.Filesys.ListDir(src.Filename)
-		logging.ReportErr(err)
 
 		return &Paths{
 			Filenames: entries,
@@ -14,7 +11,6 @@ func ListDir(src *Path, recursive, ignoreBadFiles bool) (*Paths, error) {
 	}
 
 	entries, err := ListDir(src, false, ignoreBadFiles)
-	logging.ReportErr(err)
 
 	if err != nil {
 		return nil, err
@@ -22,7 +18,6 @@ func ListDir(src *Path, recursive, ignoreBadFiles bool) (*Paths, error) {
 
 	for _, entry := range entries.Filenames {
 		entrystat, err := src.Filesys.Stat(entry)
-		logging.ReportErr(err)
 
 		if err != nil {
 			if ignoreBadFiles {
@@ -41,8 +36,6 @@ func ListDir(src *Path, recursive, ignoreBadFiles bool) (*Paths, error) {
 					Filesys:  src.Filesys,
 				}, true, ignoreBadFiles,
 			)
-
-			logging.ReportErr(err)
 
 			if err != nil {
 				if ignoreBadFiles {

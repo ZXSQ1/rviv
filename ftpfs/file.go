@@ -3,24 +3,28 @@ package ftpfs
 import (
 	"bytes"
 	"io"
+	"os"
 
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/filesystem"
 	"github.com/jlaffaye/ftp"
 )
 
 type File struct {
 	conn     *ftp.ServerConn
 	filename string
+	mode     filesystem.OpenMode
 	wpos     uint64
 	rpos     uint64
 }
 
 func (file *File) Write(p []byte) (n int, err error) {
-	err = file.conn.StorFrom(
-		file.filename, bytes.NewReader(p), file.wpos,
-	)
+	if file.mode != filesystem.ModeWrite {
+		return -1, os.ErrInvalid
+	}
 
-	logging.ReportErr(err)
+	err = stderr(
+		file.conn.StorFrom(file.filename, bytes.NewReader(p), file.wpos),
+	)
 
 	if err != nil {
 		return 0, err
@@ -32,11 +36,15 @@ func (file *File) Write(p []byte) (n int, err error) {
 }
 
 func (file *File) Read(p []byte) (n int, err error) {
+	if file.mode != filesystem.ModeRead {
+		return -1, os.ErrInvalid
+	}
+
 	resp, err := file.conn.RetrFrom(
 		file.filename, file.rpos,
 	)
 
-	logging.ReportErr(err)
+	err = stderr(err)
 
 	if err != nil {
 		return 0, err
@@ -44,8 +52,7 @@ func (file *File) Read(p []byte) (n int, err error) {
 
 	defer resp.Close()
 	n, err = resp.Read(p)
-
-	logging.ReportErr(err)
+	err = stderr(err)
 
 	if err != nil {
 		if err == io.EOF {

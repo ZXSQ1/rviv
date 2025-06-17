@@ -3,21 +3,23 @@ package processes
 import (
 	"io"
 
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/filesystem"
 	"github.com/ulikunitz/xz"
 )
 
 func CompressXz(archive *Path, outfile *Path) error {
-	inObj, err := archive.Filesys.Open(archive.Filename)
-	logging.ReportErr(err)
+	inObj, err := archive.Filesys.Open(
+		archive.Filename, filesystem.ModeRead,
+	)
 
 	if err != nil {
 		return err
 	}
 
 	defer inObj.Close()
-	outObj, err := archive.Filesys.Open(outfile.Filename)
-	logging.ReportErr(err)
+	outObj, err := archive.Filesys.Open(
+		outfile.Filename, filesystem.ModeWrite,
+	)
 
 	if err != nil {
 		return err
@@ -25,7 +27,6 @@ func CompressXz(archive *Path, outfile *Path) error {
 
 	defer outObj.Close()
 	xzWriter, err := xz.NewWriter(outObj)
-	logging.ReportErr(err)
 
 	if err != nil {
 		return err
@@ -33,7 +34,5 @@ func CompressXz(archive *Path, outfile *Path) error {
 
 	defer xzWriter.Close()
 	_, err = io.Copy(xzWriter, inObj)
-	logging.ReportErr(err)
-
 	return err
 }

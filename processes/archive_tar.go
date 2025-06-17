@@ -4,12 +4,13 @@ import (
 	"archive/tar"
 	"io"
 
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 func ArchiveTar(archive *Path, entries *Paths, ignoreBadFiles bool) error {
-	archiveObj, err := archive.Filesys.Open(archive.Filename)
-	logging.ReportErr(err)
+	archiveObj, err := archive.Filesys.Open(
+		archive.Filename, filesystem.ModeWrite,
+	)
 
 	if err != nil {
 		return err
@@ -20,8 +21,7 @@ func ArchiveTar(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 	defer tarWriter.Close()
 
 	for _, entry := range entries.Filenames {
-		entryWriter, err := entries.Filesys.Open(entry)
-		logging.ReportErr(err)
+		entryWriter, err := entries.Filesys.Open(entry, filesystem.ModeRead)
 
 		if err != nil {
 			if ignoreBadFiles {
@@ -32,7 +32,6 @@ func ArchiveTar(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 		}
 
 		info, err := entries.Filesys.Stat(entry)
-		logging.ReportErr(err)
 
 		if err != nil {
 			if ignoreBadFiles {
@@ -43,7 +42,6 @@ func ArchiveTar(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 		}
 
 		header, err := tar.FileInfoHeader(info, info.Name())
-		logging.ReportErr(err)
 
 		if err != nil {
 			if ignoreBadFiles {
@@ -54,7 +52,6 @@ func ArchiveTar(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 		}
 
 		err = tarWriter.WriteHeader(header)
-		logging.ReportErr(err)
 
 		if err != nil {
 			if ignoreBadFiles {
@@ -65,7 +62,6 @@ func ArchiveTar(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 		}
 
 		_, err = io.Copy(tarWriter, entryWriter)
-		logging.ReportErr(err)
 
 		if err != nil {
 			if ignoreBadFiles {
@@ -75,7 +71,15 @@ func ArchiveTar(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 			return err
 		}
 
-		entryWriter.Close()
+		err = entryWriter.Close()
+
+		if err != nil {
+			if ignoreBadFiles {
+				continue
+			}
+
+			return err
+		}
 	}
 
 	return nil
