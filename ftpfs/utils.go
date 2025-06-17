@@ -6,7 +6,6 @@ import (
 	"strings"
 )
 
-// returns the status code of the error
 func status(err error) int {
 	if err == nil {
 		return -1
@@ -18,8 +17,6 @@ func status(err error) int {
 	return status
 }
 
-// standardizes the FTP library error making it closer to the standard library's
-// errors
 func stderr(err error) error {
 	if err == nil {
 		return nil
@@ -29,5 +26,5 @@ func stderr(err error) error {
 	actualError := errorParts[len(errorParts)-1]
 	actualError = strings.TrimSpace(actualError)
 
-	return fmt.Errorf(actualError)
+	return fmt.Errorf("%s", actualError)
 }

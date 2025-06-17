@@ -7,8 +7,6 @@ import (
 	"github.com/ZXSQ1/rviv/logging"
 )
 
-// makes a tar archive given a filesystem-independent path and some entries; has
-// an option to ignore erroneous entries; not completed; has not been tested
 func ArchiveTar(archive *Path, entries *Paths, ignoreBadFiles bool) error {
 	archiveObj, err := archive.Filesys.Open(archive.Filename)
 	logging.ReportErr(err)

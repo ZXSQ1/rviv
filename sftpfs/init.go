@@ -8,13 +8,10 @@ import (
 	"golang.org/x/crypto/ssh"
 )
 
-// the SFTP filesystem implementation of the Filesystem interface
 type SFtpFs struct {
-	// the SFTP connection/client
 	conn *sftp.Client
 }
 
-// connects to the SFTP server given an address, a username and a password
 func Connect(addr, user, pass string) (*SFtpFs, error) {
 	config := &ssh.ClientConfig{
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),

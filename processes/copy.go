@@ -7,8 +7,6 @@ import (
 	"github.com/ZXSQ1/rviv/logging"
 )
 
-// copies the source file to the destination given 2 paths; a progress channel
-// has the number of bytes written to it
 func Copy(src, dest *Path, progress chan int) error {
 	srcfs, destfs := src.Filesys, dest.Filesys
 	srcobj, err := srcfs.Open(src.Filename)

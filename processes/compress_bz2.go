@@ -7,8 +7,6 @@ import (
 	"github.com/dsnet/compress/bzip2"
 )
 
-// compresses an archive into a bz2 archive given 2 paths; has not been tested;
-// needs specification for levels of compression
 func CompressBz2(archive *Path, outfile *Path) error {
 	inObj, err := archive.Filesys.Open(archive.Filename)
 	logging.ReportErr(err)

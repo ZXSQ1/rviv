@@ -6,8 +6,6 @@ import (
 	"runtime"
 )
 
-// logs the message (e.g. error messages from the direct caller function) to the
-// standard output specifying the direct caller of the Log function
 func Log(logmsg string) {
 	if !Debug {
 		return
@@ -24,7 +22,6 @@ func Log(logmsg string) {
 	log.Printf("%s: %s", callerName, logmsg)
 }
 
-// does the same as Log, but adds a new line
 func Logln(logmsg string) {
 	if !Debug {
 		return
@@ -41,7 +38,6 @@ func Logln(logmsg string) {
 	log.Printf("%s: %s\n", callerName, logmsg)
 }
 
-// simply a formatted Log
 func Logf(logformat string, v ...any) {
 	if !Debug {
 		return

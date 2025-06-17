@@ -40,8 +40,7 @@ type Filesystem interface {
 	// lists the directory given a path
 	ListDir(filename string) ([]string, error)
 
-	// returns an io.ReadWriteCloser for writing and reading
-	// a file given a path
+	// returns an io.ReadWriteCloser for writing and reading a file given a path
 	Open(filename string) (io.ReadWriteCloser, error)
 
 	// closes a filesystem (assuming that it is a connection; if it is not a
