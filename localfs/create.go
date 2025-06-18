@@ -7,6 +7,12 @@ import (
 )
 
 func (local *LocalFs) Create(filename string) error {
+	_, err := os.Stat(filename)
+
+	if err == nil {
+		return os.ErrExist
+	}
+
 	fileObj, err := os.Create(filename)
 
 	if err != nil {
