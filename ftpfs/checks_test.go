@@ -18,14 +18,14 @@ func TestFtpFs_IsExist(t *testing.T) {
 	testFilename := "test"
 
 	if err != nil {
-		println("error")
+		println(err.Error())
 		t.FailNow()
 	}
 
 	t.Cleanup(func() {
 		os.Remove(testPrefix + "/" + testFilename)
 		client.Close()
-		server.Stop()
+		server.Shutdown()
 	})
 
 	if os.MkdirAll(testPrefix+"/"+testFilename, filesystem.PermDir) != nil {

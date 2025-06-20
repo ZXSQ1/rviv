@@ -24,6 +24,11 @@ var (
 	ModeRead OpenMode = 1
 )
 
+const (
+	// the standard buffer size for reading and writing
+	BufferSize = 1024 * 1000
+)
+
 // the filesystem interface that standardizes the operations in all different
 // filesystems (e.g. local, FTP, SFTP, WebDav, etc.)
 type Filesystem interface {
