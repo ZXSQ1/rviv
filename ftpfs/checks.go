@@ -8,7 +8,7 @@ func (client *FtpFs) IsExist(filename string) bool {
 	logging.ReportErr(err)
 
 	if err != nil {
-		return err.Error() == "no such file or directory"
+		return err.Error() != "no such file or directory"
 	}
 
 	return true

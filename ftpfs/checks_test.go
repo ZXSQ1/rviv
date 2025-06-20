@@ -18,7 +18,6 @@ func TestFtpFs_IsExist(t *testing.T) {
 	testFilename := "test"
 
 	if err != nil {
-		println("error")
 		t.FailNow()
 	}
 
@@ -36,7 +35,7 @@ func TestFtpFs_IsExist(t *testing.T) {
 		t.FailNow()
 	}
 
-	if os.Remove(testPrefix+"/"+testFilename) != nil {
+	if os.RemoveAll(testPrefix+"/"+testFilename) != nil {
 		t.FailNow()
 	}
 
