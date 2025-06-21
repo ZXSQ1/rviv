@@ -29,7 +29,7 @@ func Copy(src, dest *Path, progress chan int) error {
 	defer destobj.Close()
 
 	for {
-		buffer := make([]byte, BufferSize)
+		buffer := make([]byte, filesystem.BufferSize)
 		n, err := srcobj.Read(buffer)
 
 		if err != nil {

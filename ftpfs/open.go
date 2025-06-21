@@ -34,7 +34,5 @@ func (client *FtpFs) Open(filename string, mode filesystem.OpenMode) (
 		conn:     client.conn,
 		filename: filename,
 		mode:     mode,
-		wpos:     0,
-		rpos:     0,
 	}, nil
 }
