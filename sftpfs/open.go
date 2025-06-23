@@ -16,6 +16,6 @@ func (client *SFtpFs) Open(filename string, mode filesystem.OpenMode) (
 	case filesystem.ModeWrite:
 		return client.conn.OpenFile(filename, os.O_WRONLY)
 	default:
-		return nil, os.ErrInvalid
+		return nil, filesystem.ErrModeInvalid
 	}
 }

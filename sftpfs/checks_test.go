@@ -1,4 +1,4 @@
-package ftpfs
+package sftpfs
 
 import (
 	"os"
@@ -7,7 +7,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func TestFtpFs_IsExist(t *testing.T) {
+func TestSFtpFs_IsExist(t *testing.T) {
 	server := OpenTestServer()
 	client, err := Connect(&filesystem.ConnInfo{
 		Addr: testAddr,
@@ -15,19 +15,19 @@ func TestFtpFs_IsExist(t *testing.T) {
 		Pass: testPass,
 	})
 
-	testFilename := "test"
-
 	if err != nil {
 		t.FailNow()
 	}
 
+	testFilename := "test"
+
 	t.Cleanup(func() {
 		os.Remove(testPrefix + "/" + testFilename)
 		client.Close()
-		server.Stop()
+		server.Close()
 	})
 
-	if os.MkdirAll(testPrefix+"/"+testFilename, filesystem.PermDir) != nil {
+	if os.Mkdir(testPrefix+"/"+testFilename, filesystem.PermDir) != nil {
 		t.FailNow()
 	}
 
@@ -35,12 +35,23 @@ func TestFtpFs_IsExist(t *testing.T) {
 		t.FailNow()
 	}
 
-	if os.RemoveAll(testPrefix+"/"+testFilename) != nil {
+	if os.Remove(testPrefix+"/"+testFilename) != nil {
 		t.FailNow()
 	}
 
 	if client.IsExist(testFilename) {
-		println("error")
+		t.FailNow()
+	}
+
+	fileObj, err := os.Create(testPrefix + "/" + testFilename)
+
+	if err != nil {
+		t.FailNow()
+	}
+
+	fileObj.Close()
+
+	if !client.IsExist(testFilename) {
 		t.FailNow()
 	}
 }

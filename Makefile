@@ -11,7 +11,7 @@ build:
 test:
 	go test $(TESTOPTS) localfs/*.go
 	go test $(TESTOPTS) ftpfs/*.go
-	#go test $(TESTOPTS) sftpfs/*.go
+	go test $(TESTOPTS) sftpfs/*.go
 	#go test $(TESTOPTS) webdavfs/*.go
 	#go test $(TESTOPTS) processes/*.go
 

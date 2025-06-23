@@ -5,6 +5,7 @@ go 1.23.4
 require (
 	github.com/dsnet/compress v0.0.1
 	github.com/fclairamb/ftpserverlib v0.26.0
+	github.com/gliderlabs/ssh v0.3.8
 	github.com/jlaffaye/ftp v0.2.0
 	github.com/pkg/sftp v1.13.9
 	github.com/spf13/afero v1.14.0
@@ -15,6 +16,7 @@ require (
 )
 
 require (
+	github.com/anmitsu/go-shlex v0.0.0-20200514113438-38f4b401e2be // indirect
 	github.com/fclairamb/go-log v0.5.0 // indirect
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect

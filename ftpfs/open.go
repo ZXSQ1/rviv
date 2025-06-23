@@ -1,9 +1,7 @@
 package ftpfs
 
 import (
-	"fmt"
 	"io"
-	"os"
 
 	"github.com/ZXSQ1/rviv/filesystem"
 )
@@ -12,7 +10,7 @@ func (client *FtpFs) Open(filename string, mode filesystem.OpenMode) (
 	io.ReadWriteCloser, error) {
 
 	if !client.IsExist(filename) {
-		return nil, os.ErrNotExist
+		return nil, filesystem.ErrNotExist
 	}
 
 	stat, err := client.Stat(filename)
@@ -23,11 +21,11 @@ func (client *FtpFs) Open(filename string, mode filesystem.OpenMode) (
 	}
 
 	if !stat.Mode().IsRegular() {
-		return nil, fmt.Errorf("open operation failed; file is not regular")
+		return nil, filesystem.ErrFileNotRegular
 	}
 
 	if !(mode == filesystem.ModeRead || mode == filesystem.ModeWrite) {
-		return nil, os.ErrInvalid
+		return nil, filesystem.ErrModeInvalid
 	}
 
 	return &File{

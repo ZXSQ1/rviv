@@ -1,6 +1,14 @@
 package sftpfs
 
+import (
+	"github.com/ZXSQ1/rviv/filesystem"
+)
+
 func (client *SFtpFs) Create(filename string) error {
+	if client.IsExist(filename) {
+		return filesystem.ErrExist
+	}
+
 	fileObj, err := client.conn.Create(filename)
 
 	if err != nil {

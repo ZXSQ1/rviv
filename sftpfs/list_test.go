@@ -1,4 +1,4 @@
-package ftpfs
+package sftpfs
 
 import (
 	"os"
@@ -8,7 +8,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func TestFtpFs_ListDir(t *testing.T) {
+func TestSFtpFs_ListDir(t *testing.T) {
 	server := OpenTestServer()
 	client, err := Connect(&filesystem.ConnInfo{
 		Addr: testAddr,
@@ -16,17 +16,17 @@ func TestFtpFs_ListDir(t *testing.T) {
 		Pass: testPass,
 	})
 
-	testEntryPrefix := "test"
-	testEntries := []string{"hi", "abcd", "jsdf", "foo", "bar", "feh"}
-
 	if err != nil {
 		t.FailNow()
 	}
 
+	testEntryPrefix := "test"
+	testEntries := []string{"a", "hfsjd", "b", "fh", "jk", "alsd"}
+
 	t.Cleanup(func() {
-		os.RemoveAll(testPrefix + "/" + testEntryPrefix)
+		os.RemoveAll(testEntryPrefix)
 		client.Close()
-		server.Stop()
+		server.Close()
 	})
 
 	for _, testEntry := range testEntries {

@@ -8,46 +8,47 @@ import (
 type OpenMode uint8
 
 var (
-	// the standard permission for a directory
-	PermDir = fs.FileMode(0755)
-
-	// the standard permission for a regular file
-	PermRegular = fs.FileMode(0644)
-
-	// the standard permission for a symbolic link
-	PermLink = fs.FileMode(0777)
-
-	// the standard mode for write
-	ModeWrite OpenMode = 0
-
-	// the standard mode for read
-	ModeRead OpenMode = 1
+	PermDir              = fs.FileMode(0755)
+	PermRegular          = fs.FileMode(0644)
+	PermLink             = fs.FileMode(0777)
+	ModeWrite   OpenMode = 0
+	ModeRead    OpenMode = 1
 )
 
 const (
-	// the standard buffer size for writing and reading
 	BufferSize = 1024 * 1000
 )
 
 // the filesystem interface that standardizes the operations in all different
 // filesystems (e.g. local, FTP, SFTP, WebDav, etc.)
+//
+// note: some methods depend on other methods; mainly the ones depended on are
+// IsExist() and Stat()
 type Filesystem interface {
 	// tests for the existence of the file give a path
 	IsExist(filename string) bool
 
-	// gives information about the file given a path
+	// gives information about the file given a path;
+	// - Name() gives the base name
+	// - Size() gives the size of the regular file and -1 for a directory
+	// - Mode() gives the default modes in the filesystem module (e.g. PermDir)
+	// - ModTime() gives the modification time
+	// - IsDir() checks if the file is a directory
+	// - Sys() completely and utterly useless; returns nil always
 	Stat(filename string) (fs.FileInfo, error)
 
-	// creates a file given a path
+	// creates a file given a path; returns an error if the regular file exists
 	Create(filename string) error
 
-	// creates a directory given a path
+	// creates a directory given a path; returns an error if the directory exists
 	CreateDir(filename string) error
 
-	// removes the file given a path
+	// removes the file given a path; returns an error if filename refers to a
+	// directory
 	Remove(filename string) error
 
-	// removes the directory and its contents (if any) given a path
+	// removes the directory and its contents (if any) given a path; returns an
+	// error if filename refers to a regular file
 	RemoveDir(filename string) error
 
 	// lists the directory given a path

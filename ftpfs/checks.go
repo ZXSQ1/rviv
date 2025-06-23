@@ -1,6 +1,9 @@
 package ftpfs
 
-import "github.com/ZXSQ1/rviv/logging"
+import (
+	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/logging"
+)
 
 func (client *FtpFs) IsExist(filename string) bool {
 	_, err := client.conn.FileSize(filename)
@@ -8,7 +11,7 @@ func (client *FtpFs) IsExist(filename string) bool {
 	logging.ReportErr(err)
 
 	if err != nil {
-		return err.Error() != "no such file or directory"
+		return err.Error() != filesystem.ErrNotExist.Error()
 	}
 
 	return true

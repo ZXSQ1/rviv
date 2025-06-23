@@ -1,8 +1,9 @@
 package localfs
 
 import (
-	"fmt"
 	"os"
+
+	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 func (local *LocalFs) Remove(filename string) error {
@@ -13,7 +14,7 @@ func (local *LocalFs) Remove(filename string) error {
 	}
 
 	if !stat.Mode().IsRegular() {
-		return fmt.Errorf("file is not a regular file")
+		return filesystem.ErrFileNotRegular
 	}
 
 	return os.Remove(filename)
@@ -27,7 +28,7 @@ func (local *LocalFs) RemoveDir(filename string) error {
 	}
 
 	if !stat.IsDir() {
-		return fmt.Errorf("file is not a regular file")
+		return filesystem.ErrFileNotDir
 	}
 
 	return os.RemoveAll(filename)

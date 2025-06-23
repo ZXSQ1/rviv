@@ -2,12 +2,13 @@ package ftpfs
 
 import (
 	"io/fs"
-	"os"
+
+	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 func (client *FtpFs) Stat(filename string) (fs.FileInfo, error) {
 	if !client.IsExist(filename) {
-		return nil, os.ErrNotExist
+		return nil, filesystem.ErrNotExist
 	}
 
 	return &FileInfo{

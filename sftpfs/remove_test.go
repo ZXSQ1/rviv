@@ -1,4 +1,4 @@
-package ftpfs
+package sftpfs
 
 import (
 	"os"
@@ -7,7 +7,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func TestFtpFs_Remove(t *testing.T) {
+func TestSFtpFs_Remove(t *testing.T) {
 	server := OpenTestServer()
 	client, err := Connect(&filesystem.ConnInfo{
 		Addr: testAddr,
@@ -15,17 +15,21 @@ func TestFtpFs_Remove(t *testing.T) {
 		Pass: testPass,
 	})
 
-	testFilename := "test"
-
 	if err != nil {
 		t.FailNow()
 	}
 
+	testFilename := "test"
+
 	t.Cleanup(func() {
 		os.Remove(testPrefix + "/" + testFilename)
 		client.Close()
-		server.Stop()
+		server.Close()
 	})
+
+	if client.Remove(testFilename) == nil {
+		t.FailNow()
+	}
 
 	if os.Mkdir(testPrefix+"/"+testFilename, filesystem.PermDir) != nil {
 		t.FailNow()
@@ -45,14 +49,16 @@ func TestFtpFs_Remove(t *testing.T) {
 		t.FailNow()
 	}
 
-	fileObj.Close()
+	if fileObj.Close() != nil {
+		t.FailNow()
+	}
 
 	if client.Remove(testFilename) != nil {
 		t.FailNow()
 	}
 }
 
-func TestFtpFs_RemoveDir(t *testing.T) {
+func TestSFtpFs_RemoveDir(t *testing.T) {
 	server := OpenTestServer()
 	client, err := Connect(&filesystem.ConnInfo{
 		Addr: testAddr,
@@ -60,17 +66,21 @@ func TestFtpFs_RemoveDir(t *testing.T) {
 		Pass: testPass,
 	})
 
-	testFilename := "test"
-
 	if err != nil {
 		t.FailNow()
 	}
 
+	testFilename := "test"
+
 	t.Cleanup(func() {
 		os.Remove(testPrefix + "/" + testFilename)
 		client.Close()
-		server.Stop()
+		server.Close()
 	})
+
+	if client.RemoveDir(testFilename) == nil {
+		t.FailNow()
+	}
 
 	if os.Mkdir(testPrefix+"/"+testFilename, filesystem.PermDir) != nil {
 		t.FailNow()

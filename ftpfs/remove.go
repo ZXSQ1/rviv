@@ -1,34 +1,32 @@
 package ftpfs
 
 import (
-	"fmt"
-
-	"github.com/jlaffaye/ftp"
+	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 func (client *FtpFs) Remove(filename string) error {
-	entry, err := client.conn.GetEntry(filename)
+	stat, err := client.Stat(filename)
 
 	if err != nil {
 		return stderr(err)
 	}
 
-	if entry.Type != ftp.EntryTypeFile {
-		return fmt.Errorf("file not a regular file")
+	if !stat.Mode().IsRegular() {
+		return filesystem.ErrFileNotRegular
 	}
 
 	return stderr(client.conn.Delete(filename))
 }
 
 func (client *FtpFs) RemoveDir(filename string) error {
-	entry, err := client.conn.GetEntry(filename)
+	stat, err := client.Stat(filename)
 
 	if err != nil {
 		return stderr(err)
 	}
 
-	if entry.Type != ftp.EntryTypeFolder {
-		return fmt.Errorf("file not a directory")
+	if !stat.IsDir() {
+		return filesystem.ErrFileNotDir
 	}
 
 	return stderr(client.conn.RemoveDirRecur(filename))

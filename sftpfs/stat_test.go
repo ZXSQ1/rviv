@@ -1,4 +1,4 @@
-package ftpfs
+package sftpfs
 
 import (
 	"os"
@@ -8,7 +8,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func TestFtpFs_Stat(t *testing.T) {
+func TestSFtpFs_Stat(t *testing.T) {
 	server := OpenTestServer()
 	client, err := Connect(&filesystem.ConnInfo{
 		Addr: testAddr,
@@ -16,16 +16,15 @@ func TestFtpFs_Stat(t *testing.T) {
 		Pass: testPass,
 	})
 
-	testFilename := "test"
-
 	if err != nil {
 		t.FailNow()
 	}
 
+	testFilename := "test"
+
 	t.Cleanup(func() {
-		os.Remove(testPrefix + "/" + testFilename)
 		client.Close()
-		server.Stop()
+		server.Close()
 	})
 
 	if os.Mkdir(testPrefix+"/"+testFilename, filesystem.PermDir) != nil {
@@ -76,10 +75,7 @@ func TestFtpFs_Stat(t *testing.T) {
 		t.FailNow()
 	}
 
-	if fileObj.Close() != nil {
-		t.FailNow()
-	}
-
+	fileObj.Close()
 	actualStat, err = os.Stat(testPrefix + "/" + testFilename)
 
 	if err != nil {

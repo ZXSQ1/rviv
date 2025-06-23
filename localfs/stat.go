@@ -6,5 +6,13 @@ import (
 )
 
 func (local *LocalFs) Stat(filename string) (fs.FileInfo, error) {
-	return os.Stat(filename)
+	_, err := os.Stat(filename)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &FileInfo{
+		filename: filename,
+	}, nil
 }

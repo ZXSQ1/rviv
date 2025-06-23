@@ -2,12 +2,13 @@ package ftpfs
 
 import (
 	"bytes"
-	"os"
+
+	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 func (client *FtpFs) Create(filename string) error {
 	if client.IsExist(filename) {
-		return os.ErrExist
+		return filesystem.ErrExist
 	}
 
 	return stderr(
@@ -17,7 +18,7 @@ func (client *FtpFs) Create(filename string) error {
 
 func (client *FtpFs) CreateDir(filename string) error {
 	if client.IsExist(filename) {
-		return os.ErrExist
+		return filesystem.ErrExist
 	}
 
 	return stderr(client.conn.MakeDir(filename))

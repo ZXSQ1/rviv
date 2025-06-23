@@ -16,6 +16,6 @@ func (local *LocalFs) Open(filename string, mode filesystem.OpenMode) (
 	case filesystem.ModeWrite:
 		return os.OpenFile(filename, os.O_WRONLY, filesystem.PermRegular)
 	default:
-		return nil, os.ErrInvalid
+		return nil, filesystem.ErrModeInvalid
 	}
 }

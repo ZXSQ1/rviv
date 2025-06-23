@@ -162,6 +162,5 @@ func OpenTestServer() *ftpserver.FtpServer {
 	}()
 
 	time.Sleep(100 * time.Millisecond)
-
 	return server
 }

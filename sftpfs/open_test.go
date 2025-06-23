@@ -1,4 +1,4 @@
-package ftpfs
+package sftpfs
 
 import (
 	"os"
@@ -7,7 +7,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func TestFtpFs_Open(t *testing.T) {
+func TestSFtpFs_Open(t *testing.T) {
 	server := OpenTestServer()
 	client, err := Connect(&filesystem.ConnInfo{
 		Addr: testAddr,
@@ -15,20 +15,26 @@ func TestFtpFs_Open(t *testing.T) {
 		Pass: testPass,
 	})
 
+	if err != nil {
+		t.FailNow()
+	}
+
 	testFilename := "test"
 	testContent := "test"
+
+	t.Cleanup(func() {
+		os.Remove(testPrefix + "/" + testFilename)
+		client.Close()
+		server.Close()
+	})
+
+	createdObj, err := os.Create(testPrefix + "/" + testFilename)
 
 	if err != nil {
 		t.FailNow()
 	}
 
-	t.Cleanup(func() {
-		os.Remove(testPrefix + "/" + testFilename)
-		client.Close()
-		server.Stop()
-	})
-
-	if client.Create(testFilename) != nil {
+	if createdObj.Close() != nil {
 		t.FailNow()
 	}
 
@@ -50,7 +56,7 @@ func TestFtpFs_Open(t *testing.T) {
 		t.FailNow()
 	}
 
-	_, err = fileObj.Read(make([]byte, filesystem.BufferSize))
+	_, err = fileObj.Read([]byte(testContent))
 
 	if err == nil {
 		t.FailNow()
@@ -69,40 +75,23 @@ func TestFtpFs_Open(t *testing.T) {
 	buffer := make([]byte, len(testContent))
 	n, err = fileObj.Read(buffer)
 
-	if n != len(testContent) || err != nil {
+	if n != len(testContent) || err != nil || string(buffer) != testContent {
 		t.FailNow()
 	}
 
 	n, err = fileObj.Read(buffer)
 
-	if n != len(testContent) || err != nil {
+	if n != len(testContent) || err != nil || string(buffer) != testContent {
 		t.FailNow()
 	}
 
-	n, err = fileObj.Read(buffer)
-
-	if n != 0 || err == nil {
-		println(err.Error())
-		t.FailNow()
-	}
-
-	_, err = fileObj.Write([]byte{})
+	_, err = fileObj.Write(buffer)
 
 	if err == nil {
 		t.FailNow()
 	}
 
 	if fileObj.Close() != nil {
-		t.FailNow()
-	}
-
-	if os.Remove(testPrefix+"/"+testFilename) != nil {
-		t.FailNow()
-	}
-
-	_, err = client.Open(testFilename, filesystem.ModeWrite)
-
-	if err == nil {
 		t.FailNow()
 	}
 }
