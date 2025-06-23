@@ -23,6 +23,7 @@ func TestSFtpFs_Stat(t *testing.T) {
 	testFilename := "test"
 
 	t.Cleanup(func() {
+		os.Remove(testPrefix + "/" + testFilename)
 		client.Close()
 		server.Close()
 	})
