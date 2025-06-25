@@ -5,6 +5,8 @@ BINFILE = ./bin/rviv-$(VERSION)
 SRCFILE = ./app.go
 TESTOPTS = -v -timeout 2m
 
+.SILENT: build test run clean
+
 build:
 	go build -o $(BINFILE) $(SRCFILE)
 

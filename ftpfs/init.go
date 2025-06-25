@@ -11,7 +11,10 @@ type FtpFs struct {
 }
 
 func Connect(connInfo *filesystem.ConnInfo) (filesystem.Filesystem, error) {
-	conn, err := ftp.Dial(connInfo.Addr)
+	conn, err := ftp.Dial(connInfo.Addr,
+		ftp.DialWithTimeout(connInfo.Timeout),
+	)
+
 	err = stderr(err)
 
 	if err != nil {

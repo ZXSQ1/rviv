@@ -25,6 +25,7 @@ func Connect(connInfo *filesystem.ConnInfo) (filesystem.Filesystem, error) {
 		"http://"+connInfo.Addr, connInfo.User, connInfo.Pass,
 	)
 
+	conn.SetTimeout(connInfo.Timeout)
 	conn.SetTransport(httpClient.Transport)
 	err := conn.Connect()
 

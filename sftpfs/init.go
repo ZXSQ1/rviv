@@ -15,6 +15,7 @@ func Connect(connInfo *filesystem.ConnInfo) (*SFtpFs, error) {
 	config := &ssh.ClientConfig{
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 		User:            connInfo.User,
+		Timeout:         connInfo.Timeout,
 		Auth: []ssh.AuthMethod{
 			ssh.Password(connInfo.Pass),
 		},

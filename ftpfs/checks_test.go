@@ -40,7 +40,6 @@ func TestFtpFs_IsExist(t *testing.T) {
 	}
 
 	if client.IsExist(testFilename) {
-		println("error")
 		t.FailNow()
 	}
 }
