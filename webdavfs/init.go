@@ -11,6 +11,7 @@ type WebDavFs struct {
 	httpClient *http.Client
 	conn       *gowebdav.Client
 	connInfo   *filesystem.ConnInfo
+	closed     bool
 }
 
 func Connect(connInfo *filesystem.ConnInfo) (filesystem.Filesystem, error) {
@@ -35,5 +36,6 @@ func Connect(connInfo *filesystem.ConnInfo) (filesystem.Filesystem, error) {
 		httpClient: httpClient,
 		conn:       conn,
 		connInfo:   connInfo,
+		closed:     false,
 	}, nil
 }

@@ -12,6 +12,10 @@ import (
 func (client *WebDavFs) Open(filename string, mode filesystem.OpenMode) (
 	io.ReadWriteCloser, error) {
 
+	if !client.IsExist(filename) {
+		return nil, filesystem.ErrNotExist
+	}
+
 	switch mode {
 	case filesystem.ModeWrite:
 		done := make(chan error, 1)

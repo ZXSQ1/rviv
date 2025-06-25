@@ -19,7 +19,6 @@ func (info *FileInfo) Name() string {
 	return path.Base(info.filename)
 }
 
-// a directory has a size of -1
 func (info *FileInfo) Size() int64 {
 	size, err := info.conn.FileSize(info.filename)
 	err = stderr(err)

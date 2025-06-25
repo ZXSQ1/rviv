@@ -1,11 +1,19 @@
 package webdavfs
 
-import "net/http"
+import (
+	"net"
+	"net/http"
+)
 
 func (client *WebDavFs) Close() error {
-	if transport, ok := client.httpClient.Transport.(*http.Transport); ok {
+	transport, ok := client.httpClient.Transport.(*http.Transport)
+
+	if ok && !client.closed {
 		transport.CloseIdleConnections()
+		client.closed = true
+
+		return nil
 	}
 
-	return nil
+	return net.ErrClosed
 }

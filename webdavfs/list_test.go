@@ -1,4 +1,4 @@
-package sftpfs
+package webdavfs
 
 import (
 	"os"
@@ -8,7 +8,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func TestSFtpFs_ListDir(t *testing.T) {
+func TestWebDavFs_ListDir(t *testing.T) {
 	server := OpenTestServer()
 	client, err := Connect(&filesystem.ConnInfo{
 		Addr: testAddr,

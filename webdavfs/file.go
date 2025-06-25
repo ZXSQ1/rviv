@@ -45,13 +45,23 @@ func (file *File) Write(p []byte) (int, error) {
 
 func (file *File) Close() error {
 	if file.mode == filesystem.ModeWrite {
-		err := <-file.done
-
-		if err != nil {
-			return err
+		if file.writer != nil {
+			if err := file.writer.Close(); err != nil {
+				return err
+			}
 		}
 
-		close(file.done)
+		if file.done != nil {
+			if err := <-file.done; err != nil {
+				return err
+			}
+		}
+	}
+
+	if file.mode == filesystem.ModeRead && file.reader != nil {
+		if err := file.reader.Close(); err != nil {
+			return err
+		}
 	}
 
 	file.done = nil

@@ -16,7 +16,6 @@ func TestLocalFs_IsExist(t *testing.T) {
 	})
 
 	if os.MkdirAll(testFilename, filesystem.PermDir) != nil {
-		println("error")
 		t.FailNow()
 	}
 

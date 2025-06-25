@@ -35,7 +35,7 @@ func TestWebDavFs_IsExist(t *testing.T) {
 		t.FailNow()
 	}
 
-	if os.RemoveAll(testPrefix+"/"+testFilename) != nil {
+	if os.Remove(testPrefix+"/"+testFilename) != nil {
 		t.FailNow()
 	}
 

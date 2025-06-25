@@ -6,7 +6,6 @@ import (
 	"net"
 	"net/http"
 	"os"
-	"path/filepath"
 	"time"
 
 	"golang.org/x/net/webdav"
@@ -20,21 +19,21 @@ var (
 )
 
 type TestServer struct {
-	Server   *http.Server
-	Listener net.Listener
-	Addr     string
+	server   *http.Server
+	listener net.Listener
+	addr     string
 }
 
 func (ts *TestServer) Close() error {
 	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
-	return ts.Server.Shutdown(ctx)
+	return ts.server.Shutdown(ctx)
 }
 
 func OpenTestServer() *TestServer {
 	handler := &webdav.Handler{
 		Prefix:     "/",
-		FileSystem: webdav.Dir(filepath.Clean(testPrefix)),
+		FileSystem: webdav.Dir(testPrefix),
 		LockSystem: webdav.NewMemLS(),
 	}
 
@@ -43,7 +42,10 @@ func OpenTestServer() *TestServer {
 			u, p, ok := r.BasicAuth()
 
 			if !ok || u != testUser || p != testPass {
-				log.Fatalln("invalid credentials")
+				w.Header().Set("WWW-Authenticate", `Basic realm="Restricted"`)
+				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+
+				return
 			}
 
 			handler.ServeHTTP(w, r)
@@ -69,8 +71,8 @@ func OpenTestServer() *TestServer {
 	time.Sleep(100 * time.Millisecond)
 
 	return &TestServer{
-		Server:   server,
-		Listener: listener,
-		Addr:     listener.Addr().String(),
+		server:   server,
+		listener: listener,
+		addr:     listener.Addr().String(),
 	}
 }
