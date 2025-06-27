@@ -14,7 +14,10 @@ check that out first to understand other packages like `ftpfs`, `localfs` and
 `sftpfs`.
 
 The `processes` package contains code for the filesystem-independent processes
-that would be done in order in the configuration.
+that would be done in order in the configuration. The `processes` package has
+user-displayed errors, so it uses the `info` package to report warnings and
+errors. The `compressor` package contains code for compression algorithms for
+single files.
 
 The `config` package regards dealing with the configuration and turning it into
 structures that are used throughout the program for running the processes and as

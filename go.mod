@@ -3,7 +3,7 @@ module github.com/ZXSQ1/rviv
 go 1.23.4
 
 require (
-	github.com/dsnet/compress v0.0.1
+	github.com/fatih/color v1.18.0
 	github.com/fclairamb/ftpserverlib v0.26.0
 	github.com/gliderlabs/ssh v0.3.8
 	github.com/go-ping/ping v1.2.0
@@ -12,14 +12,12 @@ require (
 	github.com/spf13/afero v1.14.0
 	github.com/spf13/viper v1.20.1
 	github.com/studio-b12/gowebdav v0.10.0
-	github.com/ulikunitz/xz v0.5.12
 	golang.org/x/crypto v0.39.0
 	golang.org/x/net v0.33.0
 )
 
 require (
 	github.com/anmitsu/go-shlex v0.0.0-20200514113438-38f4b401e2be // indirect
-	github.com/fatih/color v1.18.0 // indirect
 	github.com/fclairamb/go-log v0.5.0 // indirect
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/go-viper/mapstructure/v2 v2.2.1 // indirect
