@@ -3,7 +3,6 @@ package webdavfs
 import (
 	"fmt"
 	"io"
-	"os"
 
 	"github.com/ZXSQ1/rviv/filesystem"
 )
@@ -17,7 +16,11 @@ type File struct {
 
 func (file *File) Read(p []byte) (int, error) {
 	if file.mode != filesystem.ModeRead {
-		return -1, os.ErrInvalid
+		if file.mode == filesystem.ModeClosed {
+			return -1, filesystem.ErrModeClosed
+		}
+
+		return -1, filesystem.ErrModeRead
 	}
 
 	if file.reader == nil {
@@ -29,7 +32,11 @@ func (file *File) Read(p []byte) (int, error) {
 
 func (file *File) Write(p []byte) (int, error) {
 	if file.mode != filesystem.ModeWrite {
-		return -1, os.ErrInvalid
+		if file.mode == filesystem.ModeClosed {
+			return -1, filesystem.ErrModeClosed
+		}
+
+		return -1, filesystem.ErrModeWrite
 	}
 
 	if file.writer == nil {
@@ -44,6 +51,10 @@ func (file *File) Write(p []byte) (int, error) {
 }
 
 func (file *File) Close() error {
+	if file.mode == filesystem.ModeClosed {
+		return filesystem.ErrModeClosed
+	}
+
 	if file.mode == filesystem.ModeWrite {
 		if file.writer != nil {
 			if err := file.writer.Close(); err != nil {
@@ -65,7 +76,7 @@ func (file *File) Close() error {
 	}
 
 	file.done = nil
-	file.mode = filesystem.OpenMode(2)
+	file.mode = filesystem.ModeClosed
 	file.reader = nil
 	file.writer = nil
 

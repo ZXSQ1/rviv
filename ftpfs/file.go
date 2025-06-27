@@ -3,7 +3,6 @@ package ftpfs
 import (
 	"bytes"
 	"io"
-	"os"
 
 	"github.com/ZXSQ1/rviv/filesystem"
 	"github.com/jlaffaye/ftp"
@@ -19,7 +18,11 @@ type File struct {
 
 func (file *File) Write(p []byte) (n int, err error) {
 	if file.mode != filesystem.ModeWrite {
-		return -1, os.ErrInvalid
+		if file.mode == filesystem.ModeClosed {
+			return -1, filesystem.ErrModeClosed
+		}
+
+		return -1, filesystem.ErrModeWrite
 	}
 
 	err = stderr(
@@ -37,7 +40,11 @@ func (file *File) Write(p []byte) (n int, err error) {
 
 func (file *File) Read(p []byte) (n int, err error) {
 	if file.mode != filesystem.ModeRead {
-		return -1, os.ErrInvalid
+		if file.mode == filesystem.ModeClosed {
+			return -1, filesystem.ErrModeClosed
+		}
+
+		return -1, filesystem.ErrModeRead
 	}
 
 	resp, err := file.conn.RetrFrom(
@@ -68,8 +75,13 @@ func (file *File) Read(p []byte) (n int, err error) {
 }
 
 func (file *File) Close() error {
+	if file.mode == filesystem.ModeClosed {
+		return filesystem.ErrModeClosed
+	}
+
 	file.conn = nil
 	file.filename = ""
+	file.mode = filesystem.ModeClosed
 	file.wpos = 0
 	file.rpos = 0
 

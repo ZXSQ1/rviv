@@ -15,5 +15,6 @@ var (
 	ErrFileNotSym     = fmt.Errorf("file not a symbolic link")
 	ErrModeRead       = fmt.Errorf("file opened in read mode only")
 	ErrModeWrite      = fmt.Errorf("file opened in write mode only")
+	ErrModeClosed     = fmt.Errorf("file closed")
 	ErrModeInvalid    = fmt.Errorf("invalid file open mode")
 )

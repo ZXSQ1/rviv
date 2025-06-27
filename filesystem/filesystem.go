@@ -13,6 +13,7 @@ var (
 	PermLink             = fs.FileMode(0777)
 	ModeWrite   OpenMode = 0
 	ModeRead    OpenMode = 1
+	ModeClosed  OpenMode = 2
 )
 
 const (
