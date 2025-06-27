@@ -1,5 +1,5 @@
 package logging
 
-const (
+var (
 	Debug = true
 )
