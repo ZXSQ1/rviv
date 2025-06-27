@@ -17,12 +17,12 @@ var (
 func TestXz(t *testing.T) {
 	testFilename := filesystem.Path{
 		Filename: os.TempDir() + "/test",
-		Filesys:  localfs.Init(),
+		Filesys:  localfs.Init("/"),
 	}
 
 	testArchivename := filesystem.Path{
 		Filename: os.TempDir() + "/test.xz",
-		Filesys:  localfs.Init(),
+		Filesys:  localfs.Init("/"),
 	}
 
 	t.Cleanup(func() {

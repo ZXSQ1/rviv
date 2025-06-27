@@ -8,7 +8,7 @@ import (
 )
 
 func TestLocalFs_Remove(t *testing.T) {
-	client := Init()
+	client := Init("/")
 	testFilename := os.TempDir() + "/test"
 
 	t.Cleanup(func() {
@@ -43,7 +43,7 @@ func TestLocalFs_Remove(t *testing.T) {
 }
 
 func TestLocalFs_RemoveDir(t *testing.T) {
-	client := Init()
+	client := Init("/")
 	testFilename := os.TempDir() + "/test"
 
 	t.Cleanup(func() {

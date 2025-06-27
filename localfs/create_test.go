@@ -6,7 +6,7 @@ import (
 )
 
 func TestLocalFs_Create(t *testing.T) {
-	client := Init()
+	client := Init("/")
 	testFilename := os.TempDir() + "/test"
 
 	t.Cleanup(func() {
@@ -27,7 +27,7 @@ func TestLocalFs_Create(t *testing.T) {
 }
 
 func TestLocalFs_CreateDir(t *testing.T) {
-	client := Init()
+	client := Init("/")
 	testFilename := os.TempDir() + "/test"
 
 	t.Cleanup(func() {

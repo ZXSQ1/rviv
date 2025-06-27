@@ -11,12 +11,12 @@ import (
 func TestBz2(t *testing.T) {
 	testFilename := filesystem.Path{
 		Filename: os.TempDir() + "/test",
-		Filesys:  localfs.Init(),
+		Filesys:  localfs.Init("/"),
 	}
 
 	testArchivename := filesystem.Path{
 		Filename: os.TempDir() + "/test.bz2",
-		Filesys:  localfs.Init(),
+		Filesys:  localfs.Init("/"),
 	}
 
 	t.Cleanup(func() {

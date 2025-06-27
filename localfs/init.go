@@ -2,8 +2,10 @@ package localfs
 
 import "github.com/ZXSQ1/rviv/filesystem"
 
-type LocalFs struct{}
+type LocalFs struct {
+	prefix string
+}
 
-func Init() filesystem.Filesystem {
-	return &LocalFs{}
+func Init(prefix string) filesystem.Filesystem {
+	return &LocalFs{prefix: prefix}
 }

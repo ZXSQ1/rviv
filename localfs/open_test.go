@@ -9,7 +9,7 @@ import (
 )
 
 func TestLocalFs_Open(t *testing.T) {
-	client := Init()
+	client := Init("/")
 	testFilename := os.TempDir() + "/test"
 	testContent := "abcdefghijklmnopqrstuvwxyz"
 

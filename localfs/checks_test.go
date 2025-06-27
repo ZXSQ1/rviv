@@ -8,7 +8,7 @@ import (
 )
 
 func TestLocalFs_IsExist(t *testing.T) {
-	client := Init()
+	client := Init("/")
 	testFilename := os.TempDir() + "/test"
 
 	t.Cleanup(func() {

@@ -9,7 +9,7 @@ import (
 )
 
 func TestLocalFs_Stat(t *testing.T) {
-	client := Init()
+	client := Init("/")
 	testFilename := os.TempDir() + "/test"
 
 	t.Cleanup(func() {

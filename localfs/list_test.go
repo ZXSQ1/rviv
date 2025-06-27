@@ -9,7 +9,7 @@ import (
 )
 
 func TestLocalFs_List(t *testing.T) {
-	client := Init()
+	client := Init("/")
 	testPrefix := os.TempDir() + "/test"
 	testEntries := []string{
 		"a", "bah", "shfj", "bag", "feh", "voo",
