@@ -24,7 +24,8 @@ func (compressor *XzCompressor) Compress(
 
 	defer outObj.Close()
 
-	inObj, err := outfile.Filesys.Open(outfile.Filename, filesystem.ModeRead)
+	inObj, err := compressor.filename.Filesys.Open(
+		compressor.filename.Filename, filesystem.ModeRead)
 
 	if err != nil {
 		return err

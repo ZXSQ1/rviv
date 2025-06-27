@@ -15,7 +15,7 @@ test:
 	go test $(TESTOPTS) ftpfs/*.go
 	go test $(TESTOPTS) sftpfs/*.go
 	go test $(TESTOPTS) webdavfs/*.go
-	#go test $(TESTOPTS) processes/*.go
+	go test $(TESTOPTS) compressor/*.go
 
 run:
 	go run $(SRCFILE)
