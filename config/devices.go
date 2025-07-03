@@ -22,16 +22,15 @@ func LoadDevices() {
 		}
 	}
 
-	devicesRaw := viper.Get("devices").(map[string]map[string]any)
+	devicesRaw := viper.Get("devices").(map[string]any)
 	validationMap := map[string]FieldValidationMap{}
 
 	for _, verification := range DeviceValidations {
 		validationMap[verification.Name()] = verification.Validations()
 	}
 
-	for key := range devicesRaw {
-		prefix := "devices." + key + "."
-		name := key
+	for devname := range devicesRaw {
+		prefix := "devices." + devname + "."
 		kind := viper.GetString(prefix + "type")
 
 		device := Device{}
@@ -61,7 +60,7 @@ func LoadDevices() {
 			}
 		}
 
-		device.Name = name
+		device.Name = devname
 		device.Kind = kind
 		device.Info = deviceInfo
 

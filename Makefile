@@ -11,6 +11,7 @@ build:
 	go build -o $(BINFILE) $(SRCFILE)
 
 test:
+	go test $(TESTOPTS) config/*.go
 	go test $(TESTOPTS) localfs/*.go
 	go test $(TESTOPTS) ftpfs/*.go
 	go test $(TESTOPTS) sftpfs/*.go

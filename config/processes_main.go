@@ -16,7 +16,7 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 	return FieldValidationMap{
 		"processes": {
 			func(val any, parent Field) {
-				if _, ok := val.(map[string]map[string]any); !ok {
+				if _, ok := val.(map[string]any); !ok {
 					info.Error(
 						"field 'processes' is not found or has invalid format",
 					)
@@ -24,12 +24,14 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 			},
 
 			func(val any, parent Field) {
-				processesRaw := val.(map[string]map[string]any)
+				processesRaw := val.(map[string]any)
 
 				for groupname, groupinfo := range processesRaw {
+					groupinfo := groupinfo.(map[string]any)
+
 					for _, c := range groupname {
-						if ('A' > c && 'Z' < c) || ('a' > c && 'z' < c) ||
-							!(c == '_' || c == '-') || ('0' > c && '9' < c) {
+						if ('A' > c || 'Z' < c) && ('a' > c || 'z' < c) &&
+							!(c == '_' || c == '-') && ('0' > c || '9' < c) {
 
 							info.Error(
 								"process group '%s' has invalid characters "+
@@ -47,8 +49,8 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 					} else {
 						for _, alias := range aliases {
 							for _, c := range alias {
-								if ('A' > c && 'Z' < c) || ('a' > c && 'z' < c) ||
-									!(c == '_' || c == '-') || ('0' > c && '9' < c) {
+								if ('A' > c || 'Z' < c) && ('a' > c || 'z' < c) &&
+									!(c == '_' || c == '-') && ('0' > c || '9' < c) {
 
 									info.Error(
 										"alias '%s' has invalid characters "+
