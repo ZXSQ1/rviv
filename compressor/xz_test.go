@@ -5,6 +5,7 @@ import (
 	"slices"
 	"testing"
 
+	"github.com/ZXSQ1/rviv/config"
 	"github.com/ZXSQ1/rviv/filesystem"
 	"github.com/ZXSQ1/rviv/localfs"
 )
@@ -15,26 +16,26 @@ var (
 )
 
 func TestXz(t *testing.T) {
-	testFilename := filesystem.Path{
+	testFilename := config.Path{
 		Filename: os.TempDir() + "/test",
-		Filesys:  localfs.Init("/"),
+		Fsys:     localfs.Init("/"),
 	}
 
-	testArchivename := filesystem.Path{
+	testArchivename := config.Path{
 		Filename: os.TempDir() + "/test.xz",
-		Filesys:  localfs.Init("/"),
+		Fsys:     localfs.Init("/"),
 	}
 
 	t.Cleanup(func() {
-		testFilename.Filesys.Remove(testFilename.Filename)
-		testArchivename.Filesys.Remove(testArchivename.Filename)
+		testFilename.Fsys.Remove(testFilename.Filename)
+		testArchivename.Fsys.Remove(testArchivename.Filename)
 	})
 
-	if testFilename.Filesys.Create(testFilename.Filename) != nil {
+	if testFilename.Fsys.Create(testFilename.Filename) != nil {
 		t.FailNow()
 	}
 
-	fileObj, err := testFilename.Filesys.Open(
+	fileObj, err := testFilename.Fsys.Open(
 		testFilename.Filename, filesystem.ModeWrite)
 
 	if err != nil {
@@ -59,7 +60,7 @@ func TestXz(t *testing.T) {
 		t.FailNow()
 	}
 
-	if !testArchivename.Filesys.IsExist(testArchivename.Filename) {
+	if !testArchivename.Fsys.IsExist(testArchivename.Filename) {
 		t.FailNow()
 	}
 }

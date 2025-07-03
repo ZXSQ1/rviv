@@ -30,7 +30,7 @@ func (file *File) Write(p []byte) (n int, err error) {
 	)
 
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 
 	file.wpos += uint64(len(p))
@@ -54,7 +54,7 @@ func (file *File) Read(p []byte) (n int, err error) {
 	err = stderr(err)
 
 	if err != nil {
-		return 0, err
+		return -1, err
 	}
 
 	defer resp.Close()
@@ -66,7 +66,7 @@ func (file *File) Read(p []byte) (n int, err error) {
 			return 0, err
 		}
 
-		return 0, err
+		return -1, err
 	}
 
 	file.rpos += uint64(n)

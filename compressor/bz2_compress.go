@@ -3,20 +3,21 @@ package compressor
 import (
 	"io"
 
+	"github.com/ZXSQ1/rviv/config"
 	"github.com/ZXSQ1/rviv/filesystem"
 	"github.com/dsnet/compress/bzip2"
 )
 
 func (compressor *Bz2Compressor) Compress(
-	outfile filesystem.Path, level CompressionLevel) error {
+	outfile config.Path, level CompressionLevel) error {
 
-	if !outfile.Filesys.IsExist(outfile.Filename) {
-		if err := outfile.Filesys.Create(outfile.Filename); err != nil {
+	if !outfile.Fsys.IsExist(outfile.Filename) {
+		if err := outfile.Fsys.Create(outfile.Filename); err != nil {
 			return err
 		}
 	}
 
-	outObj, err := outfile.Filesys.Open(outfile.Filename, filesystem.ModeWrite)
+	outObj, err := outfile.Fsys.Open(outfile.Filename, filesystem.ModeWrite)
 
 	if err != nil {
 		return err
@@ -24,7 +25,7 @@ func (compressor *Bz2Compressor) Compress(
 
 	defer outObj.Close()
 
-	inObj, err := outfile.Filesys.Open(
+	inObj, err := outfile.Fsys.Open(
 		compressor.filename.Filename, filesystem.ModeRead)
 
 	if err != nil {

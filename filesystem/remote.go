@@ -1,7 +1,6 @@
 package filesystem
 
 import (
-	"strconv"
 	"time"
 )
 
@@ -24,8 +23,3 @@ const (
 	// the standard default timeout for connections
 	DefaultTimeout = 1 * time.Second
 )
-
-func GetAddr(ip string, port int) string {
-	portString := strconv.Itoa(port)
-	return ip + ":" + portString
-}

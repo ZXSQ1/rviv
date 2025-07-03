@@ -9,7 +9,7 @@ import (
 func Warning(format string, objs ...any) {
 	if !Colored {
 		fmt.Printf(
-			"W: %s\n", fmt.Sprintf(format, objs...),
+			"warning: %s\n", fmt.Sprintf(format, objs...),
 		)
 	} else {
 		warningPrefix := color.New(color.Bold, color.FgYellow).Sprint("W:")

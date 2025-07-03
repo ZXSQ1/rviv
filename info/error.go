@@ -10,7 +10,7 @@ import (
 func Error(format string, objs ...any) {
 	if !Colored {
 		fmt.Printf(
-			"E: %s\n", fmt.Sprintf(format, objs...),
+			"error: %s\n", fmt.Sprintf(format, objs...),
 		)
 	} else {
 		errorPrefix := color.New(color.Bold, color.FgRed).Sprint("E:")

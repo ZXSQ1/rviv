@@ -1,19 +1,20 @@
 package compressor
 
 import (
+	"github.com/ZXSQ1/rviv/config"
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 type XzCompressor struct {
-	filename filesystem.Path
+	filename config.Path
 }
 
-func NewXzCompressor(filename filesystem.Path) (Compressor, error) {
-	if !filename.Filesys.IsExist(filename.Filename) {
+func NewXzCompressor(filename config.Path) (Compressor, error) {
+	if !filename.Fsys.IsExist(filename.Filename) {
 		return nil, filesystem.ErrNotExist
 	}
 
-	stat, err := filename.Filesys.Stat(filename.Filename)
+	stat, err := filename.Fsys.Stat(filename.Filename)
 
 	if err != nil {
 		return nil, err

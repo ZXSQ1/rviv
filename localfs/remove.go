@@ -2,11 +2,13 @@ package localfs
 
 import (
 	"os"
+	"path/filepath"
 
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 func (local *LocalFs) Remove(filename string) error {
+	filename = filepath.Join(local.prefix, filename)
 	stat, err := os.Stat(filename)
 
 	if err != nil {
@@ -21,6 +23,7 @@ func (local *LocalFs) Remove(filename string) error {
 }
 
 func (local *LocalFs) RemoveDir(filename string) error {
+	filename = filepath.Join(local.prefix, filename)
 	stat, err := os.Stat(filename)
 
 	if err != nil {

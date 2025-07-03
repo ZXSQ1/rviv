@@ -31,13 +31,13 @@ a configuration of the devices.
          "type": "ftp",
          "ip": "lan",
          "port": 2121,
-         "pass": "$(ENVIRONMENT_VAR_PASS)", //environment variable substitution
-         "user": "$(USERNAME)"
+         "pass": "$ENVIRONMENT_VAR_PASS", //environment variable substitution
+         "user": "$USERNAME"
       },
 
       "dev2": {
          "type": "local",
-         "path": "$(HOME)",
+         "prefix": "$HOME",
       }
    },
 
@@ -59,7 +59,7 @@ a configuration of the devices.
                "necessary": false,
                "src": "srcpath",
                "dest": [
-                  "${dev2}/dest1", "${dev1}/dest2" //specifying a path for a device
+                  "dev2::/dest1", "dev1::/dest2" //specifying a path for a device
                ],
             }  
          ]

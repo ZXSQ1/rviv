@@ -56,7 +56,8 @@ type Filesystem interface {
 	ListDir(filename string) ([]string, error)
 
 	// returns an io.ReadWriteCloser for writing and reading a file given a path;
-	// the mode is one of WriteMode or ReadMode
+	// the mode is one of WriteMode or ReadMode; methods return -1 on error as n
+	// except for EOF (returns 0)
 	Open(filename string, mode OpenMode) (io.ReadWriteCloser, error)
 
 	// closes a filesystem (assuming that it is a connection; if it is not a
