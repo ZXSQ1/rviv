@@ -24,7 +24,7 @@ func TestProcesses(t *testing.T) {
 	LoadConfig(testFilename)
 	LoadProcesses()
 
-	if Processes == nil {
+	if len(Processes) == 0 {
 		t.FailNow()
 	}
 }

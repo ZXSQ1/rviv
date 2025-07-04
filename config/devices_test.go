@@ -24,7 +24,7 @@ func TestDevices(t *testing.T) {
 	LoadConfig(testFilename)
 	LoadDevices()
 
-	if Devices == nil {
+	if len(Devices) == 0 {
 		t.FailNow()
 	}
 }

@@ -19,17 +19,26 @@ func LoadProcesses() {
 		}
 	}
 
-	processesRaw := viper.Get("processes").(map[string]map[string]any)
+	processesRaw := viper.Get("processes").(map[string]any)
 
 	for groupname, groupinfo := range processesRaw {
+		groupinfo := groupinfo.(map[string]any)
+		aliases := []string{}
+
+		for _, alias := range groupinfo["aliases"].([]any) {
+			alias := alias.(string)
+			aliases = append(aliases, alias)
+		}
+
 		processGroup := ProcessGroup{}
 		processGroup.Groupname = groupname
-		processGroup.Aliases = groupinfo["aliases"].([]string)
+		processGroup.Aliases = aliases
 
 		prefix := "processes." + groupname
-		subprocesses := groupinfo["subprocesses"].([]map[string]any)
+		subprocesses := groupinfo["subprocesses"].([]any)
 
 		for _, subprocess := range subprocesses {
+			subprocess := subprocess.(map[string]any)
 			process := Process{}
 			prefix = prefix + ".subprocesses"
 
@@ -40,8 +49,8 @@ func LoadProcesses() {
 				srcs := []Path{}
 				dest := NewPath(subprocess["dest"].(string))
 
-				for _, srcRaw := range subprocess["srcs"].([]string) {
-					srcs = append(srcs, NewPath(srcRaw))
+				for _, srcRaw := range subprocess["srcs"].([]any) {
+					srcs = append(srcs, NewPath(srcRaw.(string)))
 				}
 
 				process.Options = CopyOpts{
@@ -54,8 +63,8 @@ func LoadProcesses() {
 				srcs := []Path{}
 				dest := NewPath(subprocess["dest"].(string))
 
-				for _, srcRaw := range subprocess["srcs"].([]string) {
-					srcs = append(srcs, NewPath(srcRaw))
+				for _, srcRaw := range subprocess["srcs"].([]any) {
+					srcs = append(srcs, NewPath(srcRaw.(string)))
 				}
 
 				process.Options = MoveOpts{
@@ -67,8 +76,8 @@ func LoadProcesses() {
 			case "mkdir":
 				files := []Path{}
 
-				for _, filename := range subprocess["paths"].([]string) {
-					files = append(files, NewPath(filename))
+				for _, filename := range subprocess["paths"].([]any) {
+					files = append(files, NewPath(filename.(string)))
 				}
 
 				process.Options = MkdirOpts{
@@ -79,8 +88,8 @@ func LoadProcesses() {
 			case "remove":
 				files := []Path{}
 
-				for _, filename := range subprocess["paths"].([]string) {
-					files = append(files, NewPath(filename))
+				for _, filename := range subprocess["paths"].([]any) {
+					files = append(files, NewPath(filename.(string)))
 				}
 
 				process.Options = RemoveOpts{

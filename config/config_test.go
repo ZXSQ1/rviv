@@ -1,7 +1,6 @@
 package config
 
 var testConfig = `
-
 {
 	"devices": {
 		"drive": {
@@ -36,7 +35,20 @@ var testConfig = `
 
   "processes": {
     	"rsync": {
-      	"aliases": ["rs"]
+      	"aliases": ["rs132_3"],
+      	"subprocesses": [
+            {
+               "type": "copy",
+               "srcs": [
+                  "dev::$HOME/Downloads",
+                  "drive2::/Download"
+               ],
+
+               "dest": "dev::$HOME/.config",
+               "method": "dd",
+               "necessary": true
+            }
+      	]
     	}
   	}
 }

@@ -4,11 +4,12 @@ import (
 	"fmt"
 	"os"
 
+	"github.com/ZXSQ1/rviv/env"
 	"github.com/fatih/color"
 )
 
 func Error(format string, objs ...any) {
-	if !Colored {
+	if !env.Colored {
 		fmt.Printf(
 			"error: %s\n", fmt.Sprintf(format, objs...),
 		)

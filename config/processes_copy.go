@@ -16,20 +16,30 @@ func (meta MoveProcessValidation) Validations() FieldValidationMap {
 	return FieldValidationMap{
 		"srcs": {
 			func(val any, parent Field) {
-				if _, ok := val.([]string); !ok {
+				if srcs, ok := val.([]any); !ok {
 					info.Error(
 						"field 'srcs' not found or has invalid "+
 							"format in field '%s'", parent,
 					)
+				} else {
+					for _, src := range srcs {
+						if _, ok := src.(string); !ok {
+							info.Error(
+								"field 'srcs' has invalid source '%s' "+
+									"in field '%s'", src, parent,
+							)
+						}
+					}
 				}
 			},
 
 			func(val any, parent Field) {
-				sourcesRaw := val.([]string)
+				sourcesRaw := val.([]any)
 				sources := []Path{}
 				devnames := []string{}
 
 				for _, sourceRaw := range sourcesRaw {
+					sourceRaw := sourceRaw.(string)
 					sources = append(
 						sources, NewPath(sourceRaw),
 					)

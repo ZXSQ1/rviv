@@ -62,7 +62,7 @@ func (file *File) Read(p []byte) (n int, err error) {
 	err = stderr(err)
 
 	if err != nil {
-		if err == io.EOF {
+		if err.Error() == io.EOF.Error() {
 			return 0, err
 		}
 

@@ -41,13 +41,22 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 						}
 					}
 
-					if aliases, ok := groupinfo["aliases"].([]string); !ok {
+					if aliases, ok := groupinfo["aliases"].([]any); !ok {
 						info.Error(
 							"field 'aliases' is not found or has invalid "+
 								"format in field 'processes.%s'", groupname,
 						)
 					} else {
 						for _, alias := range aliases {
+							if _, ok := alias.(string); !ok {
+								info.Error(
+									"field 'aliases' has invalid alias '%s' "+
+										"in field 'processes.%s'", alias, groupname,
+								)
+							}
+
+							alias := alias.(string)
+
 							for _, c := range alias {
 								if ('A' > c || 'Z' < c) && ('a' > c || 'z' < c) &&
 									!(c == '_' || c == '-') && ('0' > c || '9' < c) {
@@ -62,17 +71,27 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 						}
 					}
 
-					if _, ok := groupinfo["subprocesses"].([]map[string]any); !ok {
+					if subprocesses, ok := groupinfo["subprocesses"].([]any); !ok {
 						info.Error(
 							"field 'subprocesses' is not found or has invalid "+
 								"format in field 'processes.%s'", groupname,
 						)
+					} else {
+						for _, subprocess := range subprocesses {
+							if _, ok := subprocess.(map[string]any); !ok {
+								info.Error(
+									"field 'subprocesses' has invalid subprocess "+
+										"'%s' in field 'processes.%s'", subprocess,
+									groupname,
+								)
+							}
+						}
 					}
 				}
 			},
 
 			func(val any, parent Field) {
-				processesRaw := val.(map[string]map[string]any)
+				processesRaw := val.(map[string]any)
 				validationMap := map[string]FieldValidationMap{}
 				prockinds := []string{}
 
@@ -82,10 +101,12 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 				}
 
 				for groupname, groupinfo := range processesRaw {
+					groupinfo := groupinfo.(map[string]any)
 					prefix := "processes." + groupname
-					subprocesses := groupinfo["subprocesses"].([]map[string]any)
+					subprocesses := groupinfo["subprocesses"].([]any)
 
 					for _, subprocess := range subprocesses {
+						subprocess := subprocess.(map[string]any)
 						prefix = prefix + ".subprocesses"
 
 						if _, ok := subprocess["type"].(string); !ok {

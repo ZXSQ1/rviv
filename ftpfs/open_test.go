@@ -1,6 +1,7 @@
 package ftpfs
 
 import (
+	"io"
 	"os"
 	"testing"
 
@@ -81,8 +82,7 @@ func TestFtpFs_Open(t *testing.T) {
 
 	n, err = fileObj.Read(buffer)
 
-	if n != 0 || err == nil {
-		println(err.Error())
+	if n != 0 || err.Error() != io.EOF.Error() {
 		t.FailNow()
 	}
 
