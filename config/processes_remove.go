@@ -15,62 +15,81 @@ func (meta RemoveProcessValidation) Name() string {
 func (meta RemoveProcessValidation) Validations() FieldValidationMap {
 	return FieldValidationMap{
 		"paths": {
-			func(val any, parent Field) {
-				if _, ok := val.([]string); !ok {
-					info.Error(
+			func(val any, parent Field) error {
+				if paths, ok := val.([]any); !ok {
+					return info.Error(
 						"field 'paths' is not found or "+
 							"has invalid format in field '%s'", parent,
 					)
+				} else {
+					for _, pathname := range paths {
+						if _, ok := pathname.(string); !ok {
+							return info.Error(
+								"field 'paths' has invalid path '%s' "+
+									"in field '%s'", pathname, parent,
+							)
+						}
+					}
 				}
+
+				return nil
 			},
 
-			func(val any, parent Field) {
-				pathsRaw := val.([]string)
+			func(val any, parent Field) error {
+				pathsRaw := val.([]any)
 				paths := []Path{}
 				devnames := []string{}
 
-				LoadDevices()
+				if err := LoadDevices(); err != nil {
+					return err
+				}
 
 				for _, dev := range Devices {
 					devnames = append(devnames, dev.Name)
 				}
 
 				for _, pathRaw := range pathsRaw {
-					paths = append(paths, NewPath(pathRaw))
+					paths = append(paths, NewPath(pathRaw.(string)))
 				}
 
 				for _, path := range paths {
 					devname := path.Devname
 
 					if !slices.Contains(devnames, devname) {
-						info.Error(
+						return info.Error(
 							"path '%s' has unknown device '%s' in field '%s'",
 							path.Filename, path.Devname, parent,
 						)
 					}
 				}
+
+				return nil
 			},
 		},
 
 		"recursive": {
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				if _, ok := val.(bool); !ok {
-					info.Error(
-						"field 'recursive' is not found or "+
-							"has invalid format in field '%s'", parent,
+					return info.Error(
+						"field 'recursive' is not found "+
+							"or has invalid format in field '%s'", parent,
 					)
 				}
+
+				return nil
 			},
 		},
 
 		"necessary": {
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				if _, ok := val.(bool); !ok {
-					info.Error(
-						"field 'necessary' is not found or "+
-							"has invalid format in field '%s'", parent,
+					return info.Error(
+						"field 'necessary' is not found "+
+							"or has invalid format in field '%s'", parent,
 					)
 				}
+
+				return nil
 			},
 		},
 	}

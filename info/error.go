@@ -8,20 +8,21 @@ import (
 	"github.com/fatih/color"
 )
 
-func Error(format string, objs ...any) {
-	if !env.Colored {
-		fmt.Printf(
-			"error: %s\n", fmt.Sprintf(format, objs...),
-		)
-	} else {
-		errorPrefix := color.New(color.Bold, color.FgRed).Sprint("E:")
+var ExitOnError = true
 
-		fmt.Printf(
-			"%s %s\n", errorPrefix, fmt.Sprintf(
-				format, objs...,
-			),
-		)
+func Error(format string, objs ...any) error {
+	err := fmt.Errorf(format, objs...)
+
+	if !env.Colored {
+		fmt.Printf("error: %s\n", err.Error())
+	} else {
+		errorPrefix := color.New(color.Bold, color.FgRed).Sprint("error:")
+		fmt.Printf("%s %s\n", errorPrefix, err.Error())
 	}
 
-	os.Exit(1)
+	if ExitOnError {
+		os.Exit(1)
+	}
+
+	return err
 }

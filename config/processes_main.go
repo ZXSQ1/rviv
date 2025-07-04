@@ -15,15 +15,17 @@ func (meta ProcessValidation) Name() string {
 func (meta ProcessValidation) Validations() FieldValidationMap {
 	return FieldValidationMap{
 		"processes": {
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				if _, ok := val.(map[string]any); !ok {
-					info.Error(
+					return info.Error(
 						"field 'processes' is not found or has invalid format",
 					)
 				}
+
+				return nil
 			},
 
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				processesRaw := val.(map[string]any)
 
 				for groupname, groupinfo := range processesRaw {
@@ -33,7 +35,7 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 						if ('A' > c || 'Z' < c) && ('a' > c || 'z' < c) &&
 							!(c == '_' || c == '-') && ('0' > c || '9' < c) {
 
-							info.Error(
+							return info.Error(
 								"process group '%s' has invalid characters "+
 									"(A-Z, a-z, _ and - are only allowed) in field "+
 									"'processes'", groupname,
@@ -42,14 +44,14 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 					}
 
 					if aliases, ok := groupinfo["aliases"].([]any); !ok {
-						info.Error(
+						return info.Error(
 							"field 'aliases' is not found or has invalid "+
 								"format in field 'processes.%s'", groupname,
 						)
 					} else {
 						for _, alias := range aliases {
 							if _, ok := alias.(string); !ok {
-								info.Error(
+								return info.Error(
 									"field 'aliases' has invalid alias '%s' "+
 										"in field 'processes.%s'", alias, groupname,
 								)
@@ -61,7 +63,7 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 								if ('A' > c || 'Z' < c) && ('a' > c || 'z' < c) &&
 									!(c == '_' || c == '-') && ('0' > c || '9' < c) {
 
-									info.Error(
+									return info.Error(
 										"alias '%s' has invalid characters "+
 											"(A-Z, a-z, _ and - are only allowed) in "+
 											"field 'processes.%s'", alias, groupname,
@@ -72,14 +74,14 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 					}
 
 					if subprocesses, ok := groupinfo["subprocesses"].([]any); !ok {
-						info.Error(
+						return info.Error(
 							"field 'subprocesses' is not found or has invalid "+
 								"format in field 'processes.%s'", groupname,
 						)
 					} else {
 						for _, subprocess := range subprocesses {
 							if _, ok := subprocess.(map[string]any); !ok {
-								info.Error(
+								return info.Error(
 									"field 'subprocesses' has invalid subprocess "+
 										"'%s' in field 'processes.%s'", subprocess,
 									groupname,
@@ -88,9 +90,11 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 						}
 					}
 				}
+
+				return nil
 			},
 
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				processesRaw := val.(map[string]any)
 				validationMap := map[string]FieldValidationMap{}
 				prockinds := []string{}
@@ -102,15 +106,14 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 
 				for groupname, groupinfo := range processesRaw {
 					groupinfo := groupinfo.(map[string]any)
-					prefix := "processes." + groupname
+					prefix := "processes." + groupname + ".subprocesses"
 					subprocesses := groupinfo["subprocesses"].([]any)
 
 					for _, subprocess := range subprocesses {
 						subprocess := subprocess.(map[string]any)
-						prefix = prefix + ".subprocesses"
 
 						if _, ok := subprocess["type"].(string); !ok {
-							info.Error(
+							return info.Error(
 								"field 'type' is not found or has invalid format "+
 									"in field '%s'", prefix,
 							)
@@ -119,7 +122,7 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 						kind := subprocess["type"].(string)
 
 						if !slices.Contains(prockinds, kind) {
-							info.Error(
+							return info.Error(
 								"subprocess field '%s' has unknown type '%s'",
 								prefix, kind,
 							)
@@ -129,11 +132,15 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 							field := subprocess[string(fieldName)]
 
 							for _, validation := range validations {
-								validation(field, Field(prefix))
+								if err := validation(field, Field(prefix)); err != nil {
+									return err
+								}
 							}
 						}
 					}
 				}
+
+				return nil
 			},
 		},
 	}

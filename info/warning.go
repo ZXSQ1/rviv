@@ -7,18 +7,15 @@ import (
 	"github.com/fatih/color"
 )
 
-func Warning(format string, objs ...any) {
-	if !env.Colored {
-		fmt.Printf(
-			"warning: %s\n", fmt.Sprintf(format, objs...),
-		)
-	} else {
-		warningPrefix := color.New(color.Bold, color.FgYellow).Sprint("W:")
+func Warning(format string, objs ...any) error {
+	err := fmt.Errorf(format, objs...)
 
-		fmt.Printf(
-			"%s %s\n", warningPrefix, fmt.Sprintf(
-				format, objs...,
-			),
-		)
+	if !env.Colored {
+		fmt.Printf("warning: %s\n", err.Error())
+	} else {
+		warningPrefix := color.New(color.Bold, color.FgYellow).Sprint("warning:")
+		fmt.Printf("%s %s\n", warningPrefix, err.Error())
 	}
+
+	return err
 }

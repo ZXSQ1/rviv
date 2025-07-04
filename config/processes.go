@@ -8,14 +8,16 @@ var (
 	Processes = []ProcessGroup{}
 )
 
-func LoadProcesses() {
+func LoadProcesses() error {
 	if len(Processes) > 0 {
-		return
+		return nil
 	}
 
 	for field, validations := range MainProcessesValidation.Validations() {
 		for _, validation := range validations {
-			validation(viper.Get(string(field)), "")
+			if err := validation(viper.Get(string(field)), ""); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -34,17 +36,14 @@ func LoadProcesses() {
 		processGroup.Groupname = groupname
 		processGroup.Aliases = aliases
 
-		prefix := "processes." + groupname
 		subprocesses := groupinfo["subprocesses"].([]any)
 
 		for _, subprocess := range subprocesses {
 			subprocess := subprocess.(map[string]any)
 			process := Process{}
-			prefix = prefix + ".subprocesses"
-
 			process.Kind = subprocess["type"].(string)
 
-			switch subprocess["type"].(string) {
+			switch process.Kind {
 			case "copy":
 				srcs := []Path{}
 				dest := NewPath(subprocess["dest"].(string))
@@ -110,23 +109,41 @@ func LoadProcesses() {
 				}
 			case "zip":
 				archivename := NewPath(subprocess["archive"].(string))
+				entries := []Path{}
+
+				for _, entry := range subprocess["entries"].([]any) {
+					entries = append(entries, NewPath(entry.(string)))
+				}
 
 				process.Options = ZipOpts{
 					Archivename: archivename,
+					Entries:     entries,
 					Safe:        subprocess["safe"].(bool),
 					Necessary:   subprocess["necessary"].(bool),
 				}
 			case "tar":
 				archivename := NewPath(subprocess["archive"].(string))
+				entries := []Path{}
+				compression := subprocess["compression"].(string)
+
+				for _, entry := range subprocess["entries"].([]any) {
+					entries = append(entries, NewPath(entry.(string)))
+				}
 
 				process.Options = TarOpts{
 					Archivename: archivename,
+					Entries:     entries,
+					Compression: compression,
 					Safe:        subprocess["safe"].(bool),
 					Necessary:   subprocess["necessary"].(bool),
 				}
 			}
+
+			processGroup.Processes = append(processGroup.Processes, process)
 		}
 
 		Processes = append(Processes, processGroup)
 	}
+
+	return nil
 }

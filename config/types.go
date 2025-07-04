@@ -6,7 +6,7 @@ import "github.com/ZXSQ1/rviv/filesystem"
 type Field string
 
 // the config validation function
-type Validation func(val any, parent Field)
+type Validation func(val any, parent Field) error
 
 // the field validation map for config
 type FieldValidationMap map[Field][]Validation

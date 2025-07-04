@@ -13,16 +13,15 @@ func (meta LocalDeviceValidation) Name() string {
 func (meta LocalDeviceValidation) Validations() FieldValidationMap {
 	return map[Field][]Validation{
 		"prefix": {
-			func(val any, parent Field) {
-				switch val.(type) {
-				case string:
-					return
-				default:
-					info.Error(
+			func(val any, parent Field) error {
+				if _, ok := val.(string); !ok {
+					return info.Error(
 						"key 'prefix' has wrong type or "+
 							"is not found in field '%s'", parent,
 					)
 				}
+
+				return nil
 			},
 		},
 	}

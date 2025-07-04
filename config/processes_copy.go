@@ -15,25 +15,27 @@ func (meta MoveProcessValidation) Name() string {
 func (meta MoveProcessValidation) Validations() FieldValidationMap {
 	return FieldValidationMap{
 		"srcs": {
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				if srcs, ok := val.([]any); !ok {
-					info.Error(
+					return info.Error(
 						"field 'srcs' not found or has invalid "+
 							"format in field '%s'", parent,
 					)
 				} else {
 					for _, src := range srcs {
 						if _, ok := src.(string); !ok {
-							info.Error(
+							return info.Error(
 								"field 'srcs' has invalid source '%s' "+
 									"in field '%s'", src, parent,
 							)
 						}
 					}
 				}
+
+				return nil
 			},
 
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				sourcesRaw := val.([]any)
 				sources := []Path{}
 				devnames := []string{}
@@ -45,7 +47,9 @@ func (meta MoveProcessValidation) Validations() FieldValidationMap {
 					)
 				}
 
-				LoadDevices()
+				if err := LoadDevices(); err != nil {
+					return err
+				}
 
 				for _, dev := range Devices {
 					devnames = append(devnames, dev.Name)
@@ -55,26 +59,30 @@ func (meta MoveProcessValidation) Validations() FieldValidationMap {
 					devname := source.Devname
 
 					if !slices.Contains(devnames, devname) {
-						info.Error(
+						return info.Error(
 							"path '%s' has unknown device '%s' in field '%s'",
 							source.Filename, source.Devname, parent,
 						)
 					}
 				}
+
+				return nil
 			},
 		},
 
 		"dest": {
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				if _, ok := val.(string); !ok {
-					info.Error(
+					return info.Error(
 						"field 'dest' is not found or has "+
 							"invalid format in field '%s'", val,
 					)
 				}
+
+				return nil
 			},
 
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				destRaw := val.(string)
 				dest := NewPath(destRaw)
 				devnames := []string{}
@@ -86,44 +94,52 @@ func (meta MoveProcessValidation) Validations() FieldValidationMap {
 				}
 
 				if !slices.Contains(devnames, dest.Devname) {
-					info.Error(
+					return info.Error(
 						"path '%s' has unknown device '%s' in field '%s'",
 						dest.Filename, dest.Devname, parent,
 					)
 				}
+
+				return nil
 			},
 		},
 
 		"method": {
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				if _, ok := val.(string); !ok {
-					info.Error(
+					return info.Error(
 						"field 'method' is unknown or has "+
 							"invalid format in field '%s'", parent,
 					)
 				}
+
+				return nil
 			},
 
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				method := val.(string)
 
 				switch method {
 				case "ff", "fd", "dd":
-					return
+					return nil
 				}
 
-				info.Error("field 'method' has unknown type in field '%s'", parent)
+				return info.Error(
+					"field 'method' has unknown type in field '%s'", parent,
+				)
 			},
 		},
 
 		"necessary": {
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				if _, ok := val.(bool); !ok {
-					info.Error(
+					return info.Error(
 						"field 'necessary' is not found or "+
 							"has invalid format in field '%s'", parent,
 					)
 				}
+
+				return nil
 			},
 		},
 	}

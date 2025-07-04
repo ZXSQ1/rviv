@@ -11,14 +11,16 @@ var (
 	Devices = []Device{}
 )
 
-func LoadDevices() {
+func LoadDevices() error {
 	if len(Devices) > 0 {
-		return
+		return nil
 	}
 
 	for field, validations := range MainDevicesValidation.Validations() {
 		for _, validation := range validations {
-			validation(viper.Get(string(field)), "")
+			if err := validation(viper.Get(string(field)), ""); err != nil {
+				return err
+			}
 		}
 	}
 
@@ -66,4 +68,6 @@ func LoadDevices() {
 
 		Devices = append(Devices, device)
 	}
+
+	return nil
 }

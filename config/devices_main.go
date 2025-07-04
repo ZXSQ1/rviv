@@ -16,9 +16,9 @@ func (meta DeviceValidation) Name() string {
 func (meta DeviceValidation) Validations() FieldValidationMap {
 	return FieldValidationMap{
 		"devices": {
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				if _, ok := val.(map[string]any); !ok {
-					info.Error(
+					return info.Error(
 						"field 'devices' has invalid format or is not found",
 					)
 				}
@@ -27,7 +27,7 @@ func (meta DeviceValidation) Validations() FieldValidationMap {
 
 				for devname, devInfo := range devicesRaw {
 					if _, ok := devInfo.(map[string]any); !ok {
-						info.Error(
+						return info.Error(
 							"field '%s' is not found or has "+
 								"invalid format in field '%s'", devname, parent,
 						)
@@ -37,7 +37,7 @@ func (meta DeviceValidation) Validations() FieldValidationMap {
 						if ('A' > c || 'Z' < c) && ('a' > c || 'z' < c) &&
 							!(c == '_' || c == '-') && ('0' > c || '9' < c) {
 
-							info.Error(
+							return info.Error(
 								"device name '%s' has invalid characters "+
 									"(A-Z, a-z, _ and - are only allowed) in field "+
 									"'devices'", devname,
@@ -45,9 +45,11 @@ func (meta DeviceValidation) Validations() FieldValidationMap {
 						}
 					}
 				}
+
+				return nil
 			},
 
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				devkinds := []string{}
 				devices, _ := val.(map[string]any)
 
@@ -60,7 +62,7 @@ func (meta DeviceValidation) Validations() FieldValidationMap {
 					devkind, ok := devInfo["type"].(string)
 
 					if !ok {
-						info.Error(
+						return info.Error(
 							"field 'type' has invalid format (must be string) "+
 								"or is not found in field '%s'",
 							"devices."+devname+".type",
@@ -68,15 +70,17 @@ func (meta DeviceValidation) Validations() FieldValidationMap {
 					}
 
 					if !slices.Contains(devkinds, devkind) {
-						info.Error(
+						return info.Error(
 							"field 'type' has unknown device type in field '%s'",
 							"devices."+devname+".type",
 						)
 					}
 				}
+
+				return nil
 			},
 
-			func(val any, parent Field) {
+			func(val any, parent Field) error {
 				devices, _ := val.(map[string]any)
 				validationMap := map[string]FieldValidationMap{}
 
@@ -93,10 +97,16 @@ func (meta DeviceValidation) Validations() FieldValidationMap {
 						field = Field(prefix+".") + field
 
 						for _, validation := range validations {
-							validation(viper.Get(string(field)), Field(prefix))
+							if err := validation(
+								viper.Get(string(field)), Field(prefix),
+							); err != nil {
+								return err
+							}
 						}
 					}
 				}
+
+				return nil
 			},
 		},
 	}
