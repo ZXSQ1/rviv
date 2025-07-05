@@ -22,6 +22,9 @@ type TypeValidation interface {
 
 // the standard filesystem-independent path
 type Path struct {
+	// the pointer to devices
+	Devices []Device
+
 	// the filename
 	Filename string
 

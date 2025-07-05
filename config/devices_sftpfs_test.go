@@ -7,7 +7,7 @@ import (
 	"github.com/ZXSQ1/rviv/info"
 )
 
-func TestFtpDevice(t *testing.T) {
+func TestSFtpDevice(t *testing.T) {
 	t.Cleanup(func() {
 		info.ExitOnError = true
 		os.Remove(testFilename)
@@ -17,7 +17,7 @@ func TestFtpDevice(t *testing.T) {
 		map[string]any{
 			"devices": map[string]any{
 				"dev": map[string]any{
-					"type": "ftp",
+					"type": "ssh",
 					"ip":   "1.2.3.4",
 					"port": 133,
 					"user": "$USER",
@@ -37,7 +37,7 @@ func TestFtpDevice(t *testing.T) {
 		map[string]any{
 			"devices": map[string]any{
 				"dev": map[string]any{
-					"type": "ftp",
+					"type": "ssh",
 					"ip":   "1.2.3.4",
 					"port": 133333,
 					"user": "$USER",
@@ -57,7 +57,7 @@ func TestFtpDevice(t *testing.T) {
 		map[string]any{
 			"devices": map[string]any{
 				"dev": map[string]any{
-					"type": "ftp",
+					"type": "ssh",
 					"ip":   "lan",
 					"port": 133,
 					"user": "$USER",
@@ -77,7 +77,7 @@ func TestFtpDevice(t *testing.T) {
 		map[string]any{
 			"devices": map[string]any{
 				"dev": map[string]any{
-					"type": "ftp",
+					"type": "ssh",
 					"ip":   "1.2.3.4",
 					"port": -1,
 					"user": "$USER",
@@ -97,7 +97,7 @@ func TestFtpDevice(t *testing.T) {
 		map[string]any{
 			"devices": map[string]any{
 				"dev": map[string]any{
-					"type": "ftp",
+					"type": "ssh",
 					"ip":   "1.2.3.4",
 					"port": 133,
 					"user": "$USER",
@@ -116,7 +116,7 @@ func TestFtpDevice(t *testing.T) {
 		map[string]any{
 			"devices": map[string]any{
 				"dev": map[string]any{
-					"type": "ftp",
+					"type": "ssh",
 					"port": 133,
 					"user": "$USER",
 					"pass": "$PASS",
@@ -135,7 +135,7 @@ func TestFtpDevice(t *testing.T) {
 		map[string]any{
 			"devices": map[string]any{
 				"dev": map[string]any{
-					"type": "ftp",
+					"type": "ssh",
 					"ip":   "1.2.3.4",
 					"port": 133,
 					"pass": "$PASS",
@@ -154,7 +154,7 @@ func TestFtpDevice(t *testing.T) {
 		map[string]any{
 			"devices": map[string]any{
 				"dev": map[string]any{
-					"type": "ftp",
+					"type": "ssh",
 					"ip":   "1.2.3.4",
 					"user": "$USER",
 					"pass": "$PASS",

@@ -13,17 +13,17 @@ var (
 	ActiveConns = map[string]filesystem.Filesystem{}
 )
 
-func (file *Path) Connect(necessary bool) {
+func (file *Path) Connect(necessary bool) error {
 	if conn, ok := ActiveConns[file.Devname]; ok {
 		file.Fsys = conn
 		file.Active = true
 
-		return
+		return nil
 	}
 
 	var device Device
 
-	for _, targetDevice := range Devices {
+	for _, targetDevice := range file.Devices {
 		if file.Devname == targetDevice.Name {
 			device = targetDevice
 		}
@@ -72,13 +72,15 @@ func (file *Path) Connect(necessary bool) {
 		}
 
 		if necessary {
-			info.Error("unable to connect to device '%s'", device.Name)
+			return info.Error("unable to connect to device '%s'", device.Name)
 		} else {
-			info.Warning("unable to connect to device '%s'", device.Name)
+			return info.Warning("unable to connect to device '%s'", device.Name)
 		}
 	}
 
 	ActiveConns[file.Devname] = fsys
 	file.Fsys = fsys
 	file.Active = true
+
+	return nil
 }

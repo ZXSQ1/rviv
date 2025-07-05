@@ -4,23 +4,18 @@ import (
 	"github.com/spf13/viper"
 )
 
-var (
-	Processes = []ProcessGroup{}
-)
-
-func LoadProcesses() error {
-	if len(Processes) > 0 {
-		return nil
-	}
-
+func LoadProcesses() ([]ProcessGroup, error) {
 	for field, validations := range MainProcessesValidation.Validations() {
+		val := viper.Get(string(field))
+
 		for _, validation := range validations {
-			if err := validation(viper.Get(string(field)), ""); err != nil {
-				return err
+			if err := validation(val, ""); err != nil {
+				return nil, err
 			}
 		}
 	}
 
+	processes := []ProcessGroup{}
 	processesRaw := viper.Get("processes").(map[string]any)
 
 	for groupname, groupinfo := range processesRaw {
@@ -46,10 +41,11 @@ func LoadProcesses() error {
 			switch process.Kind {
 			case "copy":
 				srcs := []Path{}
-				dest := NewPath(subprocess["dest"].(string))
+				dest, _ := NewPath(subprocess["dest"].(string))
 
 				for _, srcRaw := range subprocess["srcs"].([]any) {
-					srcs = append(srcs, NewPath(srcRaw.(string)))
+					src, _ := NewPath(srcRaw.(string))
+					srcs = append(srcs, src)
 				}
 
 				process.Options = CopyOpts{
@@ -60,10 +56,11 @@ func LoadProcesses() error {
 				}
 			case "move":
 				srcs := []Path{}
-				dest := NewPath(subprocess["dest"].(string))
+				dest, _ := NewPath(subprocess["dest"].(string))
 
 				for _, srcRaw := range subprocess["srcs"].([]any) {
-					srcs = append(srcs, NewPath(srcRaw.(string)))
+					src, _ := NewPath(srcRaw.(string))
+					srcs = append(srcs, src)
 				}
 
 				process.Options = MoveOpts{
@@ -76,7 +73,8 @@ func LoadProcesses() error {
 				files := []Path{}
 
 				for _, filename := range subprocess["paths"].([]any) {
-					files = append(files, NewPath(filename.(string)))
+					fileObj, _ := NewPath(filename.(string))
+					files = append(files, fileObj)
 				}
 
 				process.Options = MkdirOpts{
@@ -88,7 +86,8 @@ func LoadProcesses() error {
 				files := []Path{}
 
 				for _, filename := range subprocess["paths"].([]any) {
-					files = append(files, NewPath(filename.(string)))
+					fileObj, _ := NewPath(filename.(string))
+					files = append(files, fileObj)
 				}
 
 				process.Options = RemoveOpts{
@@ -97,8 +96,8 @@ func LoadProcesses() error {
 					Necessary: subprocess["necessary"].(bool),
 				}
 			case "sync":
-				src := NewPath(subprocess["src"].(string))
-				dest := NewPath(subprocess["dest"].(string))
+				src, _ := NewPath(subprocess["src"].(string))
+				dest, _ := NewPath(subprocess["dest"].(string))
 
 				process.Options = SyncOpts{
 					Src:       src,
@@ -107,43 +106,31 @@ func LoadProcesses() error {
 					Method:    subprocess["method"].(string),
 					Necessary: subprocess["necessary"].(bool),
 				}
-			case "zip":
-				archivename := NewPath(subprocess["archive"].(string))
-				entries := []Path{}
-
-				for _, entry := range subprocess["entries"].([]any) {
-					entries = append(entries, NewPath(entry.(string)))
-				}
-
-				process.Options = ZipOpts{
-					Archivename: archivename,
-					Entries:     entries,
-					Safe:        subprocess["safe"].(bool),
-					Necessary:   subprocess["necessary"].(bool),
-				}
-			case "tar":
-				archivename := NewPath(subprocess["archive"].(string))
+			case "archive":
+				archivename, _ := NewPath(subprocess["archive"].(string))
 				entries := []Path{}
 				compression := subprocess["compression"].(string)
 
 				for _, entry := range subprocess["entries"].([]any) {
-					entries = append(entries, NewPath(entry.(string)))
+					entry, _ := NewPath(entry.(string))
+					entries = append(entries, entry)
 				}
 
-				process.Options = TarOpts{
-					Archivename: archivename,
-					Entries:     entries,
-					Compression: compression,
-					Safe:        subprocess["safe"].(bool),
-					Necessary:   subprocess["necessary"].(bool),
+				process.Options = ArchiveOpts{
+					Archivename:  archivename,
+					Entries:      entries,
+					ExpiryInDays: subprocess["expirydays"].(float64),
+					Compression:  compression,
+					Safe:         subprocess["safe"].(bool),
+					Necessary:    subprocess["necessary"].(bool),
 				}
 			}
 
 			processGroup.Processes = append(processGroup.Processes, process)
 		}
 
-		Processes = append(Processes, processGroup)
+		processes = append(processes, processGroup)
 	}
 
-	return nil
+	return processes, nil
 }

@@ -28,12 +28,21 @@ func (meta SyncProcessValidation) Validations() FieldValidationMap {
 
 			func(val any, parent Field) error {
 				srcRaw := val.(string)
-				src := NewPath(srcRaw)
+				src, err := NewPath(srcRaw)
+
+				if err != nil {
+					return err
+				}
+
 				devnames := []string{}
 
-				LoadDevices()
+				devices, err := LoadDevices()
 
-				for _, dev := range Devices {
+				if err != nil {
+					return err
+				}
+
+				for _, dev := range devices {
 					devnames = append(devnames, dev.Name)
 				}
 
@@ -41,6 +50,18 @@ func (meta SyncProcessValidation) Validations() FieldValidationMap {
 					return info.Error(
 						"path '%s' has unknown device '%s' in field '%s'",
 						src.Filename, src.Devname, parent,
+					)
+				}
+
+				return nil
+			},
+
+			func(val any, parent Field) error {
+				src := val.(string)
+
+				if src == "" {
+					return info.Error(
+						"source path is empty in field '%s'", parent,
 					)
 				}
 
@@ -62,14 +83,21 @@ func (meta SyncProcessValidation) Validations() FieldValidationMap {
 
 			func(val any, parent Field) error {
 				destRaw := val.(string)
-				dest := NewPath(destRaw)
-				devnames := []string{}
+				dest, err := NewPath(destRaw)
 
-				if err := LoadDevices(); err != nil {
+				if err != nil {
 					return err
 				}
 
-				for _, dev := range Devices {
+				devnames := []string{}
+
+				devices, err := LoadDevices()
+
+				if err != nil {
+					return err
+				}
+
+				for _, dev := range devices {
 					devnames = append(devnames, dev.Name)
 				}
 
@@ -77,6 +105,18 @@ func (meta SyncProcessValidation) Validations() FieldValidationMap {
 					return info.Error(
 						"path '%s' has unknown device '%s' in field '%s'",
 						dest.Filename, dest.Devname, parent,
+					)
+				}
+
+				return nil
+			},
+
+			func(val any, parent Field) error {
+				dest := val.(string)
+
+				if dest == "" {
+					return info.Error(
+						"destination path is empty in field '%s'", parent,
 					)
 				}
 

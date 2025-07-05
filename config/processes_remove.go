@@ -40,16 +40,24 @@ func (meta RemoveProcessValidation) Validations() FieldValidationMap {
 				paths := []Path{}
 				devnames := []string{}
 
-				if err := LoadDevices(); err != nil {
+				devices, err := LoadDevices()
+
+				if err != nil {
 					return err
 				}
 
-				for _, dev := range Devices {
+				for _, dev := range devices {
 					devnames = append(devnames, dev.Name)
 				}
 
 				for _, pathRaw := range pathsRaw {
-					paths = append(paths, NewPath(pathRaw.(string)))
+					pathObj, err := NewPath(pathRaw.(string))
+
+					if err != nil {
+						return err
+					}
+
+					paths = append(paths, pathObj)
 				}
 
 				for _, path := range paths {
@@ -61,6 +69,18 @@ func (meta RemoveProcessValidation) Validations() FieldValidationMap {
 							path.Filename, path.Devname, parent,
 						)
 					}
+				}
+
+				return nil
+			},
+
+			func(val any, parent Field) error {
+				paths := val.([]any)
+
+				if len(paths) == 0 {
+					return info.Error(
+						"field 'paths' has no entries in field '%s'", parent,
+					)
 				}
 
 				return nil

@@ -1,25 +1,20 @@
 package config
 
 import (
-	"os"
 	"strconv"
 
 	"github.com/spf13/viper"
 )
 
-var (
-	Devices = []Device{}
-)
-
-func LoadDevices() error {
-	if len(Devices) > 0 {
-		return nil
-	}
+func LoadDevices() ([]Device, error) {
+	devices := []Device{}
 
 	for field, validations := range MainDevicesValidation.Validations() {
+		val := viper.Get(string(field))
+
 		for _, validation := range validations {
-			if err := validation(viper.Get(string(field)), ""); err != nil {
-				return err
+			if err := validation(val, ""); err != nil {
+				return nil, err
 			}
 		}
 	}
@@ -40,7 +35,7 @@ func LoadDevices() error {
 
 		for field := range validationMap[kind] {
 			if field == "port" {
-				port, _ := strconv.Atoi(os.ExpandEnv(
+				port, _ := strconv.Atoi(StdPath(
 					viper.GetString(prefix + string(field)),
 				))
 
@@ -52,13 +47,13 @@ func LoadDevices() error {
 
 			switch field {
 			case "ip":
-				deviceInfo.Ip = os.ExpandEnv(value)
+				deviceInfo.Ip = StdPath(value)
 			case "user":
-				deviceInfo.User = os.ExpandEnv(value)
+				deviceInfo.User = StdPath(value)
 			case "pass":
-				deviceInfo.Pass = os.ExpandEnv(value)
+				deviceInfo.Pass = StdPath(value)
 			case "prefix":
-				deviceInfo.Prefix = os.ExpandEnv(value)
+				deviceInfo.Prefix = StdPath(value)
 			}
 		}
 
@@ -66,8 +61,8 @@ func LoadDevices() error {
 		device.Kind = kind
 		device.Info = deviceInfo
 
-		Devices = append(Devices, device)
+		devices = append(devices, device)
 	}
 
-	return nil
+	return devices, nil
 }

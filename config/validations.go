@@ -13,8 +13,7 @@ var (
 	ProcessVerifications []TypeValidation = []TypeValidation{
 		CopyProcessValidation{}, MkdirProcessValidation{},
 		MoveProcessValidation{}, RemoveProcessValidation{},
-		SyncProcessValidation{}, TarProcessValidation{},
-		ZipProcessValidation{},
+		SyncProcessValidation{}, ArchiveProcessValidation{},
 	}
 
 	MainProcessesValidation TypeValidation = ProcessValidation{}

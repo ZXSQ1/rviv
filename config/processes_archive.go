@@ -7,13 +7,13 @@ import (
 	"github.com/ZXSQ1/rviv/info"
 )
 
-type ZipProcessValidation struct{}
+type ArchiveProcessValidation struct{}
 
-func (meta ZipProcessValidation) Name() string {
-	return "zip"
+func (meta ArchiveProcessValidation) Name() string {
+	return "archive"
 }
 
-func (meta ZipProcessValidation) Validations() FieldValidationMap {
+func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 	return FieldValidationMap{
 		"archive": {
 			func(val any, parent Field) error {
@@ -29,14 +29,21 @@ func (meta ZipProcessValidation) Validations() FieldValidationMap {
 
 			func(val any, parent Field) error {
 				archiveRaw := val.(string)
-				archive := NewPath(archiveRaw)
-				devnames := []string{}
+				archive, err := NewPath(archiveRaw)
 
-				if err := LoadDevices(); err != nil {
+				if err != nil {
 					return err
 				}
 
-				for _, dev := range Devices {
+				devnames := []string{}
+
+				devices, err := LoadDevices()
+
+				if err != nil {
+					return err
+				}
+
+				for _, dev := range devices {
 					devnames = append(devnames, dev.Name)
 				}
 
@@ -53,10 +60,24 @@ func (meta ZipProcessValidation) Validations() FieldValidationMap {
 			func(val any, parent Field) error {
 				archive := val.(string)
 
-				if !strings.HasSuffix(archive, ".tar") {
+				if strings.HasSuffix(archive, ".tar") {
+					return nil
+				} else if strings.HasSuffix(archive, ".zip") {
+					return nil
+				}
+
+				return info.Error(
+					"path '%s' must end in 'tar' or 'zip' extensions "+
+						"in field '%s'", archive, parent,
+				)
+			},
+
+			func(val any, parent Field) error {
+				archivename := val.(string)
+
+				if archivename == "" {
 					return info.Error(
-						"path '%s' must end in the 'tar' extension "+
-							"(it is a tar archive) in field '%s'", archive, parent,
+						"archive path is empty in field '%s'", parent,
 					)
 				}
 
@@ -90,16 +111,24 @@ func (meta ZipProcessValidation) Validations() FieldValidationMap {
 				entries := []Path{}
 				devnames := []string{}
 
-				if err := LoadDevices(); err != nil {
+				devices, err := LoadDevices()
+
+				if err != nil {
 					return err
 				}
 
-				for _, dev := range Devices {
+				for _, dev := range devices {
 					devnames = append(devnames, dev.Name)
 				}
 
 				for _, entryRaw := range entriesRaw {
-					entries = append(entries, NewPath(entryRaw.(string)))
+					entry, err := NewPath(entryRaw.(string))
+
+					if err != nil {
+						return err
+					}
+
+					entries = append(entries, entry)
 				}
 
 				for _, entry := range entries {
@@ -111,6 +140,31 @@ func (meta ZipProcessValidation) Validations() FieldValidationMap {
 							entry.Filename, entry.Devname, parent,
 						)
 					}
+				}
+
+				return nil
+			},
+
+			func(val any, parent Field) error {
+				entries := val.([]any)
+
+				if len(entries) == 0 {
+					return info.Error(
+						"field 'entries' has no entries in field '%s'", parent,
+					)
+				}
+
+				return nil
+			},
+		},
+
+		"expirydays": {
+			func(val any, parent Field) error {
+				if _, ok := val.(float64); !ok {
+					return info.Error(
+						"field 'expirydays' is not found "+
+							"or has invalid format in field '%s'", parent,
+					)
 				}
 
 				return nil
@@ -133,7 +187,7 @@ func (meta ZipProcessValidation) Validations() FieldValidationMap {
 				compressionMethod := val.(string)
 
 				switch compressionMethod {
-				case "xz", "gz", "bz2":
+				case "xz", "gz", "bz2", "":
 					return nil
 				}
 

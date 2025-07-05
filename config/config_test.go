@@ -1,0 +1,33 @@
+package config
+
+import (
+	"encoding/json"
+	"os"
+
+	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/info"
+)
+
+var testFilename = "/tmp/config.json"
+
+func InitTestConfig(obj any) error {
+	data, err := json.Marshal(obj)
+
+	if err != nil {
+		return err
+	}
+
+	if err := os.WriteFile(testFilename, data,
+		filesystem.PermRegular); err != nil {
+
+		return err
+	}
+
+	info.ExitOnError = false
+
+	if err := LoadConfig(testFilename); err != nil {
+		return err
+	}
+
+	return nil
+}

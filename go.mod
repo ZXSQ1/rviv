@@ -8,6 +8,7 @@ require (
 	github.com/fclairamb/ftpserverlib v0.26.0
 	github.com/gliderlabs/ssh v0.3.8
 	github.com/go-ping/ping v1.2.0
+	github.com/itchyny/timefmt-go v0.1.6
 	github.com/jlaffaye/ftp v0.2.0
 	github.com/pkg/sftp v1.13.9
 	github.com/spf13/afero v1.14.0

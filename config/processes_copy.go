@@ -42,16 +42,24 @@ func (meta MoveProcessValidation) Validations() FieldValidationMap {
 
 				for _, sourceRaw := range sourcesRaw {
 					sourceRaw := sourceRaw.(string)
+					source, err := NewPath(sourceRaw)
+
+					if err != nil {
+						return err
+					}
+
 					sources = append(
-						sources, NewPath(sourceRaw),
+						sources, source,
 					)
 				}
 
-				if err := LoadDevices(); err != nil {
+				devices, err := LoadDevices()
+
+				if err != nil {
 					return err
 				}
 
-				for _, dev := range Devices {
+				for _, dev := range devices {
 					devnames = append(devnames, dev.Name)
 				}
 
@@ -68,6 +76,18 @@ func (meta MoveProcessValidation) Validations() FieldValidationMap {
 
 				return nil
 			},
+
+			func(val any, parent Field) error {
+				srcs := val.([]any)
+
+				if len(srcs) == 0 {
+					return info.Error(
+						"field 'srcs' has no entries in field '%s'", parent,
+					)
+				}
+
+				return nil
+			},
 		},
 
 		"dest": {
@@ -75,7 +95,7 @@ func (meta MoveProcessValidation) Validations() FieldValidationMap {
 				if _, ok := val.(string); !ok {
 					return info.Error(
 						"field 'dest' is not found or has "+
-							"invalid format in field '%s'", val,
+							"invalid format in field '%s'", parent,
 					)
 				}
 
@@ -84,12 +104,20 @@ func (meta MoveProcessValidation) Validations() FieldValidationMap {
 
 			func(val any, parent Field) error {
 				destRaw := val.(string)
-				dest := NewPath(destRaw)
+				dest, err := NewPath(destRaw)
 				devnames := []string{}
 
-				LoadDevices()
+				if err != nil {
+					return err
+				}
 
-				for _, dev := range Devices {
+				devices, err := LoadDevices()
+
+				if err != nil {
+					return err
+				}
+
+				for _, dev := range devices {
 					devnames = append(devnames, dev.Name)
 				}
 
@@ -97,6 +125,18 @@ func (meta MoveProcessValidation) Validations() FieldValidationMap {
 					return info.Error(
 						"path '%s' has unknown device '%s' in field '%s'",
 						dest.Filename, dest.Devname, parent,
+					)
+				}
+
+				return nil
+			},
+
+			func(val any, parent Field) error {
+				dest := val.(string)
+
+				if dest == "" {
+					return info.Error(
+						"destination path is empty in field '%s'", parent,
 					)
 				}
 

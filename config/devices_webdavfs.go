@@ -40,8 +40,13 @@ func (meta WebDavDeviceValidation) Validations() FieldValidationMap {
 		"port": {
 			func(val any, parent Field) error {
 				if port, ok := val.(float64); ok {
-					return nil
-				} else if float64(int(port)) == port {
+					if float64(int(port)) != port {
+						return info.Error(
+							"key 'port' has wrong type (not an integer) in field '%s'",
+							parent,
+						)
+					}
+
 					return nil
 				}
 
