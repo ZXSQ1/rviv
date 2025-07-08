@@ -3,13 +3,10 @@ package config
 import (
 	"os"
 	"testing"
-
-	"github.com/ZXSQ1/rviv/info"
 )
 
 func TestSFtpDevice(t *testing.T) {
 	t.Cleanup(func() {
-		info.ExitOnError = true
 		os.Remove(testFilename)
 	})
 

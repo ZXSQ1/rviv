@@ -9,18 +9,22 @@ import (
 )
 
 func TestLocalFs_Stat(t *testing.T) {
-	client := Init("/")
-	testFilename := os.TempDir() + "/test"
+	client, err := Init(testPrefix)
+	testFilename := "test"
 
-	t.Cleanup(func() {
-		os.Remove(testFilename)
-	})
-
-	if os.Mkdir(testFilename, filesystem.PermDir) != nil {
+	if err != nil {
 		t.FailNow()
 	}
 
-	actualStat, err := os.Stat(testFilename)
+	t.Cleanup(func() {
+		os.Remove(testPrefix + "/" + testFilename)
+	})
+
+	if os.Mkdir(testPrefix+"/"+testFilename, filesystem.PermDir) != nil {
+		t.FailNow()
+	}
+
+	actualStat, err := os.Stat(testPrefix + "/" + testFilename)
 
 	if err != nil {
 		t.FailNow()
@@ -54,18 +58,18 @@ func TestLocalFs_Stat(t *testing.T) {
 		t.FailNow()
 	}
 
-	if os.Remove(testFilename) != nil {
+	if os.Remove(testPrefix+"/"+testFilename) != nil {
 		t.FailNow()
 	}
 
-	fileObj, err := os.Create(testFilename)
+	fileObj, err := os.Create(testPrefix + "/" + testFilename)
 
 	if err != nil {
 		t.FailNow()
 	}
 
 	fileObj.Close()
-	actualStat, err = os.Stat(testFilename)
+	actualStat, err = os.Stat(testPrefix + "/" + testFilename)
 
 	if err != nil {
 		t.FailNow()

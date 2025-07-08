@@ -7,13 +7,11 @@ import (
 	"strings"
 	"testing"
 	"time"
-
-	"github.com/ZXSQ1/rviv/info"
 )
 
 func TestNewPath(t *testing.T) {
 	t.Cleanup(func() {
-		info.ExitOnError = true
+
 		os.Remove(testFilename)
 	})
 

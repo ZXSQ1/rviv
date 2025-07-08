@@ -1,8 +1,8 @@
 package config
 
 type MoveOpts struct {
-	Srcs      []Path
-	Dest      Path
-	Method    string
-	Necessary bool
+	Srcs    []Path
+	Dest    Path
+	Method  string
+	Verbose bool
 }

@@ -10,14 +10,20 @@ import (
 )
 
 func TestGz(t *testing.T) {
+	client, err := localfs.Init("/")
+
+	if err != nil {
+		t.FailNow()
+	}
+
 	testFilename := config.Path{
 		Filename: os.TempDir() + "/test",
-		Fsys:     localfs.Init("/"),
+		Fsys:     client,
 	}
 
 	testArchivename := config.Path{
 		Filename: os.TempDir() + "/test.gz",
-		Fsys:     localfs.Init("/"),
+		Fsys:     client,
 	}
 
 	t.Cleanup(func() {

@@ -3,11 +3,11 @@ package localfs
 import (
 	"io/fs"
 	"os"
-	"path/filepath"
+	"strings"
 )
 
 func (local *LocalFs) Stat(filename string) (fs.FileInfo, error) {
-	filename = filepath.Join(local.prefix, filename)
+	filename = strings.TrimLeft(filename, "/")
 	_, err := os.Stat(filename)
 
 	if err != nil {

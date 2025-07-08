@@ -1,11 +1,29 @@
 package localfs
 
-import "github.com/ZXSQ1/rviv/filesystem"
+import (
+	"os"
+
+	"github.com/ZXSQ1/rviv/filesystem"
+)
 
 type LocalFs struct {
-	prefix string
+	prefix  string
+	currdir string
 }
 
-func Init(prefix string) filesystem.Filesystem {
-	return &LocalFs{prefix: prefix}
+func Init(prefix string) (filesystem.Filesystem, error) {
+	currdir, err := os.Getwd()
+
+	if err != nil {
+		return nil, err
+	}
+
+	if err := os.Chdir(prefix); err != nil {
+		return nil, err
+	}
+
+	return &LocalFs{
+		prefix:  prefix,
+		currdir: currdir,
+	}, nil
 }

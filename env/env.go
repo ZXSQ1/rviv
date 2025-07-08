@@ -1,6 +1,9 @@
 package env
 
+import "os"
+
 var (
-	Quiet   = false
-	Colored = true
+	ConfigFilename = os.Getenv("RVIV_CONFIG")
+	Verbose        = true
+	Colored        = true
 )

@@ -14,6 +14,7 @@ var (
 		CopyProcessValidation{}, MkdirProcessValidation{},
 		MoveProcessValidation{}, RemoveProcessValidation{},
 		SyncProcessValidation{}, ArchiveProcessValidation{},
+		OrganizeProcessValidation{},
 	}
 
 	MainProcessesValidation TypeValidation = ProcessValidation{}

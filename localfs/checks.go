@@ -2,13 +2,13 @@ package localfs
 
 import (
 	"os"
-	"path/filepath"
+	"strings"
 
 	"github.com/ZXSQ1/rviv/logging"
 )
 
 func (local *LocalFs) IsExist(filename string) bool {
-	filename = filepath.Join(local.prefix, filename)
+	filename = strings.TrimLeft(filename, "/")
 	_, err := os.Stat(filename)
 	logging.ReportErr(err)
 

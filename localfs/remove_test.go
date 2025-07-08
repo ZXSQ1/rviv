@@ -8,14 +8,18 @@ import (
 )
 
 func TestLocalFs_Remove(t *testing.T) {
-	client := Init("/")
-	testFilename := os.TempDir() + "/test"
+	client, err := Init(testPrefix)
+	testFilename := "test"
+
+	if err != nil {
+		t.FailNow()
+	}
 
 	t.Cleanup(func() {
-		os.Remove(testFilename)
+		os.Remove(testPrefix + "/" + testFilename)
 	})
 
-	if os.Mkdir(testFilename, filesystem.PermDir) != nil {
+	if os.Mkdir(testPrefix+"/"+testFilename, filesystem.PermDir) != nil {
 		t.FailNow()
 	}
 
@@ -23,11 +27,11 @@ func TestLocalFs_Remove(t *testing.T) {
 		t.FailNow()
 	}
 
-	if os.Remove(testFilename) != nil {
+	if os.Remove(testPrefix+"/"+testFilename) != nil {
 		t.FailNow()
 	}
 
-	fileObj, err := os.Create(testFilename)
+	fileObj, err := os.Create(testPrefix + "/" + testFilename)
 
 	if err != nil {
 		t.FailNow()
@@ -43,14 +47,18 @@ func TestLocalFs_Remove(t *testing.T) {
 }
 
 func TestLocalFs_RemoveDir(t *testing.T) {
-	client := Init("/")
-	testFilename := os.TempDir() + "/test"
+	client, err := Init(testPrefix)
+	testFilename := "test"
+
+	if err != nil {
+		t.FailNow()
+	}
 
 	t.Cleanup(func() {
-		os.Remove(testFilename)
+		os.Remove(testPrefix + "/" + testFilename)
 	})
 
-	if os.Mkdir(testFilename, filesystem.PermDir) != nil {
+	if os.Mkdir(testPrefix+"/"+testFilename, filesystem.PermDir) != nil {
 		t.FailNow()
 	}
 
@@ -58,7 +66,7 @@ func TestLocalFs_RemoveDir(t *testing.T) {
 		t.FailNow()
 	}
 
-	fileObj, err := os.Create(testFilename)
+	fileObj, err := os.Create(testPrefix + "/" + testFilename)
 
 	if err != nil {
 		t.FailNow()

@@ -3,13 +3,10 @@ package config
 import (
 	"os"
 	"testing"
-
-	"github.com/ZXSQ1/rviv/info"
 )
 
 func TestCopyProcess(t *testing.T) {
 	t.Cleanup(func() {
-		info.ExitOnError = true
 		os.Remove(testFilename)
 	})
 
@@ -56,9 +53,8 @@ func TestCopyProcess(t *testing.T) {
 								"dev::/ehfdjsk/lfjkl",
 							},
 
-							"dest":      "dev::/asdas/asdas",
-							"method":    "dd",
-							"necessary": true,
+							"dest":   "dev::/asdas/asdas",
+							"method": "dd",
 						},
 					},
 				},
@@ -91,9 +87,8 @@ func TestCopyProcess(t *testing.T) {
 								"de12v::/ehfdjsk/lfjkl",
 							},
 
-							"dest":      "dev::/asdas/asdas",
-							"method":    "dd",
-							"necessary": true,
+							"dest":   "dev::/asdas/asdas",
+							"method": "dd",
 						},
 					},
 				},
@@ -128,11 +123,10 @@ func TestCopyProcess(t *testing.T) {
 					"aliases": []string{"pg"},
 					"subprocesses": []map[string]any{
 						{
-							"type":      "copy",
-							"srcs":      []string{},
-							"dest":      "dev::/asdas/asdas",
-							"method":    "d31d",
-							"necessary": true,
+							"type":   "copy",
+							"srcs":   []string{},
+							"dest":   "dev::/asdas/asdas",
+							"method": "d31d",
 						},
 					},
 				},
@@ -160,46 +154,10 @@ func TestCopyProcess(t *testing.T) {
 					"aliases": []string{"pg"},
 					"subprocesses": []map[string]any{
 						{
-							"type": "copy",
-							"srcs": []string{
-								"dev::/sada",
-							},
-
-							"dest":      "dev::/asdas/asdas",
-							"method":    "dd",
-							"necessary": 1293,
-						},
-					},
-				},
-			},
-		},
-	) != nil {
-		t.FailNow()
-	}
-
-	if _, err := LoadProcesses(); err == nil {
-		t.FailNow()
-	}
-
-	if InitTestConfig(
-		map[string]any{
-			"devices": map[string]any{
-				"dev": map[string]any{
-					"type":   "local",
-					"prefix": "/",
-				},
-			},
-
-			"processes": map[string]any{
-				"procgroup": map[string]any{
-					"aliases": []string{"pg"},
-					"subprocesses": []map[string]any{
-						{
-							"type":      "copy",
-							"srcs":      []string{},
-							"dest":      "dev::/asdas/asdas",
-							"method":    "dd",
-							"necessary": true,
+							"type":   "copy",
+							"srcs":   []string{},
+							"dest":   "dev::/asdas/asdas",
+							"method": "dd",
 						},
 					},
 				},
@@ -232,9 +190,110 @@ func TestCopyProcess(t *testing.T) {
 								"dev::/dsajd",
 							},
 
-							"dest":      "dev::/asdas/asdas",
-							"method":    "dd",
-							"necessary": true,
+							"dest":   "dev::/asdas/asdas",
+							"method": "dd",
+						},
+					},
+				},
+			},
+		},
+	) != nil {
+		t.FailNow()
+	}
+
+	if _, err := LoadProcesses(); err != nil {
+		t.FailNow()
+	}
+
+	if InitTestConfig(
+		map[string]any{
+			"devices": map[string]any{
+				"dev": map[string]any{
+					"type":   "local",
+					"prefix": "/",
+				},
+			},
+
+			"processes": map[string]any{
+				"procgroup": map[string]any{
+					"aliases": []string{"pg"},
+					"subprocesses": []map[string]any{
+						{
+							"type": "copy",
+							"srcs": []string{
+								"dev::/dsajd",
+							},
+
+							"dest":   "dev::/asdas/asdas",
+							"method": "ff",
+						},
+					},
+				},
+			},
+		},
+	) != nil {
+		t.FailNow()
+	}
+
+	if _, err := LoadProcesses(); err != nil {
+		t.FailNow()
+	}
+
+	if InitTestConfig(
+		map[string]any{
+			"devices": map[string]any{
+				"dev": map[string]any{
+					"type":   "local",
+					"prefix": "/",
+				},
+			},
+
+			"processes": map[string]any{
+				"procgroup": map[string]any{
+					"aliases": []string{"pg"},
+					"subprocesses": []map[string]any{
+						{
+							"type": "copy",
+							"srcs": []string{
+								"dev::/dsajd",
+							},
+
+							"dest":   "dev::/asdas/asdas",
+							"method": "fd",
+						},
+					},
+				},
+			},
+		},
+	) != nil {
+		t.FailNow()
+	}
+
+	if _, err := LoadProcesses(); err != nil {
+		t.FailNow()
+	}
+
+	if InitTestConfig(
+		map[string]any{
+			"devices": map[string]any{
+				"dev": map[string]any{
+					"type":   "local",
+					"prefix": "/",
+				},
+			},
+
+			"processes": map[string]any{
+				"procgroup": map[string]any{
+					"aliases": []string{"pg"},
+					"subprocesses": []map[string]any{
+						{
+							"type": "copy",
+							"srcs": []string{
+								"dev::/dsajd",
+							},
+
+							"dest":   "dev::/asdas/asdas",
+							"method": "ad",
 						},
 					},
 				},

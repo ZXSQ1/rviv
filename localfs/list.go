@@ -2,11 +2,11 @@ package localfs
 
 import (
 	"os"
-	"path/filepath"
+	"strings"
 )
 
 func (local *LocalFs) ListDir(filename string) ([]string, error) {
-	filename = filepath.Join(local.prefix, filename)
+	filename = strings.TrimLeft(filename, "/")
 	entries := []string{}
 	rawEntries, err := os.ReadDir(filename)
 

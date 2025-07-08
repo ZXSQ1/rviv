@@ -1,6 +1,7 @@
 package config
 
 import (
+	"github.com/ZXSQ1/rviv/env"
 	"github.com/spf13/viper"
 )
 
@@ -49,10 +50,10 @@ func LoadProcesses() ([]ProcessGroup, error) {
 				}
 
 				process.Options = CopyOpts{
-					Srcs:      srcs,
-					Dest:      dest,
-					Method:    subprocess["method"].(string),
-					Necessary: subprocess["necessary"].(bool),
+					Srcs:    srcs,
+					Dest:    dest,
+					Method:  subprocess["method"].(string),
+					Verbose: env.Verbose,
 				}
 			case "move":
 				srcs := []Path{}
@@ -64,10 +65,10 @@ func LoadProcesses() ([]ProcessGroup, error) {
 				}
 
 				process.Options = MoveOpts{
-					Srcs:      srcs,
-					Dest:      dest,
-					Method:    subprocess["method"].(string),
-					Necessary: subprocess["necessary"].(bool),
+					Srcs:    srcs,
+					Dest:    dest,
+					Method:  subprocess["method"].(string),
+					Verbose: env.Verbose,
 				}
 			case "mkdir":
 				files := []Path{}
@@ -80,7 +81,7 @@ func LoadProcesses() ([]ProcessGroup, error) {
 				process.Options = MkdirOpts{
 					Filenames: files,
 					Parent:    subprocess["parent"].(bool),
-					Necessary: subprocess["necessary"].(bool),
+					Verbose:   env.Verbose,
 				}
 			case "remove":
 				files := []Path{}
@@ -93,18 +94,18 @@ func LoadProcesses() ([]ProcessGroup, error) {
 				process.Options = RemoveOpts{
 					Filenames: files,
 					Recursive: subprocess["recursive"].(bool),
-					Necessary: subprocess["necessary"].(bool),
+					Verbose:   env.Verbose,
 				}
 			case "sync":
 				src, _ := NewPath(subprocess["src"].(string))
 				dest, _ := NewPath(subprocess["dest"].(string))
 
 				process.Options = SyncOpts{
-					Src:       src,
-					Dest:      dest,
-					Oneway:    subprocess["oneway"].(bool),
-					Method:    subprocess["method"].(string),
-					Necessary: subprocess["necessary"].(bool),
+					Src:     src,
+					Dest:    dest,
+					Oneway:  subprocess["oneway"].(bool),
+					Method:  subprocess["method"].(string),
+					Verbose: env.Verbose,
 				}
 			case "archive":
 				archivename, _ := NewPath(subprocess["archive"].(string))
@@ -122,7 +123,7 @@ func LoadProcesses() ([]ProcessGroup, error) {
 					ExpiryInDays: subprocess["expirydays"].(float64),
 					Compression:  compression,
 					Safe:         subprocess["safe"].(bool),
-					Necessary:    subprocess["necessary"].(bool),
+					Verbose:      env.Verbose,
 				}
 			}
 

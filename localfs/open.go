@@ -3,7 +3,7 @@ package localfs
 import (
 	"io"
 	"os"
-	"path/filepath"
+	"strings"
 
 	"github.com/ZXSQ1/rviv/filesystem"
 )
@@ -11,7 +11,7 @@ import (
 func (local *LocalFs) Open(filename string, mode filesystem.OpenMode) (
 	io.ReadWriteCloser, error) {
 
-	filename = filepath.Join(local.prefix, filename)
+	filename = strings.TrimLeft(filename, "/")
 
 	switch mode {
 	case filesystem.ModeRead:

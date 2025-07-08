@@ -48,7 +48,7 @@ a configuration of the devices.
          "subprocesses": [
             {
                "type": "copy",
-               "necessary": true,
+               
                "src": "srcpath",
                "dest": "destpath"
                // other command type-specific options

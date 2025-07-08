@@ -9,34 +9,42 @@ import (
 )
 
 func TestLocalFs_List(t *testing.T) {
-	client := Init("/")
-	testPrefix := os.TempDir() + "/test"
+	client, err := Init(testPrefix)
+	testEntryPrefix := "test"
 	testEntries := []string{
 		"a", "bah", "shfj", "bag", "feh", "voo",
 	}
 
+	if err != nil {
+		t.FailNow()
+	}
+
 	t.Cleanup(func() {
-		os.RemoveAll(testPrefix)
+		os.RemoveAll(testPrefix + "/" + testEntryPrefix)
 	})
 
 	for _, testEntry := range testEntries {
-		if os.MkdirAll(testPrefix+"/"+testEntry, filesystem.PermDir) != nil {
+		if os.MkdirAll(testPrefix+"/"+testEntryPrefix+"/"+testEntry,
+			filesystem.PermDir) != nil {
+
 			t.FailNow()
 		}
 	}
 
 	actualEntries := []string{}
-	rawEntries, err := os.ReadDir(testPrefix)
+	rawEntries, err := os.ReadDir(testPrefix + "/" + testEntryPrefix)
 
 	if err != nil {
 		t.FailNow()
 	}
 
 	for _, rawEntry := range rawEntries {
-		actualEntries = append(actualEntries, testPrefix+"/"+rawEntry.Name())
+		actualEntries = append(
+			actualEntries, testEntryPrefix+"/"+rawEntry.Name(),
+		)
 	}
 
-	resultEntries, err := client.ListDir(testPrefix)
+	resultEntries, err := client.ListDir(testEntryPrefix)
 
 	if err != nil {
 		t.FailNow()

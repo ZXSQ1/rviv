@@ -6,5 +6,5 @@ type ArchiveOpts struct {
 	ExpiryInDays float64
 	Compression  string
 	Safe         bool
-	Necessary    bool
+	Verbose      bool
 }

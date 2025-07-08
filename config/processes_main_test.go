@@ -3,13 +3,11 @@ package config
 import (
 	"os"
 	"testing"
-
-	"github.com/ZXSQ1/rviv/info"
 )
 
 func TestMainProcess(t *testing.T) {
 	t.Cleanup(func() {
-		info.ExitOnError = true
+
 		os.Remove(testFilename)
 	})
 
@@ -27,10 +25,9 @@ func TestMainProcess(t *testing.T) {
 					"aliases": []string{"pg"},
 					"subprocsses": []map[string]any{
 						{
-							"type":      "mkdir",
-							"paths":     []string{"dev::/dsajd"},
-							"parent":    true,
-							"necessary": true,
+							"type":   "mkdir",
+							"paths":  []string{"dev::/dsajd"},
+							"parent": true,
 						},
 					},
 				},
@@ -58,10 +55,9 @@ func TestMainProcess(t *testing.T) {
 					"aliases": []string{"pg"},
 					"subprocesses": []map[string]any{
 						{
-							"type":      "dsf",
-							"paths":     []string{"dev::/dsajd"},
-							"parent":    true,
-							"necessary": true,
+							"type":   "dsf",
+							"paths":  []string{"dev::/dsajd"},
+							"parent": true,
 						},
 					},
 				},
@@ -89,10 +85,9 @@ func TestMainProcess(t *testing.T) {
 					"aliasedsas": []string{"pg"},
 					"subprocesses": []map[string]any{
 						{
-							"type":      "mkdir",
-							"paths":     []string{"dev::/dsajd"},
-							"parent":    true,
-							"necessary": true,
+							"type":   "mkdir",
+							"paths":  []string{"dev::/dsajd"},
+							"parent": true,
 						},
 					},
 				},
@@ -120,10 +115,9 @@ func TestMainProcess(t *testing.T) {
 					"aliases": []string{"pg#!@#"},
 					"subprocesses": []map[string]any{
 						{
-							"type":      "mkdir",
-							"paths":     []string{"dev::/dsajd"},
-							"parent":    true,
-							"necessary": true,
+							"type":   "mkdir",
+							"paths":  []string{"dev::/dsajd"},
+							"parent": true,
 						},
 					},
 				},
@@ -151,10 +145,9 @@ func TestMainProcess(t *testing.T) {
 					"aliases": []string{"pg231_"},
 					"subprocesses": []map[string]any{
 						{
-							"type":      "mkdir",
-							"paths":     []string{"dev::/dsajd"},
-							"parent":    true,
-							"necessary": true,
+							"type":   "mkdir",
+							"paths":  []string{"dev::/dsajd"},
+							"parent": true,
 						},
 					},
 				},
@@ -182,10 +175,9 @@ func TestMainProcess(t *testing.T) {
 					"aliases": []string{"pg"},
 					"subprocesses": []map[string]any{
 						{
-							"type":      "mkdir",
-							"paths":     []string{"dev::/dsajd"},
-							"parent":    true,
-							"necessary": true,
+							"type":   "mkdir",
+							"paths":  []string{"dev::/dsajd"},
+							"parent": true,
 						},
 					},
 				},
@@ -213,10 +205,9 @@ func TestMainProcess(t *testing.T) {
 					"aliases": []string{"pg"},
 					"subprocesses": []map[string]any{
 						{
-							"type":      "mkdir",
-							"paths":     []string{"dev::/dsajd"},
-							"parent":    true,
-							"necessary": true,
+							"type":   "mkdir",
+							"paths":  []string{"dev::/dsajd"},
+							"parent": true,
 						},
 					},
 				},

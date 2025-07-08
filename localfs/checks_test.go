@@ -8,14 +8,18 @@ import (
 )
 
 func TestLocalFs_IsExist(t *testing.T) {
-	client := Init("/")
-	testFilename := os.TempDir() + "/test"
+	testFilename := "test"
+	client, err := Init(testPrefix)
+
+	if err != nil {
+		t.FailNow()
+	}
 
 	t.Cleanup(func() {
-		os.Remove(testFilename)
+		os.Remove(testPrefix + "/" + testFilename)
 	})
 
-	if os.MkdirAll(testFilename, filesystem.PermDir) != nil {
+	if os.MkdirAll(testPrefix+"/"+testFilename, filesystem.PermDir) != nil {
 		t.FailNow()
 	}
 
@@ -23,7 +27,7 @@ func TestLocalFs_IsExist(t *testing.T) {
 		t.FailNow()
 	}
 
-	if os.Remove(testFilename) != nil {
+	if os.Remove(testPrefix+"/"+testFilename) != nil {
 		t.FailNow()
 	}
 
@@ -31,7 +35,7 @@ func TestLocalFs_IsExist(t *testing.T) {
 		t.FailNow()
 	}
 
-	fileObj, err := os.Create(testFilename)
+	fileObj, err := os.Create(testPrefix + "/" + testFilename)
 
 	if err != nil {
 		t.FailNow()

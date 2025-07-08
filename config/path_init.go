@@ -7,12 +7,14 @@ import (
 	"github.com/ZXSQ1/rviv/info"
 )
 
+var DeviceSeparator = "::"
+
 func NewPath(uri string) (Path, error) {
-	if !strings.Contains(uri, "::") {
+	if !strings.Contains(uri, DeviceSeparator) {
 		return Path{}, info.Error("must specify device in path '%s'", uri)
 	}
 
-	pathParts := strings.Split(uri, "::")
+	pathParts := strings.Split(uri, DeviceSeparator)
 	pathDev := pathParts[0]
 	pathFilename := StdPath(pathParts[1])
 	devnames := []string{}

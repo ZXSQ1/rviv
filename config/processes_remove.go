@@ -99,18 +99,5 @@ func (meta RemoveProcessValidation) Validations() FieldValidationMap {
 				return nil
 			},
 		},
-
-		"necessary": {
-			func(val any, parent Field) error {
-				if _, ok := val.(bool); !ok {
-					return info.Error(
-						"field 'necessary' is not found "+
-							"or has invalid format in field '%s'", parent,
-					)
-				}
-
-				return nil
-			},
-		},
 	}
 }

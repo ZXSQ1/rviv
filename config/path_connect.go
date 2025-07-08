@@ -1,20 +1,24 @@
 package config
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/ZXSQ1/rviv/filesystem"
 	"github.com/ZXSQ1/rviv/ftpfs"
 	"github.com/ZXSQ1/rviv/info"
 	"github.com/ZXSQ1/rviv/lan"
+	"github.com/ZXSQ1/rviv/localfs"
 )
 
 var (
-	ActiveConns = map[string]filesystem.Filesystem{}
+	activeConns = map[string]filesystem.Filesystem{}
 )
 
-func (file *Path) Connect(necessary bool) error {
-	if conn, ok := ActiveConns[file.Devname]; ok {
+func (file *Path) Connect(verbose bool) error {
+	info.Heading(verbose, "connect")
+
+	if conn, ok := activeConns[file.Devname]; ok {
 		file.Fsys = conn
 		file.Active = true
 
@@ -33,6 +37,12 @@ func (file *Path) Connect(necessary bool) error {
 	var err error
 
 	switch file.Devname {
+	case "local":
+		fsys, err = localfs.Init(device.Info.Prefix)
+
+		if err != nil {
+			return info.Error("unable to connect to device '%s'", device.Name)
+		}
 	case "ftp", "ssh", "webdav":
 		ips := []string{}
 
@@ -49,36 +59,44 @@ func (file *Path) Connect(necessary bool) error {
 				Pass: device.Info.Pass,
 			}
 
+			info.Text(verbose, "tried address '%s:%d'... ", device.Info.Ip,
+				device.Info.Port)
+
 			switch device.Kind {
 			case "ftp":
 				fsys, err = ftpfs.Connect(connInfo)
 
-				if err != nil {
-					continue
+				if err == nil {
+					break
 				}
 			case "ssh":
 				fsys, err = ftpfs.Connect(connInfo)
 
-				if err != nil {
-					continue
+				if err == nil {
+					break
 				}
 			case "webdav":
 				fsys, err = ftpfs.Connect(connInfo)
 
-				if err != nil {
-					continue
+				if err == nil {
+					break
 				}
+			}
+
+			if verbose {
+				fmt.Println("failed")
 			}
 		}
 
-		if necessary {
+		if fsys == nil {
 			return info.Error("unable to connect to device '%s'", device.Name)
-		} else {
-			return info.Warning("unable to connect to device '%s'", device.Name)
+		} else if verbose {
+			fmt.Println("success")
 		}
+
 	}
 
-	ActiveConns[file.Devname] = fsys
+	activeConns[file.Devname] = fsys
 	file.Fsys = fsys
 	file.Active = true
 

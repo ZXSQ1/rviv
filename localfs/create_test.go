@@ -6,32 +6,40 @@ import (
 )
 
 func TestLocalFs_Create(t *testing.T) {
-	client := Init("/")
-	testFilename := os.TempDir() + "/test"
+	client, err := Init(testPrefix)
+	testFilename := "test"
+
+	if err != nil {
+		t.FailNow()
+	}
 
 	t.Cleanup(func() {
-		os.Remove(testFilename)
+		os.Remove(testPrefix + "/" + testFilename)
 	})
 
 	if client.Create(testFilename) != nil {
 		t.FailNow()
 	}
 
-	if client.Create(testFilename) == nil {
+	if err := client.Create(testFilename); err == nil {
 		t.FailNow()
 	}
 
-	if os.Remove(testFilename) != nil {
+	if os.Remove(testPrefix+"/"+testFilename) != nil {
 		t.FailNow()
 	}
 }
 
 func TestLocalFs_CreateDir(t *testing.T) {
-	client := Init("/")
-	testFilename := os.TempDir() + "/test"
+	client, err := Init(testPrefix)
+	testFilename := "test"
+
+	if err != nil {
+		t.FailNow()
+	}
 
 	t.Cleanup(func() {
-		os.Remove(testFilename)
+		os.Remove(testPrefix + "/" + testFilename)
 	})
 
 	if client.CreateDir(testFilename) != nil {
@@ -42,7 +50,7 @@ func TestLocalFs_CreateDir(t *testing.T) {
 		t.FailNow()
 	}
 
-	if os.Remove(testFilename) != nil {
+	if os.Remove(testPrefix+"/"+testFilename) != nil {
 		t.FailNow()
 	}
 }

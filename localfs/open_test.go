@@ -9,15 +9,21 @@ import (
 )
 
 func TestLocalFs_Open(t *testing.T) {
-	client := Init("/")
-	testFilename := os.TempDir() + "/test"
+	client, err := Init(testPrefix)
+	testFilename := "test"
 	testContent := "abcdefghijklmnopqrstuvwxyz"
 
+	if err != nil {
+		t.FailNow()
+	}
+
 	t.Cleanup(func() {
-		os.Remove(testFilename)
+		os.Remove(testPrefix + "/" + testFilename)
 	})
 
-	if os.WriteFile(testFilename, []byte(""), filesystem.PermRegular) != nil {
+	if os.WriteFile(testPrefix+"/"+testFilename,
+		[]byte(""), filesystem.PermRegular) != nil {
+
 		t.FailNow()
 	}
 

@@ -1,9 +1,18 @@
 package localfs
 
-import "testing"
+import (
+	"os"
+	"testing"
+)
+
+var testPrefix = os.TempDir()
 
 func TestInit(t *testing.T) {
-	client := Init("/")
+	client, err := Init(testPrefix)
+
+	if err != nil {
+		t.FailNow()
+	}
 
 	if client == nil {
 		t.FailNow()

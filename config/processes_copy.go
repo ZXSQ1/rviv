@@ -160,26 +160,13 @@ func (meta MoveProcessValidation) Validations() FieldValidationMap {
 				method := val.(string)
 
 				switch method {
-				case "ff", "fd", "dd":
+				case "ff", "fd", "dd", "ad":
 					return nil
 				}
 
 				return info.Error(
 					"field 'method' has unknown type in field '%s'", parent,
 				)
-			},
-		},
-
-		"necessary": {
-			func(val any, parent Field) error {
-				if _, ok := val.(bool); !ok {
-					return info.Error(
-						"field 'necessary' is not found or "+
-							"has invalid format in field '%s'", parent,
-					)
-				}
-
-				return nil
 			},
 		},
 	}
