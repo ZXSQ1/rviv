@@ -5,7 +5,7 @@ import (
 )
 
 func (client *SFtpFs) Stat(filename string) (fs.FileInfo, error) {
-	_, err := client.conn.Stat(filename)
+	stat, err := client.conn.Stat(filename)
 
 	if err != nil {
 		return nil, err
@@ -13,6 +13,7 @@ func (client *SFtpFs) Stat(filename string) (fs.FileInfo, error) {
 
 	return &FileInfo{
 		conn:     client.conn,
+		stat:     stat,
 		filename: filename,
 	}, nil
 }

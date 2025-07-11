@@ -4,7 +4,7 @@ import (
 	"github.com/ZXSQ1/rviv/config"
 )
 
-func CopyAll(srcs []config.Path, dest config.Path, verbose bool) error {
+func MoveAll(srcs []config.Path, dest config.Path, verbose bool) error {
 	srcEntries, err := Glob(config.GlobOpts{
 		Entries: srcs,
 		Verbose: verbose,
@@ -23,13 +23,15 @@ func CopyAll(srcs []config.Path, dest config.Path, verbose bool) error {
 	}
 
 	for _, srcEntry := range srcEntries {
-		var err error
-
 		if AssertIsDir(srcEntry) == nil {
-			err = CopyDir(srcEntry, dest, verbose)
-		} else {
-			err = CopyFiles([]config.Path{srcEntry}, dest, verbose)
+			if err = MoveDir(srcEntry, dest, verbose); err != nil {
+				return err
+			}
+
+			continue
 		}
+
+		err = MoveFiles([]config.Path{srcEntry}, dest, verbose)
 
 		if err != nil {
 			return err

@@ -10,7 +10,7 @@ import (
 	"github.com/ZXSQ1/rviv/localfs"
 )
 
-func TestCopyAll(t *testing.T) {
+func TestMoveAll(t *testing.T) {
 	client, err := localfs.Init(os.TempDir())
 
 	if err != nil {
@@ -87,8 +87,15 @@ func TestCopyAll(t *testing.T) {
 		prefix.Fsys.Close()
 	})
 
-	if err := CopyAll(entries, dest, false); err != nil {
+	if err := MoveAll(entries, dest, false); err != nil {
+		println(err.Error())
 		t.FailNow()
+	}
+
+	for _, entry := range entries {
+		if entry.Fsys.IsExist(entry.Filename) {
+			t.FailNow()
+		}
 	}
 
 	destEntries, err := ListDir(config.ListOpts{

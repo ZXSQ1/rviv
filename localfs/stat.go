@@ -8,13 +8,14 @@ import (
 
 func (local *LocalFs) Stat(filename string) (fs.FileInfo, error) {
 	filename = strings.TrimLeft(filename, "/")
-	_, err := os.Stat(filename)
+	stat, err := os.Stat(filename)
 
 	if err != nil {
 		return nil, err
 	}
 
 	return &FileInfo{
+		stat:     stat,
 		filename: filename,
 	}, nil
 }

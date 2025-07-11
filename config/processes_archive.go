@@ -1,8 +1,8 @@
 package config
 
 import (
+	"path/filepath"
 	"slices"
-	"strings"
 
 	"github.com/ZXSQ1/rviv/info"
 )
@@ -59,10 +59,9 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 
 			func(val any, parent Field) error {
 				archive := val.(string)
+				ext := filepath.Ext(archive)
 
-				if strings.HasSuffix(archive, ".tar") {
-					return nil
-				} else if strings.HasSuffix(archive, ".zip") {
+				if ext == ".tar" || ext == ".zip" {
 					return nil
 				}
 
@@ -169,6 +168,18 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 
 				return nil
 			},
+
+			func(val any, parent Field) error {
+				expirydays := val.(float64)
+
+				if float64(int(expirydays)) != expirydays {
+					return info.Error(
+						"field 'expirydays' is not an integer in field '%s'", parent,
+					)
+				}
+
+				return nil
+			},
 		},
 
 		"compression": {
@@ -204,6 +215,44 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 					return info.Error(
 						"field 'safe' is not found or "+
 							"has invalid format in field '%s'", parent,
+					)
+				}
+
+				return nil
+			},
+		},
+
+		"level": {
+			func(val any, parent Field) error {
+				if _, ok := val.(float64); !ok {
+					return info.Error(
+						"field 'expirydays' is not found "+
+							"or has invalid format in field '%s'", parent,
+					)
+				}
+
+				return nil
+			},
+
+			func(val any, parent Field) error {
+				level := val.(float64)
+
+				if float64(int(level)) != level {
+					return info.Error(
+						"field 'level' is not an integer in field '%s'", parent,
+					)
+				}
+
+				return nil
+			},
+
+			func(val any, parent Field) error {
+				level := val.(float64)
+
+				if level < 0 || level > 9 {
+					return info.Error(
+						"field 'level' must be betweeen 0 and 9 in field '%s'",
+						parent,
 					)
 				}
 

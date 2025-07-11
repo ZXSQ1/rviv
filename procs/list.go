@@ -12,24 +12,10 @@ func ListDir(opts config.ListOpts) ([]config.Path, error) {
 		}
 	}
 
-	if !opts.Filename.Fsys.IsExist(opts.Filename.Filename) {
-		if opts.Filename.Fsys.CreateDir(opts.Filename.Filename) != nil {
-			return nil, info.Error(
-				"unable to create directory '%s'", ShowPath(opts.Filename),
-			)
-		}
-	} else {
-		stat, err := opts.Filename.Fsys.Stat(opts.Filename.Filename)
-
-		if err != nil {
-			return nil, info.Error("unable to stat '%s'", ShowPath(opts.Filename))
-		}
-
-		if !stat.IsDir() {
-			return nil, info.Error(
-				"destination file '%s' is not a directory", ShowPath(opts.Filename),
-			)
-		}
+	if err := AssertExistsCreateDir(opts.Filename); err != nil {
+		return nil, err
+	} else if err := AssertIsDir(opts.Filename); err != nil {
+		return nil, err
 	}
 
 	info.Text(opts.Verbose, "listing directory '%s'", ShowPath(opts.Filename))
@@ -55,31 +41,26 @@ func ListDir(opts config.ListOpts) ([]config.Path, error) {
 	}
 
 	for _, entry := range entries {
-		stat, err := entry.Fsys.Stat(entry.Filename)
+		if AssertIsRegular(entry) == nil || (AssertIsDir(entry) == nil &&
+			!opts.Recursive) {
 
-		if err != nil {
-			return nil, info.Error("unable to stat file '%s'", entry.Filename)
+			resultEntries = append(resultEntries, entry)
+			continue
 		}
 
-		if (stat.IsDir() && !opts.Recursive) || stat.Mode().IsRegular() {
+		recursiveEntries, err := ListDir(config.ListOpts{
+			Filename:  entry,
+			Recursive: true,
+		})
+
+		if err != nil {
+			return nil, err
+		}
+
+		if len(recursiveEntries) == 0 {
 			resultEntries = append(resultEntries, entry)
 		} else {
-			recursiveEntries, err := ListDir(config.ListOpts{
-				Filename:  entry,
-				Recursive: true,
-			})
-
-			if err != nil {
-				return nil, info.Error(
-					"unable to recursively list directory '%s'", entry.Filename,
-				)
-			}
-
-			if len(recursiveEntries) == 0 {
-				resultEntries = append(resultEntries, entry)
-			} else {
-				resultEntries = append(resultEntries, recursiveEntries...)
-			}
+			resultEntries = append(resultEntries, recursiveEntries...)
 		}
 	}
 

@@ -9,7 +9,7 @@ import (
 	"github.com/ZXSQ1/rviv/localfs"
 )
 
-func TestCopyDir(t *testing.T) {
+func TestMoveDir(t *testing.T) {
 	client, err := localfs.Init(os.TempDir())
 
 	if err != nil {
@@ -63,7 +63,12 @@ func TestCopyDir(t *testing.T) {
 		}
 	}
 
-	if err := CopyDir(srcPrefix, destPrefix, false); err != nil {
+	if MoveDir(srcPrefix, destPrefix, false) != nil {
+		t.FailNow()
+	}
+
+	if srcPrefix.Fsys.IsExist(srcPrefix.Filename) {
+		println("error")
 		t.FailNow()
 	}
 
@@ -94,7 +99,21 @@ func TestCopyDir(t *testing.T) {
 		t.FailNow()
 	}
 
-	if err := CopyDir(srcPrefix, destPrefix, false); err != nil {
+	if srcPrefix.Fsys.CreateDir(srcPrefix.Filename) != nil {
+		t.FailNow()
+	}
+
+	for _, srcEntry := range srcEntries {
+		if srcEntry.Fsys.Create(srcEntry.Filename) != nil {
+			t.FailNow()
+		}
+	}
+
+	if MoveDir(srcPrefix, destPrefix, false) != nil {
+		t.FailNow()
+	}
+
+	if srcPrefix.Fsys.IsExist(srcPrefix.Filename) {
 		t.FailNow()
 	}
 

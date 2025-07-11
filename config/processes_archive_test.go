@@ -32,6 +32,7 @@ func TestArchiveProcess(t *testing.T) {
 
 							"expirydays":  123,
 							"compression": "xz",
+							"level":       0,
 							"safe":        true,
 						},
 					},
@@ -68,6 +69,7 @@ func TestArchiveProcess(t *testing.T) {
 
 							"expirydays":  123,
 							"compression": "xz",
+							"level":       0,
 							"safe":        true,
 						},
 					},
@@ -101,6 +103,7 @@ func TestArchiveProcess(t *testing.T) {
 							"entries":     []string{},
 							"expirydays":  123,
 							"compression": "xz",
+							"level":       0,
 							"safe":        true,
 						},
 					},
@@ -134,6 +137,7 @@ func TestArchiveProcess(t *testing.T) {
 							"entries":     []string{},
 							"expirydays":  123,
 							"compression": "xz",
+							"level":       0,
 							"safe":        true,
 						},
 					},
@@ -170,6 +174,7 @@ func TestArchiveProcess(t *testing.T) {
 
 							"expirydays":  "fjksdf",
 							"compression": true,
+							"level":       0,
 							"safe":        true,
 						},
 					},
@@ -206,6 +211,7 @@ func TestArchiveProcess(t *testing.T) {
 
 							"expirydays":  123,
 							"compression": 2189,
+							"level":       0,
 							"safe":        true,
 						},
 					},
@@ -242,6 +248,7 @@ func TestArchiveProcess(t *testing.T) {
 
 							"expirydays":  123,
 							"compression": "",
+							"level":       0,
 							"safe":        true,
 						},
 					},
@@ -278,6 +285,7 @@ func TestArchiveProcess(t *testing.T) {
 
 							"expirydays":  123,
 							"compression": "xz",
+							"level":       0,
 							"safe":        true,
 						},
 					},
@@ -314,6 +322,7 @@ func TestArchiveProcess(t *testing.T) {
 
 							"expirydays":  123,
 							"compression": "gz",
+							"level":       0,
 							"safe":        true,
 						},
 					},
@@ -350,6 +359,7 @@ func TestArchiveProcess(t *testing.T) {
 
 							"expirydays":  123,
 							"compression": "bz2",
+							"level":       0,
 							"safe":        true,
 						},
 					},
@@ -386,6 +396,7 @@ func TestArchiveProcess(t *testing.T) {
 
 							"expirydays":  123,
 							"compression": 123123,
+							"level":       0,
 							"safe":        false,
 						},
 					},
@@ -422,6 +433,7 @@ func TestArchiveProcess(t *testing.T) {
 
 							"expirydays":  123,
 							"compression": "xz",
+							"level":       0,
 							"safe":        312312,
 						},
 					},
@@ -458,6 +470,192 @@ func TestArchiveProcess(t *testing.T) {
 
 							"expirydays":  123,
 							"compression": "xz",
+							"level":       0.3,
+							"safe":        true,
+						},
+					},
+				},
+			},
+		},
+	) != nil {
+		t.FailNow()
+	}
+
+	if _, err := LoadProcesses(); err == nil {
+		t.FailNow()
+	}
+
+	if InitTestConfig(
+		map[string]any{
+			"devices": map[string]any{
+				"dev": map[string]any{
+					"type":   "local",
+					"prefix": "/",
+				},
+			},
+
+			"processes": map[string]any{
+				"procgroup": map[string]any{
+					"aliases": []string{"pg"},
+					"subprocesses": []map[string]any{
+						{
+							"type":    "archive",
+							"archive": "dev:://fjskdjfl.tar",
+							"entries": []string{
+								"dev::/fsdfs",
+							},
+
+							"expirydays":  123,
+							"compression": "xz",
+							"level":       9,
+							"safe":        true,
+						},
+					},
+				},
+			},
+		},
+	) != nil {
+		t.FailNow()
+	}
+
+	if _, err := LoadProcesses(); err != nil {
+		t.FailNow()
+	}
+
+	if InitTestConfig(
+		map[string]any{
+			"devices": map[string]any{
+				"dev": map[string]any{
+					"type":   "local",
+					"prefix": "/",
+				},
+			},
+
+			"processes": map[string]any{
+				"procgroup": map[string]any{
+					"aliases": []string{"pg"},
+					"subprocesses": []map[string]any{
+						{
+							"type":    "archive",
+							"archive": "dev:://fjskdjfl.tar",
+							"entries": []string{
+								"dev::/fsdfs",
+							},
+
+							"expirydays":  123,
+							"compression": "xz",
+							"level":       90,
+							"safe":        true,
+						},
+					},
+				},
+			},
+		},
+	) != nil {
+		t.FailNow()
+	}
+
+	if _, err := LoadProcesses(); err == nil {
+		t.FailNow()
+	}
+
+	if InitTestConfig(
+		map[string]any{
+			"devices": map[string]any{
+				"dev": map[string]any{
+					"type":   "local",
+					"prefix": "/",
+				},
+			},
+
+			"processes": map[string]any{
+				"procgroup": map[string]any{
+					"aliases": []string{"pg"},
+					"subprocesses": []map[string]any{
+						{
+							"type":    "archive",
+							"archive": "dev:://fjskdjfl.tar",
+							"entries": []string{
+								"dev::/fsdfs",
+							},
+
+							"expirydays":  123,
+							"compression": "xz",
+							"level":       -1,
+							"safe":        true,
+						},
+					},
+				},
+			},
+		},
+	) != nil {
+		t.FailNow()
+	}
+
+	if _, err := LoadProcesses(); err == nil {
+		t.FailNow()
+	}
+
+	if InitTestConfig(
+		map[string]any{
+			"devices": map[string]any{
+				"dev": map[string]any{
+					"type":   "local",
+					"prefix": "/",
+				},
+			},
+
+			"processes": map[string]any{
+				"procgroup": map[string]any{
+					"aliases": []string{"pg"},
+					"subprocesses": []map[string]any{
+						{
+							"type":    "archive",
+							"archive": "dev:://fjskdjfl.tar",
+							"entries": []string{
+								"dev::/fsdfs",
+							},
+
+							"expirydays":  123,
+							"compression": "xz",
+							"level":       "fsdfsd",
+							"safe":        true,
+						},
+					},
+				},
+			},
+		},
+	) != nil {
+		t.FailNow()
+	}
+
+	if _, err := LoadProcesses(); err == nil {
+		t.FailNow()
+	}
+
+	if InitTestConfig(
+		map[string]any{
+			"devices": map[string]any{
+				"dev": map[string]any{
+					"type":   "local",
+					"prefix": "/",
+				},
+			},
+
+			"processes": map[string]any{
+				"procgroup": map[string]any{
+					"aliases": []string{"pg"},
+					"subprocesses": []map[string]any{
+						{
+							"type":    "archive",
+							"archive": "dev:://fjskdjfl.tar",
+							"entries": []string{
+								"dev::/fsdfs",
+							},
+
+							"expirydays":  123,
+							"compression": "xz",
+							"level":       0,
 							"safe":        true,
 						},
 					},

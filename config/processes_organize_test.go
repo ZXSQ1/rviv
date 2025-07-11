@@ -55,6 +55,7 @@ func TestOrganize(t *testing.T) {
 
 							"organizedir": "dev::/asdas/asdas",
 							"method":      "date",
+							"date":        "%d",
 						},
 					},
 				},
@@ -89,6 +90,7 @@ func TestOrganize(t *testing.T) {
 
 							"organizedir": "dev::/asdas/asdas",
 							"method":      "date",
+							"date":        "%d",
 						},
 					},
 				},
@@ -127,6 +129,7 @@ func TestOrganize(t *testing.T) {
 							"srcs":        []string{},
 							"organizedir": "dev::/asdas/asdas",
 							"method":      "d31d",
+							"date":        "%d",
 						},
 					},
 				},
@@ -158,6 +161,7 @@ func TestOrganize(t *testing.T) {
 							"srcs":        []string{},
 							"organizedir": "dev::/asdas/asdas",
 							"method":      "date",
+							"date":        "%d",
 						},
 					},
 				},
@@ -192,6 +196,7 @@ func TestOrganize(t *testing.T) {
 
 							"organizedir": "dev::/asdas/asdas",
 							"method":      "alpha",
+							"date":        "%d",
 						},
 					},
 				},
@@ -226,6 +231,7 @@ func TestOrganize(t *testing.T) {
 
 							"organizedir": "dev::/asdas/asdas",
 							"method":      "ext",
+							"date":        "%d",
 						},
 					},
 				},
@@ -260,6 +266,77 @@ func TestOrganize(t *testing.T) {
 
 							"organizedir": "dev::/asdas/asdas",
 							"method":      "date",
+							"date":        "%d",
+						},
+					},
+				},
+			},
+		},
+	) != nil {
+		t.FailNow()
+	}
+
+	if _, err := LoadProcesses(); err != nil {
+		t.FailNow()
+	}
+
+	if InitTestConfig(
+		map[string]any{
+			"devices": map[string]any{
+				"dev": map[string]any{
+					"type":   "local",
+					"prefix": "/",
+				},
+			},
+
+			"processes": map[string]any{
+				"procgroup": map[string]any{
+					"aliases": []string{"pg"},
+					"subprocesses": []map[string]any{
+						{
+							"type": "organize",
+							"srcs": []string{
+								"dev::/dsajd",
+							},
+
+							"organizedir": "dev::/asdas/asdas",
+							"method":      "date",
+							"date":        "date",
+						},
+					},
+				},
+			},
+		},
+	) != nil {
+		t.FailNow()
+	}
+
+	if _, err := LoadProcesses(); err == nil {
+		t.FailNow()
+	}
+
+	if InitTestConfig(
+		map[string]any{
+			"devices": map[string]any{
+				"dev": map[string]any{
+					"type":   "local",
+					"prefix": "/",
+				},
+			},
+
+			"processes": map[string]any{
+				"procgroup": map[string]any{
+					"aliases": []string{"pg"},
+					"subprocesses": []map[string]any{
+						{
+							"type": "organize",
+							"srcs": []string{
+								"dev::/dsajd",
+							},
+
+							"organizedir": "dev::/asdas/asdas",
+							"method":      "date",
+							"date":        "%d-%m-%y",
 						},
 					},
 				},

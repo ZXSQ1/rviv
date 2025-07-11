@@ -1,6 +1,7 @@
 package config
 
 import (
+	"regexp"
 	"slices"
 
 	"github.com/ZXSQ1/rviv/info"
@@ -167,6 +168,34 @@ func (meta OrganizeProcessValidation) Validations() FieldValidationMap {
 				return info.Error(
 					"field 'method' has unknown type in field '%s'", parent,
 				)
+			},
+		},
+
+		"date": {
+			func(val any, parent Field) error {
+				if _, ok := val.(string); !ok {
+					return info.Error(
+						"field 'date' is unknown or has "+
+							"invalid format in field '%s'", parent,
+					)
+				}
+
+				return nil
+			},
+
+			func(val any, parent Field) error {
+				datestr := val.(string)
+				pattern := `%[a-zA-Z]`
+				re := regexp.MustCompile(pattern)
+
+				if !re.MatchString(datestr) {
+					return info.Error(
+						"field 'date' does not contain any datetime specifier "+
+							"in field '%s'", parent,
+					)
+				}
+
+				return nil
 			},
 		},
 	}

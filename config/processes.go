@@ -118,12 +118,37 @@ func LoadProcesses() ([]ProcessGroup, error) {
 				}
 
 				process.Options = ArchiveOpts{
-					Archivename:  archivename,
+					Archivename: archivename,
+					Archivefmt: Path{
+						Filename: subprocess["archive"].(string),
+						Devname:  archivename.Devname,
+						Devices:  archivename.Devices,
+						Active:   archivename.Active,
+						Fsys:     archivename.Fsys,
+					},
+
 					Entries:      entries,
-					ExpiryInDays: subprocess["expirydays"].(float64),
+					ExpiryInDays: int(subprocess["expirydays"].(float64)),
 					Compression:  compression,
+					Level:        int(subprocess["level"].(float64)),
 					Safe:         subprocess["safe"].(bool),
 					Verbose:      env.Verbose,
+				}
+			case "organize":
+				srcs := []Path{}
+				organizedir, _ := NewPath(subprocess["organizedir"].(string))
+
+				for _, srcRaw := range subprocess["srcs"].([]any) {
+					src, _ := NewPath(srcRaw.(string))
+					srcs = append(srcs, src)
+				}
+
+				process.Options = OrganizeOpts{
+					Srcs:        srcs,
+					OrganizeDir: organizedir,
+					Method:      subprocess["method"].(string),
+					Datefmt:     subprocess["date"].(string),
+					Verbose:     env.Verbose,
 				}
 			}
 

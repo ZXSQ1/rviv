@@ -2,14 +2,12 @@ package localfs
 
 import (
 	"io/fs"
-	"os"
 	"path/filepath"
 	"time"
-
-	"github.com/ZXSQ1/rviv/logging"
 )
 
 type FileInfo struct {
+	stat     fs.FileInfo
 	filename string
 }
 
@@ -18,35 +16,23 @@ func (info *FileInfo) Name() string {
 }
 
 func (info *FileInfo) Size() int64 {
-	stat, err := os.Stat(info.filename)
-	logging.ReportErr(err)
-
-	if stat.IsDir() {
+	if info.stat.IsDir() {
 		return -1
 	}
 
-	return stat.Size()
+	return info.stat.Size()
 }
 
 func (info *FileInfo) Mode() fs.FileMode {
-	stat, err := os.Stat(info.filename)
-	logging.ReportErr(err)
-
-	return stat.Mode()
+	return info.stat.Mode()
 }
 
 func (info *FileInfo) ModTime() time.Time {
-	stat, err := os.Stat(info.filename)
-	logging.ReportErr(err)
-
-	return stat.ModTime()
+	return info.stat.ModTime()
 }
 
 func (info *FileInfo) IsDir() bool {
-	stat, err := os.Stat(info.filename)
-	logging.ReportErr(err)
-
-	return stat.IsDir()
+	return info.stat.IsDir()
 }
 
 func (info *FileInfo) Sys() any {

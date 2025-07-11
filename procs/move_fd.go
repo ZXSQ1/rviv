@@ -7,7 +7,7 @@ import (
 	"github.com/ZXSQ1/rviv/info"
 )
 
-func CopyFiles(srcs []config.Path, dest config.Path, verbose bool) error {
+func MoveFiles(srcs []config.Path, dest config.Path, verbose bool) error {
 	srcEntries, err := Glob(config.GlobOpts{
 		Entries: srcs,
 		Verbose: verbose,
@@ -50,10 +50,10 @@ func CopyFiles(srcs []config.Path, dest config.Path, verbose bool) error {
 			return err
 		}
 
-		err := CopyFile(
+		err := MoveFile(
 			srcEntry, destEntry, verbose, func(src, dest string) {
 				info.Text(
-					true, "copying source file '%s' to destination '%s'", src, dest,
+					true, "moving source file '%s' to destination '%s'", src, dest,
 				)
 			},
 		)

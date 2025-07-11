@@ -43,7 +43,6 @@ func TestMkdir(t *testing.T) {
 	err = Mkdir(config.MkdirOpts{
 		Filenames: dirs,
 		Parent:    false,
-		Verbose:   false,
 	})
 
 	if err == nil {
@@ -53,7 +52,6 @@ func TestMkdir(t *testing.T) {
 	paths, err := ListDir(config.ListOpts{
 		Filename:  prefix,
 		Recursive: true,
-		Verbose:   false,
 	})
 
 	if err != nil {
@@ -73,7 +71,6 @@ func TestMkdir(t *testing.T) {
 	err = Mkdir(config.MkdirOpts{
 		Filenames: dirs,
 		Parent:    true,
-		Verbose:   false,
 	})
 
 	if err != nil {
@@ -83,7 +80,6 @@ func TestMkdir(t *testing.T) {
 	paths, err = ListDir(config.ListOpts{
 		Filename:  prefix,
 		Recursive: true,
-		Verbose:   false,
 	})
 
 	if err != nil {

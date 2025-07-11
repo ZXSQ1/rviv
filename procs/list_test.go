@@ -77,4 +77,42 @@ func TestListDir(t *testing.T) {
 			t.FailNow()
 		}
 	}
+
+	if testPathPrefix.Fsys.RemoveDir(testPathPrefix.Filename) != nil {
+		t.FailNow()
+	}
+
+	if testPathPrefix.Fsys.CreateDir(testPathPrefix.Filename) != nil {
+		t.FailNow()
+	}
+
+	for _, entry := range testPathEntries {
+		entryName := entry.Filename
+		entryDir := filepath.Dir(entryName)
+
+		if !entry.Fsys.IsExist(entryDir) &&
+			entry.Fsys.CreateDir(entryDir) != nil {
+
+			t.FailNow()
+		}
+
+		if entry.Fsys.CreateDir(entryName) != nil {
+			t.FailNow()
+		}
+	}
+
+	paths, err = ListDir(config.ListOpts{
+		Filename:  testPathPrefix,
+		Recursive: true,
+	})
+
+	if err != nil {
+		t.FailNow()
+	}
+
+	for idx := range paths {
+		if paths[idx].Filename != testPathEntries[idx].Filename {
+			t.FailNow()
+		}
+	}
 }

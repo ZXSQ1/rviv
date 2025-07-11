@@ -9,7 +9,7 @@ import (
 	"github.com/schollz/progressbar/v3"
 )
 
-func CopyFile(srcfile, destfile config.Path, verbose bool,
+func MoveFile(srcfile, destfile config.Path, verbose bool,
 	printfn func(src, dest string)) error {
 
 	if err := AssertExists(srcfile); err != nil {
@@ -82,9 +82,17 @@ func CopyFile(srcfile, destfile config.Path, verbose bool,
 
 	if err != nil {
 		return info.Error(
-			"unable to copy source file '%s' to destination file '%s'",
+			"unable to move source file '%s' to destination file '%s'",
 			ShowPath(srcfile), ShowPath(destfile),
 		)
+	}
+
+	if srcObj.Close() != nil {
+		return info.Error("unable to close file '%s'", ShowPath(srcfile))
+	}
+
+	if srcfile.Fsys.Remove(srcfile.Filename) != nil {
+		return info.Error("unable to remove file '%s'", ShowPath(srcfile))
 	}
 
 	return nil

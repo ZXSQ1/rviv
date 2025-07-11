@@ -8,7 +8,7 @@ import (
 	"github.com/ZXSQ1/rviv/info"
 )
 
-func CopyDir(srcdir, destdir config.Path, verbose bool) error {
+func MoveDir(srcdir, destdir config.Path, verbose bool) error {
 	if err := AssertExists(srcdir); err != nil {
 		return err
 	}
@@ -36,9 +36,8 @@ func CopyDir(srcdir, destdir config.Path, verbose bool) error {
 	}
 
 	if len(srcEntries) == 0 {
-		destFilename := filepath.Join(
-			destdir.Filename, filepath.Base(srcdir.Filename),
-		)
+		destFilename := filepath.Join(destdir.Filename, filepath.Base(
+			srcdir.Filename))
 
 		if replaceOnCopy {
 			destFilename = destdir.Filename
@@ -88,7 +87,7 @@ func CopyDir(srcdir, destdir config.Path, verbose bool) error {
 		}
 
 		if !destEntry.Fsys.IsExist(filepath.Dir(destEntry.Filename)) {
-			err := Mkdir(config.MkdirOpts{
+			Mkdir(config.MkdirOpts{
 				Filenames: []config.Path{
 					{
 						Filename: filepath.Dir(destEntry.Filename),
@@ -102,10 +101,6 @@ func CopyDir(srcdir, destdir config.Path, verbose bool) error {
 				Parent:  true,
 				Verbose: verbose,
 			})
-
-			if err != nil {
-				return err
-			}
 		}
 
 		if AssertIsRegular(srcEntry) == nil && (AssertExists(destEntry) != nil ||
@@ -115,7 +110,7 @@ func CopyDir(srcdir, destdir config.Path, verbose bool) error {
 				src, dest string) {
 
 				info.Text(
-					true, "copying source file '%s' to destination '%s'", src, dest,
+					true, "moving source file '%s' to destination '%s'", src, dest,
 				)
 			})
 
@@ -139,6 +134,16 @@ func CopyDir(srcdir, destdir config.Path, verbose bool) error {
 
 			continue
 		}
+	}
+
+	err = Remove(config.RemoveOpts{
+		Filenames: []config.Path{srcdir},
+		Recursive: true,
+		Verbose:   verbose,
+	})
+
+	if err != nil {
+		return err
 	}
 
 	return nil

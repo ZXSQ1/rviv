@@ -2,17 +2,18 @@ package webdavfs
 
 import (
 	"io/fs"
-
-	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 func (client *WebDavFs) Stat(filename string) (fs.FileInfo, error) {
-	if !client.IsExist(filename) {
-		return nil, filesystem.ErrNotExist
+	stat, err := client.conn.Stat(filename)
+
+	if err != nil {
+		return nil, err
 	}
 
 	return &FileInfo{
 		filename: filename,
+		stat:     stat,
 		conn:     client.conn,
 	}, nil
 }

@@ -15,16 +15,10 @@ func Mkdir(opts config.MkdirOpts) error {
 			}
 		}
 
-		if filename.Fsys.IsExist(filename.Filename) {
-			stat, err := filename.Fsys.Stat(filename.Filename)
+		if err := AssertIsDir(filename); AssertExists(filename) == nil &&
+			err != nil {
 
-			if err != nil {
-				return info.Error("unable to stat file '%s'", ShowPath(filename))
-			}
-
-			if !stat.IsDir() {
-				return info.Error("file '%s' not a directory", ShowPath(filename))
-			}
+			return err
 		}
 
 		if opts.Parent {
@@ -47,10 +41,8 @@ func Mkdir(opts config.MkdirOpts) error {
 
 		info.Text(opts.Verbose, "creating directory '%s'", ShowPath(filename))
 
-		if filename.Fsys.CreateDir(filename.Filename) != nil {
-			return info.Error(
-				"unable to create directory '%s'", ShowPath(filename),
-			)
+		if err := AssertExistsCreateDir(filename); err != nil {
+			return err
 		}
 	}
 

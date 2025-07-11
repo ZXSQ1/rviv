@@ -188,6 +188,38 @@ func TestSyncProcess(t *testing.T) {
 							"src":    "dev:://fjskdjfl",
 							"dest":   "dev::/fsdfs",
 							"oneway": true,
+							"method": "remove",
+						},
+					},
+				},
+			},
+		},
+	) != nil {
+		t.FailNow()
+	}
+
+	if _, err := LoadProcesses(); err != nil {
+		t.FailNow()
+	}
+
+	if InitTestConfig(
+		map[string]any{
+			"devices": map[string]any{
+				"dev": map[string]any{
+					"type":   "local",
+					"prefix": "/",
+				},
+			},
+
+			"processes": map[string]any{
+				"procgroup": map[string]any{
+					"aliases": []string{"pg"},
+					"subprocesses": []map[string]any{
+						{
+							"type":   "sync",
+							"src":    "dev:://fjskdjfl",
+							"dest":   "dev::/fsdfs",
+							"oneway": true,
 							"method": "add",
 						},
 					},

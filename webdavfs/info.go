@@ -6,12 +6,12 @@ import (
 	"time"
 
 	"github.com/ZXSQ1/rviv/filesystem"
-	"github.com/ZXSQ1/rviv/logging"
 	"github.com/studio-b12/gowebdav"
 )
 
 type FileInfo struct {
 	conn     *gowebdav.Client
+	stat     fs.FileInfo
 	filename string
 }
 
@@ -20,14 +20,11 @@ func (info *FileInfo) Name() string {
 }
 
 func (info *FileInfo) Size() int64 {
-	stat, err := info.conn.Stat(info.filename)
-	logging.ReportErr(err)
-
-	if stat.IsDir() {
+	if info.stat.IsDir() {
 		return -1
 	}
 
-	return stat.Size()
+	return info.stat.Size()
 }
 
 func (info *FileInfo) Mode() fs.FileMode {
@@ -43,24 +40,15 @@ func (info *FileInfo) Mode() fs.FileMode {
 }
 
 func (info *FileInfo) ModTime() time.Time {
-	stat, err := info.conn.Stat(info.filename)
-	logging.ReportErr(err)
-
-	return stat.ModTime()
+	return info.stat.ModTime()
 }
 
 func (info *FileInfo) IsDir() bool {
-	stat, err := info.conn.Stat(info.filename)
-	logging.ReportErr(err)
-
-	return stat.IsDir()
+	return info.stat.IsDir()
 }
 
 func (info *FileInfo) IsSymlink() bool {
-	stat, err := info.conn.Stat(info.filename)
-	logging.ReportErr(err)
-
-	return !(stat.IsDir() || stat.Mode().IsRegular())
+	return !(info.stat.IsDir() || info.stat.Mode().IsRegular())
 }
 
 func (info *FileInfo) Sys() any {

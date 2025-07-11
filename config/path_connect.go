@@ -52,6 +52,7 @@ func (file *Path) Connect(verbose bool) error {
 			ips = append(ips, device.Info.Ip)
 		}
 
+	loop:
 		for _, ip := range ips {
 			connInfo := &filesystem.ConnInfo{
 				Addr: ip + ":" + strconv.Itoa(device.Info.Port),
@@ -67,19 +68,19 @@ func (file *Path) Connect(verbose bool) error {
 				fsys, err = ftpfs.Connect(connInfo)
 
 				if err == nil {
-					break
+					break loop
 				}
 			case "ssh":
 				fsys, err = ftpfs.Connect(connInfo)
 
 				if err == nil {
-					break
+					break loop
 				}
 			case "webdav":
 				fsys, err = ftpfs.Connect(connInfo)
 
 				if err == nil {
-					break
+					break loop
 				}
 			}
 

@@ -23,7 +23,7 @@ func Copy(opts config.CopyOpts) error {
 	switch opts.Method {
 	case "ff":
 		if len(opts.Srcs) > 1 {
-			info.Error(
+			return info.Error(
 				"invalid number of sources to copy for method '%s'",
 				opts.Method,
 			)
@@ -38,7 +38,7 @@ func Copy(opts config.CopyOpts) error {
 		return CopyFiles(opts.Srcs, opts.Dest, opts.Verbose)
 	case "dd":
 		if len(opts.Srcs) > 1 {
-			info.Error(
+			return info.Error(
 				"invalid number of sources to copy for method '%s'",
 				opts.Method,
 			)
