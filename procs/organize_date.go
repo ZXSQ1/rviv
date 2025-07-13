@@ -10,20 +10,20 @@ import (
 func OrganizeDate(srcs []config.Path, organizedir config.Path, datefmt string,
 	verbose bool) error {
 
-	if err := AssertExists(organizedir); err != nil {
+	if err := CheckExists(organizedir); err != nil {
 		return err
 	}
 
-	if err := AssertIsDir(organizedir); err != nil {
+	if err := CheckIsDir(organizedir); err != nil {
 		return err
 	}
 
 	for _, src := range srcs {
-		if err := AssertExists(src); err != nil {
+		if err := CheckExists(src); err != nil {
 			return err
 		}
 
-		stat, err := AssertStatWorks(src)
+		stat, err := CheckStat(src)
 
 		if err != nil {
 			return err
@@ -39,11 +39,11 @@ func OrganizeDate(srcs []config.Path, organizedir config.Path, datefmt string,
 			Fsys:     organizedir.Fsys,
 		}
 
-		if err := AssertExistsCreateDir(destDir); err != nil {
+		if err := CheckExistsCreateDir(destDir); err != nil {
 			return err
 		}
 
-		if err := AssertIsDir(destDir); err != nil {
+		if err := CheckIsDir(destDir); err != nil {
 			return err
 		}
 

@@ -14,16 +14,16 @@ func MoveAll(srcs []config.Path, dest config.Path, verbose bool) error {
 		return err
 	}
 
-	if err := AssertExists(dest); err != nil {
+	if err := CheckExists(dest); err != nil {
 		return err
 	}
 
-	if err := AssertIsDir(dest); err != nil {
+	if err := CheckIsDir(dest); err != nil {
 		return err
 	}
 
 	for _, srcEntry := range srcEntries {
-		if AssertIsDir(srcEntry) == nil {
+		if CheckIsDir(srcEntry) == nil {
 			if err = MoveDir(srcEntry, dest, verbose); err != nil {
 				return err
 			}

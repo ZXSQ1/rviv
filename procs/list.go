@@ -12,9 +12,9 @@ func ListDir(opts config.ListOpts) ([]config.Path, error) {
 		}
 	}
 
-	if err := AssertExistsCreateDir(opts.Filename); err != nil {
+	if err := CheckExistsCreateDir(opts.Filename); err != nil {
 		return nil, err
-	} else if err := AssertIsDir(opts.Filename); err != nil {
+	} else if err := CheckIsDir(opts.Filename); err != nil {
 		return nil, err
 	}
 
@@ -41,7 +41,7 @@ func ListDir(opts config.ListOpts) ([]config.Path, error) {
 	}
 
 	for _, entry := range entries {
-		if AssertIsRegular(entry) == nil || (AssertIsDir(entry) == nil &&
+		if CheckIsRegular(entry) == nil || (CheckIsDir(entry) == nil &&
 			!opts.Recursive) {
 
 			resultEntries = append(resultEntries, entry)

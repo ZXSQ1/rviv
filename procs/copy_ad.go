@@ -14,18 +14,18 @@ func CopyAll(srcs []config.Path, dest config.Path, verbose bool) error {
 		return err
 	}
 
-	if err := AssertExists(dest); err != nil {
+	if err := CheckExists(dest); err != nil {
 		return err
 	}
 
-	if err := AssertIsDir(dest); err != nil {
+	if err := CheckIsDir(dest); err != nil {
 		return err
 	}
 
 	for _, srcEntry := range srcEntries {
 		var err error
 
-		if AssertIsDir(srcEntry) == nil {
+		if CheckIsDir(srcEntry) == nil {
 			err = CopyDir(srcEntry, dest, verbose)
 		} else {
 			err = CopyFiles([]config.Path{srcEntry}, dest, verbose)

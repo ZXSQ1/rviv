@@ -15,7 +15,7 @@ func Mkdir(opts config.MkdirOpts) error {
 			}
 		}
 
-		if err := AssertIsDir(filename); AssertExists(filename) == nil &&
+		if err := CheckIsDir(filename); CheckExists(filename) == nil &&
 			err != nil {
 
 			return err
@@ -41,7 +41,7 @@ func Mkdir(opts config.MkdirOpts) error {
 
 		info.Text(opts.Verbose, "creating directory '%s'", ShowPath(filename))
 
-		if err := AssertExistsCreateDir(filename); err != nil {
+		if err := CheckExistsCreateDir(filename); err != nil {
 			return err
 		}
 	}

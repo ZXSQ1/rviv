@@ -12,15 +12,15 @@ import (
 func CopyFile(srcfile, destfile config.Path, verbose bool,
 	printfn func(src, dest string)) error {
 
-	if err := AssertExists(srcfile); err != nil {
+	if err := CheckExists(srcfile); err != nil {
 		return err
 	}
 
-	if err := AssertIsRegular(srcfile); err != nil {
+	if err := CheckIsRegular(srcfile); err != nil {
 		return err
 	}
 
-	srcStat, err := AssertStatWorks(srcfile)
+	srcStat, err := CheckStat(srcfile)
 
 	if err != nil {
 		return err
@@ -28,27 +28,26 @@ func CopyFile(srcfile, destfile config.Path, verbose bool,
 
 	srcfileSize := srcStat.Size()
 
-	if err := AssertExistsCreate(destfile); err != nil {
+	if err := CheckExistsCreate(destfile); err != nil {
 		return err
 	}
 
-	if err := AssertIsRegular(destfile); err != nil {
+	if err := CheckIsRegular(destfile); err != nil {
 		return err
 	}
 
-	srcObj, err := srcfile.Fsys.Open(srcfile.Filename, filesystem.ModeRead)
+	srcObj, err := CheckOpen(srcfile, filesystem.ModeRead)
 
 	if err != nil {
-		return info.Error("unable to open '%s' for reading", ShowPath(srcfile))
+		return err
 	}
 
 	defer srcObj.Close()
-	destObj, err := destfile.Fsys.Open(
-		destfile.Filename, filesystem.ModeWrite,
-	)
+
+	destObj, err := CheckOpen(destfile, filesystem.ModeWrite)
 
 	if err != nil {
-		return info.Error("unable to open '%s' for writing", ShowPath(destfile))
+		return err
 	}
 
 	defer destObj.Close()

@@ -39,7 +39,7 @@ func Glob(opts config.GlobOpts) ([]config.Path, error) {
 				Devices:  entry.Devices,
 			},
 
-			Recursive: true,
+			Recursive: false,
 		})
 
 		if err != nil {

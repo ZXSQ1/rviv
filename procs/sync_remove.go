@@ -8,19 +8,19 @@ import (
 )
 
 func SyncRemove(src, dest config.Path, oneway, verbose bool) error {
-	if err := AssertExists(src); err != nil {
+	if err := CheckExists(src); err != nil {
 		return err
 	}
 
-	if err := AssertIsDir(src); err != nil {
+	if err := CheckIsDir(src); err != nil {
 		return err
 	}
 
-	if err := AssertExists(dest); err != nil {
+	if err := CheckExists(dest); err != nil {
 		return err
 	}
 
-	if err := AssertIsDir(dest); err != nil {
+	if err := CheckIsDir(dest); err != nil {
 		return err
 	}
 
@@ -69,13 +69,13 @@ func SyncRemove(src, dest config.Path, oneway, verbose bool) error {
 			Fsys:    commonEntry.Fsys,
 		}
 
-		srcStat, err := AssertStatWorks(srcEntry)
+		srcStat, err := CheckStat(srcEntry)
 
 		if err != nil {
 			return err
 		}
 
-		destStat, err := AssertStatWorks(destEntry)
+		destStat, err := CheckStat(destEntry)
 
 		if err != nil {
 			return err

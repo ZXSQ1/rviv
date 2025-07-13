@@ -9,19 +9,19 @@ import (
 )
 
 func MoveDir(srcdir, destdir config.Path, verbose bool) error {
-	if err := AssertExists(srcdir); err != nil {
+	if err := CheckExists(srcdir); err != nil {
 		return err
 	}
 
-	if err := AssertIsDir(srcdir); err != nil {
+	if err := CheckIsDir(srcdir); err != nil {
 		return err
 	}
 
 	replaceOnCopy := false
 
-	if err := AssertExists(destdir); err != nil {
+	if err := CheckExists(destdir); err != nil {
 		replaceOnCopy = true
-	} else if err := AssertIsDir(destdir); err != nil {
+	} else if err := CheckIsDir(destdir); err != nil {
 		return err
 	}
 
@@ -103,8 +103,8 @@ func MoveDir(srcdir, destdir config.Path, verbose bool) error {
 			})
 		}
 
-		if AssertIsRegular(srcEntry) == nil && (AssertExists(destEntry) != nil ||
-			AssertIsRegular(destEntry) == nil) {
+		if CheckIsRegular(srcEntry) == nil && (CheckExists(destEntry) != nil ||
+			CheckIsRegular(destEntry) == nil) {
 
 			err := CopyFile(srcEntry, destEntry, verbose, func(
 				src, dest string) {
@@ -121,7 +121,7 @@ func MoveDir(srcdir, destdir config.Path, verbose bool) error {
 			continue
 		}
 
-		if AssertIsDir(srcEntry) == nil && AssertExists(destEntry) != nil {
+		if CheckIsDir(srcEntry) == nil && CheckExists(destEntry) != nil {
 			err := Mkdir(config.MkdirOpts{
 				Filenames: []config.Path{destEntry},
 				Parent:    false,

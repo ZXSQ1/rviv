@@ -16,19 +16,19 @@ type Differences struct {
 func Differ(opts config.DifferOpts) (Differences, error) {
 	diffs := Differences{}
 
-	if err := AssertExists(opts.Src); err != nil {
+	if err := CheckExists(opts.Src); err != nil {
 		return diffs, err
 	}
 
-	if err := AssertIsDir(opts.Src); err != nil {
+	if err := CheckIsDir(opts.Src); err != nil {
 		return diffs, err
 	}
 
-	if err := AssertExists(opts.Dest); err != nil {
+	if err := CheckExists(opts.Dest); err != nil {
 		return diffs, err
 	}
 
-	if err := AssertIsDir(opts.Dest); err != nil {
+	if err := CheckIsDir(opts.Dest); err != nil {
 		return diffs, err
 	}
 

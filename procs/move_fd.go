@@ -17,20 +17,20 @@ func MoveFiles(srcs []config.Path, dest config.Path, verbose bool) error {
 		return err
 	}
 
-	if err := AssertExists(dest); err != nil {
+	if err := CheckExists(dest); err != nil {
 		return err
 	}
 
-	if err := AssertIsDir(dest); err != nil {
+	if err := CheckIsDir(dest); err != nil {
 		return err
 	}
 
 	for _, srcEntry := range srcEntries {
-		if err := AssertExists(srcEntry); err != nil {
+		if err := CheckExists(srcEntry); err != nil {
 			return err
 		}
 
-		if err := AssertIsRegular(srcEntry); err != nil {
+		if err := CheckIsRegular(srcEntry); err != nil {
 			return err
 		}
 
@@ -42,11 +42,11 @@ func MoveFiles(srcs []config.Path, dest config.Path, verbose bool) error {
 			Fsys:     dest.Fsys,
 		}
 
-		if err := AssertExistsCreate(destEntry); err != nil {
+		if err := CheckExistsCreate(destEntry); err != nil {
 			return err
 		}
 
-		if err := AssertIsRegular(destEntry); err != nil {
+		if err := CheckIsRegular(destEntry); err != nil {
 			return err
 		}
 
