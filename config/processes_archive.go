@@ -3,7 +3,9 @@ package config
 import (
 	"path/filepath"
 	"slices"
+	"strings"
 
+	"github.com/ZXSQ1/rviv/expiry"
 	"github.com/ZXSQ1/rviv/info"
 )
 
@@ -15,26 +17,30 @@ func (meta ArchiveProcessValidation) Name() string {
 
 func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 	return FieldValidationMap{
-		"archive": {
+		"parents": {
 			func(val any, parent Field) error {
-				if _, ok := val.(string); !ok {
+				if parents, ok := val.([]any); !ok {
 					return info.Error(
-						"field 'archive' is not found "+
-							"or has invalid format in field '%s'", parent,
+						"field 'parents' is not found or "+
+							"has invalid format in field '%s'", parent,
 					)
+				} else {
+					for _, entry := range parents {
+						if _, ok := entry.(string); !ok {
+							return info.Error(
+								"field 'parents' has invalid path '%s' "+
+									"in field '%s'", entry, parent,
+							)
+						}
+					}
 				}
 
 				return nil
 			},
 
 			func(val any, parent Field) error {
-				archiveRaw := val.(string)
-				archive, err := NewPath(archiveRaw)
-
-				if err != nil {
-					return err
-				}
-
+				parentsRaw := val.([]any)
+				parents := []Path{}
 				devnames := []string{}
 
 				devices, err := LoadDevices()
@@ -47,28 +53,53 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 					devnames = append(devnames, dev.Name)
 				}
 
-				if !slices.Contains(devnames, archive.Devname) {
-					return info.Error(
-						"path '%s' has unknown device '%s' in field '%s'",
-						archive.Filename, archive.Devname, parent,
-					)
+				for _, parentRaw := range parentsRaw {
+					parentEntry, err := NewPath(parentRaw.(string))
+
+					if err != nil {
+						return err
+					}
+
+					parents = append(parents, parentEntry)
+				}
+
+				for _, parentEntry := range parents {
+					devname := parentEntry.Devname
+
+					if !slices.Contains(devnames, devname) {
+						return info.Error(
+							"path '%s' has unknown device '%s' in field '%s'",
+							parentEntry.Filename, parentEntry.Devname, parent,
+						)
+					}
 				}
 
 				return nil
 			},
 
 			func(val any, parent Field) error {
-				archive := val.(string)
-				ext := filepath.Ext(archive)
+				parents := val.([]any)
 
-				if ext == ".tar" || ext == ".zip" {
-					return nil
+				if len(parents) == 0 {
+					return info.Error(
+						"field 'parents' has no entries in field '%s'", parent,
+					)
 				}
 
-				return info.Error(
-					"path '%s' must end in 'tar' or 'zip' extensions "+
-						"in field '%s'", archive, parent,
-				)
+				return nil
+			},
+		},
+
+		"archivename": {
+			func(val any, parent Field) error {
+				if _, ok := val.(string); !ok {
+					return info.Error(
+						"field 'archivename' is not found "+
+							"or has invalid format in field '%s'", parent,
+					)
+				}
+
+				return nil
 			},
 
 			func(val any, parent Field) error {
@@ -76,11 +107,38 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 
 				if archivename == "" {
 					return info.Error(
-						"archive path is empty in field '%s'", parent,
+						"archive name is empty in field '%s'", parent,
 					)
 				}
 
 				return nil
+			},
+
+			func(val any, parent Field) error {
+				archivename := val.(string)
+				ext := filepath.Ext(archivename)
+
+				if ext == ".tar" || ext == ".zip" {
+					return nil
+				}
+
+				return info.Error(
+					"path '%s' must end in 'tar' or 'zip' extensions "+
+						"in field '%s'", archivename, parent,
+				)
+			},
+
+			func(val any, parent Field) error {
+				archivename := val.(string)
+
+				if !strings.Contains(archivename, string(filepath.Separator)) {
+					return nil
+				}
+
+				return info.Error(
+					"path '%s' must have one component only (basename "+
+						"of an archive) in field '%s'", archivename, parent,
+				)
 			},
 		},
 
@@ -157,12 +215,15 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 			},
 		},
 
-		"expirydays": {
+		"expiry": {
 			func(val any, parent Field) error {
-				if _, ok := val.(float64); !ok {
+				if val == nil {
+					return nil
+				}
+
+				if _, ok := val.(string); !ok {
 					return info.Error(
-						"field 'expirydays' is not found "+
-							"or has invalid format in field '%s'", parent,
+						"field 'expiry' has invalid format in field '%s'", parent,
 					)
 				}
 
@@ -170,12 +231,14 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 			},
 
 			func(val any, parent Field) error {
-				expirydays := val.(float64)
+				if val == nil {
+					return nil
+				}
 
-				if float64(int(expirydays)) != expirydays {
-					return info.Error(
-						"field 'expirydays' is not an integer in field '%s'", parent,
-					)
+				expiryfmt := val.(string)
+
+				if _, err := expiry.ParseExpiry(expiryfmt); err != nil {
+					return err
 				}
 
 				return nil
@@ -184,10 +247,14 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 
 		"compression": {
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				if _, ok := val.(string); !ok {
 					return info.Error(
-						"field 'compression' is not found "+
-							"or has invalid format in field '%s'", parent,
+						"field 'compression' has "+
+							"invalid format in field '%s'", parent,
 					)
 				}
 
@@ -195,6 +262,10 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 			},
 
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				compressionMethod := val.(string)
 
 				switch compressionMethod {
@@ -209,25 +280,15 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 			},
 		},
 
-		"safe": {
-			func(val any, parent Field) error {
-				if _, ok := val.(bool); !ok {
-					return info.Error(
-						"field 'safe' is not found or "+
-							"has invalid format in field '%s'", parent,
-					)
-				}
-
-				return nil
-			},
-		},
-
 		"level": {
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				if _, ok := val.(float64); !ok {
 					return info.Error(
-						"field 'expirydays' is not found "+
-							"or has invalid format in field '%s'", parent,
+						"field 'level' has invalid format in field '%s'", parent,
 					)
 				}
 
@@ -235,6 +296,10 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 			},
 
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				level := val.(float64)
 
 				if float64(int(level)) != level {
@@ -247,6 +312,10 @@ func (meta ArchiveProcessValidation) Validations() FieldValidationMap {
 			},
 
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				level := val.(float64)
 
 				if level < 0 || level > 9 {

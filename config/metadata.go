@@ -1,17 +1,9 @@
 package config
 
-type DeviceInfo struct {
-	Ip     string
-	Port   int
-	User   string
-	Pass   string
-	Prefix string
-}
-
 type Device struct {
 	Name string
 	Kind string
-	Info DeviceInfo
+	Info any
 }
 
 type Process struct {

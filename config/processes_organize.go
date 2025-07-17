@@ -147,10 +147,13 @@ func (meta OrganizeProcessValidation) Validations() FieldValidationMap {
 
 		"method": {
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				if _, ok := val.(string); !ok {
 					return info.Error(
-						"field 'method' is unknown or has "+
-							"invalid format in field '%s'", parent,
+						"field 'method' has invalid format in field '%s'", parent,
 					)
 				}
 
@@ -158,6 +161,10 @@ func (meta OrganizeProcessValidation) Validations() FieldValidationMap {
 			},
 
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				method := val.(string)
 
 				switch method {
@@ -173,10 +180,13 @@ func (meta OrganizeProcessValidation) Validations() FieldValidationMap {
 
 		"date": {
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				if _, ok := val.(string); !ok {
 					return info.Error(
-						"field 'date' is unknown or has "+
-							"invalid format in field '%s'", parent,
+						"field 'date' has invalid format in field '%s'", parent,
 					)
 				}
 
@@ -184,6 +194,10 @@ func (meta OrganizeProcessValidation) Validations() FieldValidationMap {
 			},
 
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				datestr := val.(string)
 				pattern := `%[a-zA-Z]`
 				re := regexp.MustCompile(pattern)

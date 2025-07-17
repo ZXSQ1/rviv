@@ -126,10 +126,13 @@ func (meta SyncProcessValidation) Validations() FieldValidationMap {
 
 		"oneway": {
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				if _, ok := val.(bool); !ok {
 					return info.Error(
-						"field 'oneway' is not found or "+
-							"has invalid format in field '%s'", parent,
+						"field 'oneway' has invalid format in field '%s'", parent,
 					)
 				}
 
@@ -139,10 +142,13 @@ func (meta SyncProcessValidation) Validations() FieldValidationMap {
 
 		"method": {
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				if _, ok := val.(string); !ok {
 					return info.Error(
-						"field 'method' is not found or "+
-							"has invalid format in field '%s'", parent,
+						"field 'method' has invalid format in field '%s'", parent,
 					)
 				}
 
@@ -150,6 +156,10 @@ func (meta SyncProcessValidation) Validations() FieldValidationMap {
 			},
 
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				method := val.(string)
 
 				switch method {

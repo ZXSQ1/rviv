@@ -103,6 +103,18 @@ func (meta CopyProcessValidation) Validations() FieldValidationMap {
 			},
 
 			func(val any, parent Field) error {
+				dest := val.(string)
+
+				if dest == "" {
+					return info.Error(
+						"destination path is empty in field '%s'", parent,
+					)
+				}
+
+				return nil
+			},
+
+			func(val any, parent Field) error {
 				destRaw := val.(string)
 				dest, err := NewPath(destRaw)
 
@@ -126,18 +138,6 @@ func (meta CopyProcessValidation) Validations() FieldValidationMap {
 					return info.Error(
 						"path '%s' has unknown device '%s' in field '%s'",
 						dest.Filename, dest.Devname, parent,
-					)
-				}
-
-				return nil
-			},
-
-			func(val any, parent Field) error {
-				dest := val.(string)
-
-				if dest == "" {
-					return info.Error(
-						"destination path is empty in field '%s'", parent,
 					)
 				}
 

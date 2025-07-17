@@ -10,8 +10,8 @@ import (
 	"github.com/ZXSQ1/rviv/info"
 )
 
-func ZipFile(archivename, archivefmt config.Path, entries []config.Path,
-	expiryInDays, level int, safe, verbose bool) error {
+func ZipFile(archivename, archivefmt config.Path, parents,
+	entries []config.Path, expiryInDays, level int, safe, verbose bool) error {
 
 	if err := CheckExistsCreate(archivename); err != nil {
 		return err

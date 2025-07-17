@@ -89,10 +89,13 @@ func (meta RemoveProcessValidation) Validations() FieldValidationMap {
 
 		"recursive": {
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				if _, ok := val.(bool); !ok {
 					return info.Error(
-						"field 'recursive' is not found "+
-							"or has invalid format in field '%s'", parent,
+						"field 'recursive' has invalid format in field '%s'", parent,
 					)
 				}
 

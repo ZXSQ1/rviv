@@ -1,8 +1,6 @@
 package config
 
 import (
-	"strconv"
-
 	"github.com/spf13/viper"
 )
 
@@ -27,39 +25,24 @@ func LoadDevices() ([]Device, error) {
 	}
 
 	for devname := range devicesRaw {
-		prefix := "devices." + devname + "."
-		kind := viper.GetString(prefix + "type")
+		prefix := "devices." + devname
+		kind := viper.GetString(prefix + ".type")
+		deviceRaw := viper.Get(prefix).(map[string]any)
 
 		device := Device{}
-		deviceInfo := DeviceInfo{}
-
-		for field := range validationMap[kind] {
-			if field == "port" {
-				port, _ := strconv.Atoi(StdPath(
-					viper.GetString(prefix + string(field)),
-				))
-
-				deviceInfo.Port = port
-				continue
-			}
-
-			value, _ := viper.Get(prefix + string(field)).(string)
-
-			switch field {
-			case "ip":
-				deviceInfo.Ip = StdPath(value)
-			case "user":
-				deviceInfo.User = StdPath(value)
-			case "pass":
-				deviceInfo.Pass = StdPath(value)
-			case "prefix":
-				deviceInfo.Prefix = StdPath(value)
-			}
-		}
-
-		device.Name = devname
 		device.Kind = kind
-		device.Info = deviceInfo
+		device.Name = devname
+
+		switch kind {
+		case "local":
+			device.Info = LoadLocalFsConfig(deviceRaw)
+		case "ftp":
+			device.Info = LoadFtpFsConfig(deviceRaw)
+		case "ssh":
+			device.Info = LoadSFtpFsConfig(deviceRaw)
+		case "webdav":
+			device.Info = LoadWebDavFsConfig(deviceRaw)
+		}
 
 		devices = append(devices, device)
 	}

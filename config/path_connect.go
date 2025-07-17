@@ -1,14 +1,8 @@
 package config
 
 import (
-	"fmt"
-	"strconv"
-
 	"github.com/ZXSQ1/rviv/filesystem"
-	"github.com/ZXSQ1/rviv/ftpfs"
 	"github.com/ZXSQ1/rviv/info"
-	"github.com/ZXSQ1/rviv/lan"
-	"github.com/ZXSQ1/rviv/localfs"
 )
 
 var (
@@ -16,8 +10,6 @@ var (
 )
 
 func (file *Path) Connect(verbose bool) error {
-	info.Heading(verbose, "connect")
-
 	if conn, ok := activeConns[file.Devname]; ok {
 		file.Fsys = conn
 		file.Active = true
@@ -33,68 +25,24 @@ func (file *Path) Connect(verbose bool) error {
 		}
 	}
 
+	info.Text(verbose, "connecting to device '%s'", file.Devname)
+
 	var fsys filesystem.Filesystem
 	var err error
 
-	switch file.Devname {
+	switch device.Kind {
 	case "local":
-		fsys, err = localfs.Init(device.Info.Prefix)
+		fsys, err = ConnectLocalFs(device.Info, verbose)
+	case "ftp":
+		fsys, err = ConnectFtpFs(device.Info, verbose)
+	case "ssh":
+		fsys, err = ConnectSFtpFs(device.Info, verbose)
+	case "webdav":
+		fsys, err = ConnectWebDavFs(device.Info, verbose)
+	}
 
-		if err != nil {
-			return info.Error("unable to connect to device '%s'", device.Name)
-		}
-	case "ftp", "ssh", "webdav":
-		ips := []string{}
-
-		if device.Info.Ip == "lan" {
-			ips = lan.ScanLanAddrs(device.Info.Port, filesystem.DefaultTimeout)
-		} else {
-			ips = append(ips, device.Info.Ip)
-		}
-
-	loop:
-		for _, ip := range ips {
-			connInfo := &filesystem.ConnInfo{
-				Addr: ip + ":" + strconv.Itoa(device.Info.Port),
-				User: device.Info.User,
-				Pass: device.Info.Pass,
-			}
-
-			info.Text(verbose, "tried address '%s:%d'... ", device.Info.Ip,
-				device.Info.Port)
-
-			switch device.Kind {
-			case "ftp":
-				fsys, err = ftpfs.Connect(connInfo)
-
-				if err == nil {
-					break loop
-				}
-			case "ssh":
-				fsys, err = ftpfs.Connect(connInfo)
-
-				if err == nil {
-					break loop
-				}
-			case "webdav":
-				fsys, err = ftpfs.Connect(connInfo)
-
-				if err == nil {
-					break loop
-				}
-			}
-
-			if verbose {
-				fmt.Println("failed")
-			}
-		}
-
-		if fsys == nil {
-			return info.Error("unable to connect to device '%s'", device.Name)
-		} else if verbose {
-			fmt.Println("success")
-		}
-
+	if err != nil {
+		return info.Error("unable to connect to device '%s'", device.Name)
 	}
 
 	activeConns[file.Devname] = fsys

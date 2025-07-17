@@ -129,7 +129,11 @@ func (meta ProcessValidation) Validations() FieldValidationMap {
 						}
 
 						for fieldName, validations := range validationMap[kind] {
-							field := subprocess[string(fieldName)]
+							field, ok := subprocess[string(fieldName)]
+
+							if !ok {
+								field = nil
+							}
 
 							for _, validation := range validations {
 								if err := validation(field, Field(prefix)); err != nil {

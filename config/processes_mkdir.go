@@ -89,10 +89,13 @@ func (meta MkdirProcessValidation) Validations() FieldValidationMap {
 
 		"parent": {
 			func(val any, parent Field) error {
+				if val == nil {
+					return nil
+				}
+
 				if _, ok := val.(bool); !ok {
 					return info.Error(
-						"field 'parent' is not found "+
-							"or has invalid format in field '%s'", parent,
+						"field 'parent' has invalid format in field '%s'", parent,
 					)
 				}
 
