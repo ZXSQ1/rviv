@@ -1,22 +1,45 @@
 package localfs
 
 import (
-	"os"
+	"path/filepath"
+	"slices"
 	"strings"
+
+	"github.com/ZXSQ1/rviv/filesystem"
 )
 
 func (local *LocalFs) ListDir(filename string) ([]string, error) {
 	filename = strings.TrimLeft(filename, "/")
 	entries := []string{}
-	rawEntries, err := os.ReadDir(filename)
+	directory, err := local.fsys.Open(filename)
+
+	if err != nil {
+		return nil, err
+	}
+
+	dirStat, err := directory.Stat()
+
+	if err != nil {
+		return nil, err
+	}
+
+	if !dirStat.IsDir() {
+		return nil, filesystem.ErrFileNotDir
+	}
+
+	rawEntries, err := directory.Readdir(-1)
 
 	if err != nil {
 		return nil, err
 	}
 
 	for _, rawEntry := range rawEntries {
-		entries = append(entries, filename+"/"+rawEntry.Name())
+		entries = append(
+			entries, filepath.Join(filename, rawEntry.Name()),
+		)
 	}
+
+	slices.Sort(entries)
 
 	return entries, nil
 }

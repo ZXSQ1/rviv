@@ -50,6 +50,8 @@ func TestLocalFs_List(t *testing.T) {
 		t.FailNow()
 	}
 
+	slices.Sort(actualEntries)
+
 	if !slices.Equal(resultEntries, actualEntries) {
 		t.FailNow()
 	}

@@ -9,7 +9,7 @@ import (
 
 func (local *LocalFs) IsExist(filename string) bool {
 	filename = strings.TrimLeft(filename, "/")
-	_, err := os.Stat(filename)
+	_, err := local.fsys.Stat(filename)
 	logging.ReportErr(err)
 
 	return !os.IsNotExist(err)

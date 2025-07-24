@@ -3,8 +3,9 @@ package config
 import "time"
 
 type ArchiveOpts struct {
-	Archivename Path
-	Archivefmt  Path
+	Archivename string
+	Archivefmt  string
+	Parents     []Path
 	Entries     []Path
 	ExpiryTime  *time.Time
 	Compression string

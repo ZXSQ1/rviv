@@ -1,7 +1,6 @@
 package localfs
 
 import (
-	"os"
 	"strings"
 
 	"github.com/ZXSQ1/rviv/filesystem"
@@ -15,7 +14,7 @@ func (local *LocalFs) Create(filename string) error {
 		return filesystem.ErrExist
 	}
 
-	fileObj, err := os.Create(filename)
+	fileObj, err := local.fsys.Create(filename)
 
 	if err != nil {
 		return err
@@ -26,5 +25,5 @@ func (local *LocalFs) Create(filename string) error {
 
 func (local *LocalFs) CreateDir(filename string) error {
 	filename = strings.TrimLeft(filename, "/")
-	return os.Mkdir(filename, filesystem.PermDir)
+	return local.fsys.Mkdir(filename, filesystem.PermDir)
 }

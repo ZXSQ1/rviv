@@ -15,9 +15,9 @@ func (local *LocalFs) Open(filename string, mode filesystem.OpenMode) (
 
 	switch mode {
 	case filesystem.ModeRead:
-		return os.OpenFile(filename, os.O_RDONLY, filesystem.PermRegular)
+		return local.fsys.OpenFile(filename, os.O_RDONLY, filesystem.PermRegular)
 	case filesystem.ModeWrite:
-		return os.OpenFile(filename, os.O_WRONLY, filesystem.PermRegular)
+		return local.fsys.OpenFile(filename, os.O_WRONLY, filesystem.PermRegular)
 	default:
 		return nil, filesystem.ErrModeInvalid
 	}

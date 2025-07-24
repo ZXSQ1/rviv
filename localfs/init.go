@@ -4,26 +4,29 @@ import (
 	"os"
 
 	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/spf13/afero"
 )
 
 type LocalFs struct {
-	prefix  string
-	currdir string
+	fsys afero.Fs
 }
 
 func Init(prefix string) (filesystem.Filesystem, error) {
-	currdir, err := os.Getwd()
+	info, err := os.Stat(prefix)
 
 	if err != nil {
-		return nil, err
+		return nil, filesystem.ErrExist
 	}
 
-	if err := os.Chdir(prefix); err != nil {
-		return nil, err
+	if !info.IsDir() {
+		return nil, filesystem.ErrFileNotDir
 	}
+
+	fsys := afero.NewBasePathFs(
+		afero.NewOsFs(), prefix,
+	)
 
 	return &LocalFs{
-		prefix:  prefix,
-		currdir: currdir,
+		fsys: fsys,
 	}, nil
 }

@@ -8,7 +8,8 @@ import (
 )
 
 func LoadArchiveOpts(optsRaw map[string]any) any {
-	archivename, _ := NewPath(optsRaw["archivename"].(string))
+	archivename := StdPath(optsRaw["archivename"].(string))
+	parents := []Path{}
 	entries := []Path{}
 	compression := ""
 	level := 6
@@ -18,6 +19,11 @@ func LoadArchiveOpts(optsRaw map[string]any) any {
 	for _, entry := range optsRaw["entries"].([]any) {
 		entry, _ := NewPath(entry.(string))
 		entries = append(entries, entry)
+	}
+
+	for _, parentRaw := range optsRaw["parents"].([]any) {
+		parent, _ := NewPath(parentRaw.(string))
+		parents = append(parents, parent)
 	}
 
 	if optsRaw["expiry"] != nil {
@@ -38,14 +44,8 @@ func LoadArchiveOpts(optsRaw map[string]any) any {
 
 	return ArchiveOpts{
 		Archivename: archivename,
-		Archivefmt: Path{
-			Filename: optsRaw["archivename"].(string),
-			Devname:  archivename.Devname,
-			Devices:  archivename.Devices,
-			Active:   archivename.Active,
-			Fsys:     archivename.Fsys,
-		},
-
+		Archivefmt:  optsRaw["archivename"].(string),
+		Parents:     parents,
 		Entries:     entries,
 		Compression: compression,
 		Level:       level,
