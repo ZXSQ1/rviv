@@ -29,7 +29,7 @@ func TestFtpFs_Open(t *testing.T) {
 		server.Stop()
 	})
 
-	if client.Create(testFilename) != nil {
+	if client.CreateFile(testFilename) != nil {
 		t.FailNow()
 	}
 

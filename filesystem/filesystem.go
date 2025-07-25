@@ -39,21 +39,21 @@ type Filesystem interface {
 	Stat(filename string) (fs.FileInfo, error)
 
 	// creates a file given a path; returns an error if the regular file exists
-	Create(filename string) error
+	CreateFile(filename string) error
 
 	// creates a directory given a path; returns an error if the directory exists
 	CreateDir(filename string) error
 
 	// removes the file given a path; returns an error if filename refers to a
 	// directory
-	Remove(filename string) error
+	RemoveFile(filename string) error
 
 	// removes the directory and its contents (if any) given a path; returns an
 	// error if filename refers to a regular file
 	RemoveDir(filename string) error
 
 	// lists the directory given a path
-	ListDir(filename string) ([]string, error)
+	List(dirname string) ([]string, error)
 
 	// returns an io.ReadWriteCloser for writing and reading a file given a path;
 	// the mode is one of WriteMode or ReadMode; methods return -1 on error as n

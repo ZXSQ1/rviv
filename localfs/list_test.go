@@ -44,7 +44,7 @@ func TestLocalFs_List(t *testing.T) {
 		)
 	}
 
-	resultEntries, err := client.ListDir(testEntryPrefix)
+	resultEntries, err := client.List(testEntryPrefix)
 
 	if err != nil {
 		t.FailNow()

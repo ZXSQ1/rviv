@@ -12,7 +12,7 @@ func (compressor *GzCompressor) Compress(
 	outfile config.Path, level CompressionLevel) error {
 
 	if !outfile.Fsys.IsExist(outfile.Filename) {
-		if err := outfile.Fsys.Create(outfile.Filename); err != nil {
+		if err := outfile.Fsys.CreateFile(outfile.Filename); err != nil {
 			return err
 		}
 	}

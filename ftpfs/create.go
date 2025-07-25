@@ -6,7 +6,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func (client *FtpFs) Create(filename string) error {
+func (client *FtpFs) CreateFile(filename string) error {
 	if client.IsExist(filename) {
 		return filesystem.ErrExist
 	}

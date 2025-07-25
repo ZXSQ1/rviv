@@ -7,7 +7,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func TestWebDavFs_Create(t *testing.T) {
+func TestWebDavFs_CreateFile(t *testing.T) {
 	server := OpenTestServer()
 	client, err := Connect(&filesystem.ConnInfo{
 		Addr: testAddr,
@@ -27,11 +27,11 @@ func TestWebDavFs_Create(t *testing.T) {
 		server.Close()
 	})
 
-	if client.Create(testFilename) != nil {
+	if client.CreateFile(testFilename) != nil {
 		t.FailNow()
 	}
 
-	if client.Create(testFilename) == nil {
+	if client.CreateFile(testFilename) == nil {
 		t.FailNow()
 	}
 
@@ -43,7 +43,7 @@ func TestWebDavFs_Create(t *testing.T) {
 		t.FailNow()
 	}
 
-	if client.Create(testFilename) == nil {
+	if client.CreateFile(testFilename) == nil {
 		t.FailNow()
 	}
 }
@@ -90,7 +90,7 @@ func TestWebDavFs_CreateDir(t *testing.T) {
 		t.FailNow()
 	}
 
-	if client.Create(testFilename) == nil {
+	if client.CreateDir(testFilename) == nil {
 		t.FailNow()
 	}
 }

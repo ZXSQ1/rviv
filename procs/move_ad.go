@@ -14,10 +14,6 @@ func MoveAll(srcs []config.Path, dest config.Path, verbose bool) error {
 		return err
 	}
 
-	if err := CheckExists(dest); err != nil {
-		return err
-	}
-
 	if err := CheckIsDir(dest); err != nil {
 		return err
 	}

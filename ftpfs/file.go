@@ -19,7 +19,7 @@ type File struct {
 func (file *File) Write(p []byte) (n int, err error) {
 	if file.mode != filesystem.ModeWrite {
 		if file.mode == filesystem.ModeClosed {
-			return -1, filesystem.ErrModeClosed
+			return -1, filesystem.ErrClosed
 		}
 
 		return -1, filesystem.ErrModeWrite
@@ -41,7 +41,7 @@ func (file *File) Write(p []byte) (n int, err error) {
 func (file *File) Read(p []byte) (n int, err error) {
 	if file.mode != filesystem.ModeRead {
 		if file.mode == filesystem.ModeClosed {
-			return -1, filesystem.ErrModeClosed
+			return -1, filesystem.ErrClosed
 		}
 
 		return -1, filesystem.ErrModeRead
@@ -76,7 +76,7 @@ func (file *File) Read(p []byte) (n int, err error) {
 
 func (file *File) Close() error {
 	if file.mode == filesystem.ModeClosed {
-		return filesystem.ErrModeClosed
+		return filesystem.ErrClosed
 	}
 
 	file.conn = nil

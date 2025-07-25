@@ -6,7 +6,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func (client *SFtpFs) Remove(filename string) error {
+func (client *SFtpFs) RemoveFile(filename string) error {
 	if !client.IsExist(filename) {
 		return os.ErrNotExist
 	}

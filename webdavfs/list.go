@@ -1,6 +1,6 @@
 package webdavfs
 
-func (client *WebDavFs) ListDir(filename string) ([]string, error) {
+func (client *WebDavFs) List(filename string) ([]string, error) {
 	results := []string{}
 	entries, err := client.conn.ReadDir(filename)
 

@@ -11,7 +11,7 @@ type SFtpFs struct {
 	connInfo *filesystem.ConnInfo
 }
 
-func Connect(connInfo *filesystem.ConnInfo) (*SFtpFs, error) {
+func Connect(connInfo *filesystem.ConnInfo) (filesystem.Filesystem, error) {
 	config := &ssh.ClientConfig{
 		HostKeyCallback: ssh.InsecureIgnoreHostKey(),
 		User:            connInfo.User,

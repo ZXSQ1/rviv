@@ -31,7 +31,7 @@ func TestFtpFs_Remove(t *testing.T) {
 		t.FailNow()
 	}
 
-	if client.Remove(testFilename) == nil {
+	if client.RemoveFile(testFilename) == nil {
 		t.FailNow()
 	}
 
@@ -47,7 +47,7 @@ func TestFtpFs_Remove(t *testing.T) {
 
 	fileObj.Close()
 
-	if client.Remove(testFilename) != nil {
+	if client.RemoveFile(testFilename) != nil {
 		t.FailNow()
 	}
 }

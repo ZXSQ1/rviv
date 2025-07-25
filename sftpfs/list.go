@@ -1,6 +1,6 @@
 package sftpfs
 
-func (client *SFtpFs) ListDir(filename string) ([]string, error) {
+func (client *SFtpFs) List(filename string) ([]string, error) {
 	resultEntries := []string{}
 	entries, err := client.conn.ReadDir(filename)
 

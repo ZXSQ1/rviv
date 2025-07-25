@@ -10,10 +10,6 @@ import (
 func OrganizeDate(srcs []config.Path, organizedir config.Path, datefmt string,
 	verbose bool) error {
 
-	if err := CheckExists(organizedir); err != nil {
-		return err
-	}
-
 	if err := CheckIsDir(organizedir); err != nil {
 		return err
 	}

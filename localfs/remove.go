@@ -6,7 +6,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func (local *LocalFs) Remove(filename string) error {
+func (local *LocalFs) RemoveFile(filename string) error {
 	filename = strings.TrimLeft(filename, "/")
 	stat, err := local.Stat(filename)
 

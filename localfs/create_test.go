@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func TestLocalFs_Create(t *testing.T) {
+func TestLocalFs_CreateFile(t *testing.T) {
 	client, err := Init(testPrefix)
 	testFilename := "test"
 
@@ -17,11 +17,11 @@ func TestLocalFs_Create(t *testing.T) {
 		os.Remove(testPrefix + "/" + testFilename)
 	})
 
-	if client.Create(testFilename) != nil {
+	if client.CreateFile(testFilename) != nil {
 		t.FailNow()
 	}
 
-	if err := client.Create(testFilename); err == nil {
+	if err := client.CreateFile(testFilename); err == nil {
 		t.FailNow()
 	}
 

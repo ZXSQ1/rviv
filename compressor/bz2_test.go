@@ -27,11 +27,11 @@ func TestBz2(t *testing.T) {
 	}
 
 	t.Cleanup(func() {
-		testFilename.Fsys.Remove(testFilename.Filename)
-		testArchivename.Fsys.Remove(testArchivename.Filename)
+		testFilename.Fsys.RemoveFile(testFilename.Filename)
+		testArchivename.Fsys.RemoveFile(testArchivename.Filename)
 	})
 
-	if testFilename.Fsys.Create(testFilename.Filename) != nil {
+	if testFilename.Fsys.CreateFile(testFilename.Filename) != nil {
 		t.FailNow()
 	}
 

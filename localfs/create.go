@@ -6,7 +6,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func (local *LocalFs) Create(filename string) error {
+func (local *LocalFs) CreateFile(filename string) error {
 	filename = strings.TrimLeft(filename, "/")
 	_, err := local.Stat(filename)
 

@@ -7,7 +7,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func TestLocalFs_Remove(t *testing.T) {
+func TestLocalFs_RemoveFile(t *testing.T) {
 	client, err := Init(testPrefix)
 	testFilename := "test"
 
@@ -23,7 +23,7 @@ func TestLocalFs_Remove(t *testing.T) {
 		t.FailNow()
 	}
 
-	if client.Remove(testFilename) == nil {
+	if client.RemoveFile(testFilename) == nil {
 		t.FailNow()
 	}
 
@@ -41,7 +41,7 @@ func TestLocalFs_Remove(t *testing.T) {
 		t.FailNow()
 	}
 
-	if client.Remove(testFilename) != nil {
+	if client.RemoveFile(testFilename) != nil {
 		t.FailNow()
 	}
 }

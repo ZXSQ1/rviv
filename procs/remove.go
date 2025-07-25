@@ -7,36 +7,30 @@ import (
 
 func Remove(opts config.RemoveOpts) error {
 	for _, filename := range opts.Filenames {
-		if !filename.Fsys.IsExist(filename.Filename) {
-			return info.Error("file '%s' does not exist", ShowPath(filename))
+		if err := CheckExists(filename); err != nil {
+			return err
 		}
 
 		info.Text(opts.Verbose, "removing file '%s'", ShowPath(filename))
-		stat, err := filename.Fsys.Stat(filename.Filename)
 
-		if err != nil {
-			return info.Error("unable to stat '%s'", ShowPath(filename))
-		}
-
-		if !opts.Recursive && stat.IsDir() {
+		if !opts.Recursive && CheckIsDir(filename) == nil {
 			return info.Error(
 				"can not remove directory '%s' (recursive is not specified)",
 				ShowPath(filename),
 			)
 		}
 
-		if stat.IsDir() {
-			err = filename.Fsys.RemoveDir(filename.Filename)
+		if CheckIsDir(filename) == nil {
+			err := CheckRemoveDir(filename)
 
 			if err != nil {
-				return info.Error("unable to remove directory '%s'", ShowPath(
-					filename))
+				return err
 			}
 		} else {
-			err = filename.Fsys.Remove(filename.Filename)
+			err := CheckRemove(filename)
 
 			if err != nil {
-				return info.Error("unable to remove file '%s'", ShowPath(filename))
+				return err
 			}
 		}
 

@@ -9,10 +9,6 @@ import (
 )
 
 func MoveDir(srcdir, destdir config.Path, verbose bool) error {
-	if err := CheckExists(srcdir); err != nil {
-		return err
-	}
-
 	if err := CheckIsDir(srcdir); err != nil {
 		return err
 	}

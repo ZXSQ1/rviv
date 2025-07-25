@@ -10,10 +10,6 @@ import (
 func OrganizeAlpha(srcs []config.Path, organizedir config.Path,
 	verbose bool) error {
 
-	if err := CheckExists(organizedir); err != nil {
-		return err
-	}
-
 	if err := CheckIsDir(organizedir); err != nil {
 		return err
 	}

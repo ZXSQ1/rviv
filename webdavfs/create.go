@@ -4,7 +4,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func (client *WebDavFs) Create(filename string) error {
+func (client *WebDavFs) CreateFile(filename string) error {
 	if client.IsExist(filename) {
 		return filesystem.ErrExist
 	}

@@ -8,7 +8,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func TestWebDavFs_ListDir(t *testing.T) {
+func TestWebDavFs_List(t *testing.T) {
 	server := OpenTestServer()
 	client, err := Connect(&filesystem.ConnInfo{
 		Addr: testAddr,
@@ -43,7 +43,7 @@ func TestWebDavFs_ListDir(t *testing.T) {
 		actualEntries[idx] = testEntryPrefix + "/" + actualEntry
 	}
 
-	resultEntries, err := client.ListDir(testEntryPrefix)
+	resultEntries, err := client.List(testEntryPrefix)
 
 	if err != nil {
 		t.FailNow()

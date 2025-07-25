@@ -7,7 +7,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func TestFtpFs_Create(t *testing.T) {
+func TestFtpFs_CreateFile(t *testing.T) {
 	server := OpenTestServer()
 	client, err := Connect(&filesystem.ConnInfo{
 		Addr: testAddr,
@@ -27,11 +27,11 @@ func TestFtpFs_Create(t *testing.T) {
 		server.Stop()
 	})
 
-	if client.Create(testFilename) != nil {
+	if client.CreateFile(testFilename) != nil {
 		t.FailNow()
 	}
 
-	if client.Create(testFilename) == nil {
+	if client.CreateFile(testFilename) == nil {
 		t.FailNow()
 	}
 
@@ -43,7 +43,7 @@ func TestFtpFs_Create(t *testing.T) {
 		t.FailNow()
 	}
 
-	if client.Create(testFilename) == nil {
+	if client.CreateFile(testFilename) == nil {
 		t.FailNow()
 	}
 }

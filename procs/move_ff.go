@@ -12,10 +12,6 @@ import (
 func MoveFile(srcfile, destfile config.Path, verbose bool,
 	printfn func(src, dest string)) error {
 
-	if err := CheckExists(srcfile); err != nil {
-		return err
-	}
-
 	if err := CheckIsRegular(srcfile); err != nil {
 		return err
 	}

@@ -2,7 +2,7 @@ package webdavfs
 
 import "github.com/ZXSQ1/rviv/filesystem"
 
-func (client *WebDavFs) Remove(filename string) error {
+func (client *WebDavFs) RemoveFile(filename string) error {
 	if !client.IsExist(filename) {
 		return filesystem.ErrNotExist
 	}

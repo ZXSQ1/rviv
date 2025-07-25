@@ -7,7 +7,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func TestSFtpFs_Remove(t *testing.T) {
+func TestSFtpFs_RemoveFile(t *testing.T) {
 	server := OpenTestServer()
 	client, err := Connect(&filesystem.ConnInfo{
 		Addr: testAddr,
@@ -27,7 +27,7 @@ func TestSFtpFs_Remove(t *testing.T) {
 		server.Close()
 	})
 
-	if client.Remove(testFilename) == nil {
+	if client.RemoveFile(testFilename) == nil {
 		t.FailNow()
 	}
 
@@ -35,7 +35,7 @@ func TestSFtpFs_Remove(t *testing.T) {
 		t.FailNow()
 	}
 
-	if client.Remove(testFilename) == nil {
+	if client.RemoveFile(testFilename) == nil {
 		t.FailNow()
 	}
 
@@ -53,7 +53,7 @@ func TestSFtpFs_Remove(t *testing.T) {
 		t.FailNow()
 	}
 
-	if client.Remove(testFilename) != nil {
+	if client.RemoveFile(testFilename) != nil {
 		t.FailNow()
 	}
 }

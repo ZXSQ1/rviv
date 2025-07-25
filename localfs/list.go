@@ -8,7 +8,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func (local *LocalFs) ListDir(filename string) ([]string, error) {
+func (local *LocalFs) List(filename string) ([]string, error) {
 	filename = strings.TrimLeft(filename, "/")
 	entries := []string{}
 	directory, err := local.fsys.Open(filename)

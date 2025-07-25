@@ -4,7 +4,7 @@ import (
 	"github.com/ZXSQ1/rviv/filesystem"
 )
 
-func (client *FtpFs) Remove(filename string) error {
+func (client *FtpFs) RemoveFile(filename string) error {
 	stat, err := client.Stat(filename)
 
 	if err != nil {

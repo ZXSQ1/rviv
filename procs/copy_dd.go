@@ -6,23 +6,33 @@ import (
 
 	"github.com/ZXSQ1/rviv/config"
 	"github.com/ZXSQ1/rviv/info"
+	"github.com/pkg/errors"
 )
 
 func CopyDir(srcdir, destdir config.Path, verbose bool) error {
-	if err := CheckExists(srcdir); err != nil {
-		return err
+	srcDirStat, err := srcdir.Fsys.Stat(srcdir.Filename)
+
+	if err != nil {
+		return errors.Wrap(ErrStat, ShowPath(srcdir))
 	}
 
-	if err := CheckIsDir(srcdir); err != nil {
-		return err
+	if !srcDirStat.IsDir() {
+		return errors.Wrap(ErrFileNotDir, ShowPath(srcdir))
 	}
 
-	replaceOnCopy := false
+	replaceOnCopy := true
 
-	if err := CheckExists(destdir); err != nil {
-		replaceOnCopy = true
-	} else if err := CheckIsDir(destdir); err != nil {
-		return err
+	if destdir.Fsys.IsExist(destdir.Filename) {
+		replaceOnCopy = false
+		destDirStat, err := destdir.Fsys.Stat(destdir.Filename)
+
+		if err != nil {
+			return errors.Wrap(ErrStat, ShowPath(destdir))
+		}
+
+		if !destDirStat.IsDir() {
+			return errors.Wrap(ErrFileNotDir, ShowPath(destdir))
+		}
 	}
 
 	srcEntries, err := ListDir(config.ListOpts{
@@ -108,8 +118,17 @@ func CopyDir(srcdir, destdir config.Path, verbose bool) error {
 			}
 		}
 
-		if CheckIsRegular(srcEntry) == nil && (CheckExists(destEntry) != nil ||
-			CheckIsRegular(destEntry) == nil) {
+		srcEntryStat, err := srcEntry.Fsys.Stat(srcEntry.Filename)
+
+		if err != nil {
+			return errors.Wrap(ErrStat, ShowPath(srcEntry))
+		}
+
+		destEntryExists := destEntry.Fsys.IsExist(destEntry.Filename)
+		destEntryStat, _ := destEntry.Fsys.Stat(destEntry.Filename)
+
+		if srcEntryStat.IsDir() && (!destEntryExists ||
+			destEntryStat.Mode().IsRegular()) {
 
 			err := CopyFile(srcEntry, destEntry, verbose, func(
 				src, dest string) {

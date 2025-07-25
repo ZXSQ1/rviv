@@ -16,15 +16,7 @@ type Differences struct {
 func Differ(opts config.DifferOpts) (Differences, error) {
 	diffs := Differences{}
 
-	if err := CheckExists(opts.Src); err != nil {
-		return diffs, err
-	}
-
 	if err := CheckIsDir(opts.Src); err != nil {
-		return diffs, err
-	}
-
-	if err := CheckExists(opts.Dest); err != nil {
 		return diffs, err
 	}
 

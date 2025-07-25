@@ -8,15 +8,7 @@ import (
 )
 
 func SyncAdd(src, dest config.Path, oneway, verbose bool) error {
-	if err := CheckExists(src); err != nil {
-		return err
-	}
-
 	if err := CheckIsDir(src); err != nil {
-		return err
-	}
-
-	if err := CheckExists(dest); err != nil {
 		return err
 	}
 
