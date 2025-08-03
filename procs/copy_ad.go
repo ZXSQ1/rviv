@@ -2,6 +2,7 @@ package procs
 
 import (
 	"github.com/ZXSQ1/rviv/config"
+	"github.com/ZXSQ1/rviv/filesystem"
 	"github.com/pkg/errors"
 )
 
@@ -18,11 +19,11 @@ func CopyAll(srcs []config.Path, dest config.Path, verbose bool) error {
 	destStat, err := dest.Fsys.Stat(dest.Filename)
 
 	if err != nil {
-		return errors.Wrap(ErrStat, ShowPath(dest))
+		return errors.Wrap(filesystem.ErrStat, ShowPath(dest))
 	}
 
 	if !destStat.IsDir() {
-		return errors.Wrap(ErrFileNotDir, ShowPath(dest))
+		return errors.Wrap(filesystem.ErrFileNotDir, ShowPath(dest))
 	}
 
 	for _, srcEntry := range srcEntries {
@@ -31,7 +32,7 @@ func CopyAll(srcs []config.Path, dest config.Path, verbose bool) error {
 		srcEntryStat, err := srcEntry.Fsys.Stat(srcEntry.Filename)
 
 		if err != nil {
-			return errors.Wrap(ErrStat, ShowPath(srcEntry))
+			return errors.Wrap(filesystem.ErrStat, ShowPath(srcEntry))
 		}
 
 		if srcEntryStat.IsDir() {

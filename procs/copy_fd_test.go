@@ -37,7 +37,7 @@ func TestCopyFiles(t *testing.T) {
 
 	t.Cleanup(func() {
 		for _, src := range srcs {
-			src.Fsys.Remove(src.Filename)
+			src.Fsys.RemoveFile(src.Filename)
 		}
 
 		destdir.Fsys.RemoveDir(destdir.Filename)
@@ -49,7 +49,7 @@ func TestCopyFiles(t *testing.T) {
 	}
 
 	for _, src := range srcs {
-		if err := src.Fsys.Create(src.Filename); err != nil {
+		if err := src.Fsys.CreateFile(src.Filename); err != nil {
 			t.FailNow()
 		}
 	}
@@ -58,7 +58,7 @@ func TestCopyFiles(t *testing.T) {
 		t.FailNow()
 	}
 
-	destEntries, err := destdir.Fsys.ListDir(destdir.Filename)
+	destEntries, err := destdir.Fsys.List(destdir.Filename)
 
 	if err != nil {
 		t.FailNow()

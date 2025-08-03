@@ -58,7 +58,7 @@ func TestCopyDir(t *testing.T) {
 	}
 
 	for _, srcEntry := range srcEntries {
-		if srcEntry.Fsys.Create(srcEntry.Filename) != nil {
+		if srcEntry.Fsys.CreateFile(srcEntry.Filename) != nil {
 			t.FailNow()
 		}
 	}

@@ -65,11 +65,11 @@ func TestCopyAll(t *testing.T) {
 		}
 
 		if isDir {
-			if entry.Fsys.CreateDir(entry.Filename) != nil {
+			if CreateDir(entry) != nil {
 				t.FailNow()
 			}
 		} else {
-			if entry.Fsys.Create(entry.Filename) != nil {
+			if CreateFile(entry) != nil {
 				t.FailNow()
 			}
 		}

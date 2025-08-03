@@ -22,11 +22,13 @@ func CreateFile(filename config.Path) error {
 	}
 
 	if IsExist(parent) != nil {
-		return errors.Wrap(filesystem.ErrNotExist, ShowPath(parent))
+		if err := CreateDir(parent); err != nil {
+			return err
+		}
 	}
 
-	if IsDir(parent) != nil {
-		return errors.Wrap(filesystem.ErrFileNotDir, ShowPath(parent))
+	if err := IsDir(parent); err != nil {
+		return err
 	}
 
 	if filename.Fsys.CreateFile(filename.Filename) != nil {
@@ -50,11 +52,13 @@ func CreateDir(filename config.Path) error {
 	}
 
 	if IsExist(parent) != nil {
-		return errors.Wrap(filesystem.ErrNotExist, ShowPath(parent))
+		if err := CreateDir(parent); err != nil {
+			return err
+		}
 	}
 
-	if IsDir(parent) != nil {
-		return errors.Wrap(filesystem.ErrFileNotDir, ShowPath(parent))
+	if err := IsDir(parent); err != nil {
+		return err
 	}
 
 	if filename.Fsys.CreateDir(filename.Filename) != nil {

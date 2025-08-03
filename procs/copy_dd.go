@@ -5,6 +5,7 @@ import (
 	"strings"
 
 	"github.com/ZXSQ1/rviv/config"
+	"github.com/ZXSQ1/rviv/filesystem"
 	"github.com/ZXSQ1/rviv/info"
 	"github.com/pkg/errors"
 )
@@ -13,11 +14,11 @@ func CopyDir(srcdir, destdir config.Path, verbose bool) error {
 	srcDirStat, err := srcdir.Fsys.Stat(srcdir.Filename)
 
 	if err != nil {
-		return errors.Wrap(ErrStat, ShowPath(srcdir))
+		return errors.Wrap(filesystem.ErrStat, ShowPath(srcdir))
 	}
 
 	if !srcDirStat.IsDir() {
-		return errors.Wrap(ErrFileNotDir, ShowPath(srcdir))
+		return errors.Wrap(filesystem.ErrFileNotDir, ShowPath(srcdir))
 	}
 
 	replaceOnCopy := true
@@ -27,11 +28,11 @@ func CopyDir(srcdir, destdir config.Path, verbose bool) error {
 		destDirStat, err := destdir.Fsys.Stat(destdir.Filename)
 
 		if err != nil {
-			return errors.Wrap(ErrStat, ShowPath(destdir))
+			return errors.Wrap(filesystem.ErrStat, ShowPath(destdir))
 		}
 
 		if !destDirStat.IsDir() {
-			return errors.Wrap(ErrFileNotDir, ShowPath(destdir))
+			return errors.Wrap(filesystem.ErrFileNotDir, ShowPath(destdir))
 		}
 	}
 
@@ -121,7 +122,7 @@ func CopyDir(srcdir, destdir config.Path, verbose bool) error {
 		srcEntryStat, err := srcEntry.Fsys.Stat(srcEntry.Filename)
 
 		if err != nil {
-			return errors.Wrap(ErrStat, ShowPath(srcEntry))
+			return errors.Wrap(filesystem.ErrStat, ShowPath(srcEntry))
 		}
 
 		destEntryExists := destEntry.Fsys.IsExist(destEntry.Filename)
@@ -145,7 +146,7 @@ func CopyDir(srcdir, destdir config.Path, verbose bool) error {
 			continue
 		}
 
-		if CheckIsDir(srcEntry) == nil && CheckExists(destEntry) != nil {
+		if IsDir(srcEntry) == nil && IsExist(destEntry) != nil {
 			err := Mkdir(config.MkdirOpts{
 				Filenames: []config.Path{destEntry},
 				Parent:    false,

@@ -17,12 +17,12 @@ func CopyFiles(srcs []config.Path, dest config.Path, verbose bool) error {
 		return err
 	}
 
-	if err := CheckIsDir(dest); err != nil {
+	if err := IsDir(dest); err != nil {
 		return err
 	}
 
 	for _, srcEntry := range srcEntries {
-		if err := CheckIsRegular(srcEntry); err != nil {
+		if err := IsRegular(srcEntry); err != nil {
 			return err
 		}
 
