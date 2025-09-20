@@ -2,7 +2,7 @@
 VERSION = alpha
 
 BINFILE = ./bin/rviv-$(VERSION)
-SRCFILE = ./app.go
+SRCFILE = ./cmd/app.go
 TESTOPTS = -v -timeout 2m
 
 .SILENT: build test run clean
@@ -10,15 +10,23 @@ TESTOPTS = -v -timeout 2m
 build:
 	go build -o $(BINFILE) $(SRCFILE)
 
-test:
-	go test $(TESTOPTS) localfs/*.go
-	go test $(TESTOPTS) ftpfs/*.go
-	go test $(TESTOPTS) sftpfs/*.go
-	go test $(TESTOPTS) webdavfs/*.go
-	go test $(TESTOPTS) expiry/*.go
-	go test $(TESTOPTS) config/*.go
-	go test $(TESTOPTS) procs/*.go
-	go test $(TESTOPTS) compressor/*.go
+test-fs:
+	go test $(TESTOPTS) ./internal/localfs/*.go
+	go test $(TESTOPTS) ./internal/ftpfs/*.go
+	go test $(TESTOPTS) ./internal/sftpfs/*.go
+	go test $(TESTOPTS) ./internal/webdavfs/*.go
+
+test-utils:
+	go test $(TESTOPTS) ./internal/expiry/*.go
+	go test $(TESTOPTS) ./internal/compressor/*.go
+
+test-config:
+	go test $(TESTOPTS) ./internal/config/*.go
+
+test-procs:
+	go test $(TESTOPTS) ./internal/procs/*.go
+
+test: test-fs test-utils test-config test-procs
 
 run:
 	go run $(SRCFILE)
