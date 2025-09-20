@@ -1,6 +1,6 @@
 package config
 
-import "github.com/ZXSQ1/rviv/info"
+import "github.com/ZXSQ1/rviv/internal/info"
 
 func CloseConns() error {
 	for dev, conn := range activeConns {

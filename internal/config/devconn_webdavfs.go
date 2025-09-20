@@ -3,10 +3,10 @@ package config
 import (
 	"strconv"
 
-	"github.com/ZXSQ1/rviv/filesystem"
-	"github.com/ZXSQ1/rviv/info"
-	"github.com/ZXSQ1/rviv/lan"
-	"github.com/ZXSQ1/rviv/webdavfs"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
+	"github.com/ZXSQ1/rviv/internal/info"
+	"github.com/ZXSQ1/rviv/internal/lan"
+	"github.com/ZXSQ1/rviv/internal/webdavfs"
 )
 
 func ConnectWebDavFs(infoRaw any, verbose bool) (filesystem.Filesystem, error) {

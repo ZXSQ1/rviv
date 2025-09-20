@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ZXSQ1/rviv/config"
+	"github.com/ZXSQ1/rviv/internal/config"
 )
 
 type Differences struct {

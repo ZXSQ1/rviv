@@ -1,8 +1,6 @@
 package ftpfs
 
-import (
-	"github.com/ZXSQ1/rviv/filesystem"
-)
+import "github.com/ZXSQ1/rviv/internal/filesystem"
 
 func (client *FtpFs) RemoveFile(filename string) error {
 	stat, err := client.Stat(filename)

@@ -4,7 +4,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/internal/logging"
 )
 
 func (local *LocalFs) IsExist(filename string) bool {

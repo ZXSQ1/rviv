@@ -1,6 +1,6 @@
 package procs
 
-import "github.com/ZXSQ1/rviv/config"
+import "github.com/ZXSQ1/rviv/internal/config"
 
 func CopyPath(basePath config.Path, newFilename string) config.Path {
 	return config.Path{

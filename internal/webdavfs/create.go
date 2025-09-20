@@ -1,8 +1,6 @@
 package webdavfs
 
-import (
-	"github.com/ZXSQ1/rviv/filesystem"
-)
+import "github.com/ZXSQ1/rviv/internal/filesystem"
 
 func (client *WebDavFs) CreateFile(filename string) error {
 	if client.IsExist(filename) {

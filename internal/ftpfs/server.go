@@ -7,7 +7,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/internal/logging"
 	ftpserver "github.com/fclairamb/ftpserverlib"
 	"github.com/spf13/afero"
 )

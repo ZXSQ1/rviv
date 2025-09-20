@@ -5,7 +5,7 @@ import (
 	"slices"
 	"testing"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func TestSFtpFs_List(t *testing.T) {

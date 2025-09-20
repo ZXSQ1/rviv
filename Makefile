@@ -18,7 +18,6 @@ test-fs:
 
 test-utils:
 	go test $(TESTOPTS) ./internal/expiry/*.go
-	go test $(TESTOPTS) ./internal/compressor/*.go
 
 test-config:
 	go test $(TESTOPTS) ./internal/config/*.go

@@ -3,7 +3,7 @@ package sftpfs
 import (
 	"os"
 
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/internal/logging"
 )
 
 func (client *SFtpFs) IsExist(filename string) bool {

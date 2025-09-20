@@ -5,7 +5,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func (local *LocalFs) Open(filename string, mode filesystem.OpenMode) (

@@ -3,7 +3,7 @@ package localfs
 import (
 	"os"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 	"github.com/spf13/afero"
 )
 

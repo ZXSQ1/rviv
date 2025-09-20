@@ -1,8 +1,8 @@
 package procs
 
 import (
-	"github.com/ZXSQ1/rviv/config"
-	"github.com/ZXSQ1/rviv/info"
+	"github.com/ZXSQ1/rviv/internal/config"
+	"github.com/ZXSQ1/rviv/internal/info"
 )
 
 func Copy(opts config.CopyOpts) error {

@@ -4,8 +4,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/ZXSQ1/rviv/config"
-	"github.com/ZXSQ1/rviv/info"
+	"github.com/ZXSQ1/rviv/internal/config"
+	"github.com/ZXSQ1/rviv/internal/info"
 )
 
 func CopyDir(srcdir, destdir config.Path, verbose bool) error {

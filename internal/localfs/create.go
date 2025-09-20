@@ -3,7 +3,7 @@ package localfs
 import (
 	"strings"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func (local *LocalFs) CreateFile(filename string) error {

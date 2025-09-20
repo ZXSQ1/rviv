@@ -1,6 +1,6 @@
 package procs
 
-import "github.com/ZXSQ1/rviv/config"
+import "github.com/ZXSQ1/rviv/internal/config"
 
 func Sync(opts config.SyncOpts) error {
 	if !opts.Src.Active {

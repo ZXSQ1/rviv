@@ -5,7 +5,7 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func TestWebDavFs_Stat(t *testing.T) {

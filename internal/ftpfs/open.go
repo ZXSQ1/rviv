@@ -3,7 +3,7 @@ package ftpfs
 import (
 	"io"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func (client *FtpFs) Open(filename string, mode filesystem.OpenMode) (

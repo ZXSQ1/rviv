@@ -3,7 +3,7 @@ package info
 import (
 	"fmt"
 
-	"github.com/ZXSQ1/rviv/env"
+	"github.com/ZXSQ1/rviv/internal/env"
 	"github.com/fatih/color"
 )
 

@@ -1,21 +1,20 @@
 package config
 
 var (
-	DeviceValidations []TypeBasedFieldValidation = []TypeBasedFieldValidation{
+	DeviceValidations = []TypeBasedFieldValidation{
 		LocalDeviceValidation{}, FtpDeviceValidation{}, SFtpDeviceValidation{},
 		WebDavDeviceValidation{},
 	}
 
-	MainDevicesValidation TypeBasedFieldValidation = DeviceValidation{}
+	MainDevicesValidation = DeviceValidation{}
 )
 
 var (
-	ProcessVerifications []TypeBasedFieldValidation = []TypeBasedFieldValidation{
+	ProcessVerifications = []TypeBasedFieldValidation{
 		CopyProcessValidation{}, MkdirProcessValidation{},
 		MoveProcessValidation{}, RemoveProcessValidation{},
-		SyncProcessValidation{}, ArchiveProcessValidation{},
-		OrganizeProcessValidation{},
+		SyncProcessValidation{}, OrganizeProcessValidation{},
 	}
 
-	MainProcessesValidation TypeBasedFieldValidation = ProcessValidation{}
+	MainProcessesValidation = ProcessValidation{}
 )

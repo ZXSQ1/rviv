@@ -1,6 +1,6 @@
 package config
 
-import "github.com/ZXSQ1/rviv/env"
+import "github.com/ZXSQ1/rviv/internal/env"
 
 func LoadMkdirOpts(rawOpts map[string]any) any {
 	files := []Path{}

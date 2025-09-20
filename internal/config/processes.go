@@ -49,8 +49,6 @@ func LoadProcesses() ([]ProcessGroup, error) {
 				process.Options = LoadRemoveOpts(subprocess)
 			case "sync":
 				process.Options = LoadSyncOpts(subprocess)
-			case "archive":
-				process.Options = LoadArchiveOpts(subprocess)
 			case "organize":
 				process.Options = LoadOrganizeOpts(subprocess)
 			}

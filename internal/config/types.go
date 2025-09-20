@@ -1,6 +1,6 @@
 package config
 
-import "github.com/ZXSQ1/rviv/filesystem"
+import "github.com/ZXSQ1/rviv/internal/filesystem"
 
 // the field config
 type Field string

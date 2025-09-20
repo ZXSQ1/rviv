@@ -4,7 +4,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func (client *SFtpFs) Open(filename string, mode filesystem.OpenMode) (

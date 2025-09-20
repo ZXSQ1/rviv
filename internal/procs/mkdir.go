@@ -3,8 +3,8 @@ package procs
 import (
 	"path/filepath"
 
-	"github.com/ZXSQ1/rviv/config"
-	"github.com/ZXSQ1/rviv/info"
+	"github.com/ZXSQ1/rviv/internal/config"
+	"github.com/ZXSQ1/rviv/internal/info"
 )
 
 func Mkdir(opts config.MkdirOpts) error {

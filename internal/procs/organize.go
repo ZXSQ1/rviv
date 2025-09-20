@@ -1,6 +1,6 @@
 package procs
 
-import "github.com/ZXSQ1/rviv/config"
+import "github.com/ZXSQ1/rviv/internal/config"
 
 func Organize(opts config.OrganizeOpts) error {
 	for _, src := range opts.Srcs {

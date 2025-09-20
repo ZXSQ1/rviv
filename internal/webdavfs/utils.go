@@ -4,8 +4,8 @@ import (
 	"strconv"
 	"strings"
 
-	"github.com/ZXSQ1/rviv/filesystem"
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
+	"github.com/ZXSQ1/rviv/internal/logging"
 )
 
 func status(err error) int {

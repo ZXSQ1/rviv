@@ -1,6 +1,6 @@
 package config
 
-import "github.com/ZXSQ1/rviv/env"
+import "github.com/ZXSQ1/rviv/internal/env"
 
 func LoadSyncOpts(optsRaw map[string]any) any {
 	src, _ := NewPath(optsRaw["src"].(string))

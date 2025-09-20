@@ -4,7 +4,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ZXSQ1/rviv/info"
+	"github.com/ZXSQ1/rviv/internal/info"
 )
 
 var DeviceSeparator = "::"

@@ -6,9 +6,9 @@ import (
 	"testing"
 	"time"
 
-	"github.com/ZXSQ1/rviv/config"
-	"github.com/ZXSQ1/rviv/expiry"
-	"github.com/ZXSQ1/rviv/localfs"
+	"github.com/ZXSQ1/rviv/internal/config"
+	"github.com/ZXSQ1/rviv/internal/expiry"
+	"github.com/ZXSQ1/rviv/internal/localfs"
 )
 
 func TestRemoveExpired(t *testing.T) {

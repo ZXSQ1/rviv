@@ -3,7 +3,7 @@ package procs
 import (
 	"path/filepath"
 
-	"github.com/ZXSQ1/rviv/config"
+	"github.com/ZXSQ1/rviv/internal/config"
 	"github.com/itchyny/timefmt-go"
 )
 

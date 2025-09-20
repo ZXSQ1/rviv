@@ -6,7 +6,7 @@ import (
 	"os"
 	"time"
 
-	"github.com/ZXSQ1/rviv/logging"
+	"github.com/ZXSQ1/rviv/internal/logging"
 	"github.com/gliderlabs/ssh"
 	"github.com/pkg/sftp"
 )

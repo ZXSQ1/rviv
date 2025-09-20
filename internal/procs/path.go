@@ -3,7 +3,7 @@ package procs
 import (
 	"strings"
 
-	"github.com/ZXSQ1/rviv/config"
+	"github.com/ZXSQ1/rviv/internal/config"
 )
 
 func ShortenPath(filename string) string {

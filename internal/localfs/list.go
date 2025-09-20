@@ -5,7 +5,7 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func (local *LocalFs) List(filename string) ([]string, error) {

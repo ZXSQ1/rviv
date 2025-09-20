@@ -1,7 +1,7 @@
 package config
 
 import (
-	"github.com/ZXSQ1/rviv/info"
+	"github.com/ZXSQ1/rviv/internal/info"
 )
 
 type LocalDeviceValidation struct{}

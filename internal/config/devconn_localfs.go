@@ -1,9 +1,9 @@
 package config
 
 import (
-	"github.com/ZXSQ1/rviv/filesystem"
-	"github.com/ZXSQ1/rviv/info"
-	"github.com/ZXSQ1/rviv/localfs"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
+	"github.com/ZXSQ1/rviv/internal/info"
+	"github.com/ZXSQ1/rviv/internal/localfs"
 )
 
 func ConnectLocalFs(infoRaw any, verbose bool) (filesystem.Filesystem, error) {

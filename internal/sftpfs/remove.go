@@ -3,7 +3,7 @@ package sftpfs
 import (
 	"os"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func (client *SFtpFs) RemoveFile(filename string) error {

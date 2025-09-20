@@ -1,4 +1,4 @@
-package compressor
+package sftpfs
 
 import (
 	"fmt"

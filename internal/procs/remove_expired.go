@@ -4,7 +4,7 @@ import (
 	"path/filepath"
 	"time"
 
-	"github.com/ZXSQ1/rviv/config"
+	"github.com/ZXSQ1/rviv/internal/config"
 )
 
 func RemoveExpired(parent config.Path, baseFilenameFmt string,

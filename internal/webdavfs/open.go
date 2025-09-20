@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func (client *WebDavFs) Open(filename string, mode filesystem.OpenMode) (

@@ -3,7 +3,7 @@ package ftpfs
 import (
 	"bytes"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func (client *FtpFs) CreateFile(filename string) error {

@@ -1,8 +1,6 @@
 package procs
 
-import (
-	"github.com/ZXSQ1/rviv/config"
-)
+import "github.com/ZXSQ1/rviv/internal/config"
 
 func MoveAll(srcs []config.Path, dest config.Path, verbose bool) error {
 	srcEntries, err := Glob(config.GlobOpts{

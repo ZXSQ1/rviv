@@ -3,7 +3,7 @@ package config
 import (
 	"net"
 
-	"github.com/ZXSQ1/rviv/info"
+	"github.com/ZXSQ1/rviv/internal/info"
 )
 
 type FtpDeviceValidation struct{}

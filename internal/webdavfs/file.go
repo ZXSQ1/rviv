@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"io"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 type File struct {

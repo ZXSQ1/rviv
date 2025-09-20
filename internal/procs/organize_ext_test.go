@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/ZXSQ1/rviv/config"
-	"github.com/ZXSQ1/rviv/localfs"
+	"github.com/ZXSQ1/rviv/internal/config"
+	"github.com/ZXSQ1/rviv/internal/localfs"
 )
 
 func TestOrganizeExt(t *testing.T) {

@@ -5,7 +5,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func TestFtpFs_Open(t *testing.T) {

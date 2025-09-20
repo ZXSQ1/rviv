@@ -3,10 +3,10 @@ package config
 import (
 	"strconv"
 
-	"github.com/ZXSQ1/rviv/filesystem"
-	"github.com/ZXSQ1/rviv/ftpfs"
-	"github.com/ZXSQ1/rviv/info"
-	"github.com/ZXSQ1/rviv/lan"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
+	"github.com/ZXSQ1/rviv/internal/ftpfs"
+	"github.com/ZXSQ1/rviv/internal/info"
+	"github.com/ZXSQ1/rviv/internal/lan"
 )
 
 func ConnectFtpFs(infoRaw any, verbose bool) (filesystem.Filesystem, error) {

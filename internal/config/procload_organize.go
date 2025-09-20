@@ -1,6 +1,6 @@
 package config
 
-import "github.com/ZXSQ1/rviv/env"
+import "github.com/ZXSQ1/rviv/internal/env"
 
 func LoadOrganizeOpts(optsRaw map[string]any) any {
 	srcs := []Path{}

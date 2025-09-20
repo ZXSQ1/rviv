@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 	"testing"
 
-	"github.com/ZXSQ1/rviv/config"
-	"github.com/ZXSQ1/rviv/localfs"
+	"github.com/ZXSQ1/rviv/internal/config"
+	"github.com/ZXSQ1/rviv/internal/localfs"
 )
 
 func TestMoveDir(t *testing.T) {

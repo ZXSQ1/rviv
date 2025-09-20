@@ -5,7 +5,7 @@ import (
 	"path"
 	"time"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 	"github.com/jlaffaye/ftp"
 )
 

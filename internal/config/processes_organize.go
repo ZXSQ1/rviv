@@ -4,7 +4,7 @@ import (
 	"regexp"
 	"slices"
 
-	"github.com/ZXSQ1/rviv/info"
+	"github.com/ZXSQ1/rviv/internal/info"
 )
 
 type OrganizeProcessValidation struct{}

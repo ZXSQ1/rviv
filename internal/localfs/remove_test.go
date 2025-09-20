@@ -4,7 +4,7 @@ import (
 	"os"
 	"testing"
 
-	"github.com/ZXSQ1/rviv/filesystem"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
 )
 
 func TestLocalFs_RemoveFile(t *testing.T) {

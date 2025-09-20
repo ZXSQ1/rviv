@@ -3,9 +3,9 @@ package procs
 import (
 	"testing"
 
-	"github.com/ZXSQ1/rviv/config"
-	"github.com/ZXSQ1/rviv/filesystem"
-	"github.com/ZXSQ1/rviv/localfs"
+	"github.com/ZXSQ1/rviv/internal/config"
+	"github.com/ZXSQ1/rviv/internal/filesystem"
+	"github.com/ZXSQ1/rviv/internal/localfs"
 )
 
 func TestOpen(t *testing.T) {
